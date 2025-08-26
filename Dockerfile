@@ -2,8 +2,8 @@
 # check=error=true
 
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t hc_rails_starter .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name hc_rails_starter hc_rails_starter
+# docker build -t hackworks .
+# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name hackworks hackworks
 
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
 
