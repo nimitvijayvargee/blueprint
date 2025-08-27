@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "login_form" do %>
+  <% if alert %>
+  <p class="alert"><%= alert %></p>
+  <% end %>
+  <%= render partial: "email_form" %>
+<% end %>

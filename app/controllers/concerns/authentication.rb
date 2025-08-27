@@ -6,7 +6,7 @@ module Authentication
   included do
       before_action :set_current_user
       before_action :authenticate_user!
-      helper_method :current_user, :user_signed_in?
+      helper_method :current_user, :user_logged_in?
   end
 
   class_methods do
@@ -23,7 +23,7 @@ module Authentication
     end
   end
 
-  def user_signed_in?
+  def user_logged_in?
     current_user.present?
   end
 

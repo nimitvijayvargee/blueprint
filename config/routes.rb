@@ -46,13 +46,17 @@ Rails.application.routes.draw do
   root "landing#index"
 
   # Slack authentication
-  get "auth/slack" => "sessions#new", as: :login
+  get "auth/login" => "sessions#index", as: :login
+  get "auth/slack" => "sessions#new", as: :slack_login
   get "auth/slack/callback" => "sessions#create", as: :slack_callback
+  post "auth/email" => "sessions#create_email", as: :login_email
   delete "auth/signout" => "sessions#destroy", as: :signout
 
   get "home" => "home#index", as: :home
 
   namespace :admin do
+    mount MissionControl::Jobs::Engine, at: "jobs"
+
     get "/" => "static_pages#index", as: :root
   end
 end

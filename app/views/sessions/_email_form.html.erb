@@ -1,0 +1,13 @@
+<% if alert %>
+  <p class="alert"><%= alert %></p>
+<% end %>
+
+<%= form_with url: login_email_path, method: :post, data: { turbo_frame: "login_form" } do |f| %>
+  <div>
+    <%= f.label :email, "Email" %>
+    <%= f.text_field :email, required: false, autofocus: true %>
+  </div>
+  <div>
+    <%= f.submit "Send OTP" %>
+  </div>
+<% end %>

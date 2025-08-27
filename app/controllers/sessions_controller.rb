@@ -1,8 +1,22 @@
 class SessionsController < ApplicationController
-  allow_unauthenticated_access only: %i[ new create ]
+  allow_unauthenticated_access only: %i[ index new create create_email ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
 
+  def index
+    if user_logged_in?
+      redirect_to home_path
+      return
+    end
+
+    render "sessions/index", layout: "auth"
+  end
+
   def new
+    if user_logged_in?
+      redirect_to home_path
+      return
+    end
+
     state = SecureRandom.hex(24)
     session[:state] = state
 
@@ -15,6 +29,79 @@ class SessionsController < ApplicationController
     }
     redirect_to "https://slack.com/oauth/v2/authorize?#{params.to_query}", allow_other_host: true
   end
+
+  def create_email
+    if user_logged_in?
+      redirect_to home_path
+      return
+    end
+
+    email = params[:email]
+    otp = params[:otp]
+
+    if email.blank? || !(email =~ URI::MailTo::EMAIL_REGEXP)
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "login_form",
+            partial: "sessions/email_form",
+            locals: { alert: "Invalid email address." }
+          )
+        end
+      end
+      return
+    end
+
+    if otp.present?
+      if validate_otp(email, otp)
+        Rails.logger.info("OTP validated for email: \\#{email}, OTP: \\#{otp}")
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(
+              "login_form",
+              partial: "sessions/otp_form",
+              locals: { email: email }
+            )
+          end
+        end
+      else
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(
+              "login_form",
+              partial: "sessions/email_form",
+              locals: { alert: "Invalid OTP. Please try again." }
+            )
+          end
+        end
+      end
+      return
+    end
+
+    # Logic to send OTP
+    if send_otp(email)
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "login_form",
+            partial: "sessions/otp_form",
+            locals: { email: email }
+          )
+        end
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "login_form",
+            partial: "sessions/email_form",
+            locals: { alert: "Failed to send OTP. Please try again." }
+          )
+        end
+      end
+    end
+  end
+
 
   def create
     if params[:state] != session[:state]
@@ -57,5 +144,18 @@ class SessionsController < ApplicationController
   def destroy
     terminate_session
     redirect_to root_path, notice: "Signed out successfully. Cya!"
+  end
+
+  private
+
+  def send_otp(email)
+    Rails.logger.info("Sending OTP to email: #{email}")
+
+    true
+  end
+
+  def validate_otp(email, otp)
+    Rails.logger.info("Validating OTP for email: #{email}, OTP: #{otp}")
+    true # Placeholder for actual OTP validation logic
   end
 end

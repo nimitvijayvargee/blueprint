@@ -28,6 +28,8 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+gem "mission_control-jobs"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -44,8 +46,6 @@ gem "tailwindcss-rails", "~> 4.0"
 
 # Redis for cache, queue, and Action Cable
 gem "redis", "~> 5.0"
-# Sidekiq for background jobs (optional, but recommended)
-gem "sidekiq", "~> 7.0"
 
 # PostgreSQL adapter for ActiveRecord
 gem "pg", "~> 1.5"
