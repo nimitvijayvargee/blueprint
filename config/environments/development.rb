@@ -1,6 +1,8 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Ensure lib/mail is autoloaded for custom delivery methods
+  config.autoload_paths << Rails.root.join("lib/mail")
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.
@@ -31,6 +33,9 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+
+  # Use custom Airtable delivery method for mailer
+  config.action_mailer.delivery_method = :airtable_delivery_method
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 

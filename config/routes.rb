@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   root "landing#index"
 
   # Slack authentication
-  get "auth/slack" => "sessions#new", as: :signin
+  get "auth/slack" => "sessions#new", as: :login
   get "auth/slack/callback" => "sessions#create", as: :slack_callback
   delete "auth/signout" => "sessions#destroy", as: :signout
 
