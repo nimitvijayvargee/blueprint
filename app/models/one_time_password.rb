@@ -3,29 +3,36 @@
 # Table name: one_time_passwords
 #
 #  id         :bigint           not null, primary key
+#  email      :string           not null
 #  expires_at :datetime
 #  secret     :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  user_id    :bigint           not null
 #
 # Indexes
 #
-#  index_one_time_passwords_on_user_id  (user_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users.id)
+#  index_one_time_passwords_on_email  (email)
 #
 class OneTimePassword < ApplicationRecord
-  belongs_to :user
-
   before_validation :generate, on: :create
 
   validates :secret, :expires_at, presence: true
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def expired?
     Time.current > expires_at
+  end
+
+  def send!
+    AuthMailer.with(email: email, otp: secret).otp_email.deliver_later
+    true
+  end
+
+  def self.valid?(secret, email)
+    otps = OneTimePassword.where(email: email, secret: secret)
+    valid =  otps.any? { |otp| !otp.expired? }
+    otps.each(&:destroy)
+    valid
   end
 
   private

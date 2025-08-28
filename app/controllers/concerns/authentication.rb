@@ -19,7 +19,7 @@ module Authentication
 
   def authenticate_user!
     unless current_user
-      redirect_to root_path, alert: "You need to be logged in to see this!"
+      redirect_to main_app.root_path, alert: "You need to be logged in to see this!"
     end
   end
 

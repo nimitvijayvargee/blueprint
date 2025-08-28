@@ -54,7 +54,9 @@ class SessionsController < ApplicationController
 
     if otp.present?
       if validate_otp(email, otp)
-        Rails.logger.info("OTP validated for email: \\#{email}, OTP: \\#{otp}")
+        user = User.find_or_create_from_email(email)
+        session[:user_id] = user.id
+        Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
         respond_to do |format|
           format.turbo_stream do
             render turbo_stream: turbo_stream.replace(
@@ -149,13 +151,11 @@ class SessionsController < ApplicationController
   private
 
   def send_otp(email)
-    Rails.logger.info("Sending OTP to email: #{email}")
-
-    true
+    otp = OneTimePassword.create!(email: email)
+    otp.send!
   end
 
   def validate_otp(email, otp)
-    Rails.logger.info("Validating OTP for email: #{email}, OTP: #{otp}")
-    true # Placeholder for actual OTP validation logic
+    OneTimePassword.valid?(otp, email)
   end
 end

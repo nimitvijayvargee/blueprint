@@ -3,20 +3,19 @@
 # Table name: users
 #
 #  id           :bigint           not null, primary key
-#  avatar       :string           not null
-#  display_name :string           not null
+#  avatar       :string
+#  display_name :string
 #  email        :string           not null
 #  is_banned    :boolean          default(FALSE), not null
 #  role         :integer          default("user"), not null
-#  timezone     :string           not null
+#  timezone     :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  slack_id     :string           not null
+#  slack_id     :string
 #
 class User < ApplicationRecord
   enum :role, { user: 0, admin: 1 }
 
-  validates :avatar, :slack_id, :display_name, :timezone, presence: true
   validates :role, presence: true
   validates :is_banned, inclusion: { in: [ true, false ] }
 
@@ -110,6 +109,13 @@ class User < ApplicationRecord
     )
   end
 
+  def self.find_or_create_from_email(email)
+    User.find_or_create_by!(email: email) do |user|
+      user.is_banned = false
+      user.role = :user
+    end
+  end
+
   def self.fetch_slack_user_info(slack_id)
     client = Slack::Web::Client.new(token: ENV.fetch("SLACK_BOT_TOKEN", nil))
 
@@ -125,7 +131,7 @@ class User < ApplicationRecord
         retry
       else
         Rails.logger.error("Slack API ratelimit, max retries on #{slack_id}.")
-        Honeybadger.notify("Slack API ratelimit, max retries on #{slack_id}.")
+        # Honeybadger.notify("Slack API ratelimit, max retries on #{slack_id}.")
         raise
       end
     end
@@ -138,6 +144,16 @@ class User < ApplicationRecord
         user_id: id,
         slack_id: slack_id
       }.to_json)
+    end
+
+    unless slack_user?
+      Rails.logger.tagged("ProfileRefresh") do
+        Rails.logger.info({
+          event: "profile_refresh_no_slack",
+          user_id: id
+        }.to_json)
+      end
+      return
     end
 
     user_info = User.fetch_slack_user_info(slack_id)
@@ -197,5 +213,9 @@ class User < ApplicationRecord
     end
 
     # Honeybadger.notify(e, context: { user_id: id, slack_id: slack_id })
+  end
+
+  def slack_user?
+    slack_id.present? && !slack_id.blank?
   end
 end

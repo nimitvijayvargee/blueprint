@@ -10,30 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_27_204911) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_28_005709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "one_time_passwords", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "secret", null: false
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_one_time_passwords_on_user_id"
+    t.string "email", null: false
+    t.index ["email"], name: "index_one_time_passwords_on_email"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "avatar", null: false
-    t.string "slack_id", null: false
-    t.string "display_name", null: false
-    t.string "timezone", null: false
+    t.string "avatar"
+    t.string "slack_id"
+    t.string "display_name"
+    t.string "timezone"
     t.integer "role", default: 0, null: false
     t.boolean "is_banned", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", null: false
   end
-
-  add_foreign_key "one_time_passwords", "users"
 end

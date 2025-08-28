@@ -30,6 +30,14 @@
 #                       rails_disk_service GET  /rails/active_storage/disk/:encoded_key/*filename(.:format)                                       active_storage/disk#show
 #                update_rails_disk_service PUT  /rails/active_storage/disk/:encoded_token(.:format)                                               active_storage/disk#update
 #                     rails_direct_uploads POST /rails/active_storage/direct_uploads(.:format)                                                    active_storage/direct_uploads#create
+class AdminConstraint
+  def self.matches?(request)
+    return false unless request.session[:user_id]
+
+    user = User.find_by(id: request.session[:user_id])
+    user&.admin?
+  end
+end
 
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -54,7 +62,7 @@ Rails.application.routes.draw do
 
   get "home" => "home#index", as: :home
 
-  namespace :admin do
+  namespace :admin, constraint: AdminConstraint do
     mount MissionControl::Jobs::Engine, at: "jobs"
 
     get "/" => "static_pages#index", as: :root
