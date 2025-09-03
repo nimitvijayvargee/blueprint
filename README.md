@@ -1,6 +1,6 @@
-# Hack Club Rails Starter Templplate (WIP)
+# Blueprint
 
-This template aims to be a starting point for Hack Club programs written in rails. It is heavily inspired by, with code used from, previous Hack Club programs such as the Summer of Making, HCB, or Submit. This template contains:
+Blueprint is a starting point for Hack Club programs written in Rails. It is heavily inspired by, with code used from, previous Hack Club programs such as the Summer of Making, HCB, or Submit. This template contains:
 
 - User authentication via Slack OAuth
 - WIP

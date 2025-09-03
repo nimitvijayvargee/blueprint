@@ -10,12 +10,12 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV["PGDATABASE"] || ENV["POSTGRES_DB"] || ENV["DB_NAME"] || "hc_rails_starter_development" %>
+  database: <%= ENV["PGDATABASE"] || ENV["POSTGRES_DB"] || ENV["DB_NAME"] || "blueprint_development" %>
 
 test:
   <<: *default
-  database: <%= ENV["PGDATABASE_TEST"] || ENV["POSTGRES_DB_TEST"] || ENV["DB_NAME_TEST"] || "hc_rails_starter_test" %>
+  database: <%= ENV["PGDATABASE_TEST"] || ENV["POSTGRES_DB_TEST"] || ENV["DB_NAME_TEST"] || "blueprint_test" %>
 
 production:
   <<: *default
-  database: <%= ENV["PGDATABASE"] || ENV["POSTGRES_DB"] || ENV["DB_NAME"] || "hc_rails_starter_production" %>
+  database: <%= ENV["PGDATABASE"] || ENV["POSTGRES_DB"] || ENV["DB_NAME"] || "blueprint_production" %>
