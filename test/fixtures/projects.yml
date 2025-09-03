@@ -1,0 +1,60 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: projects
+#
+#  id                     :bigint           not null, primary key
+#  demo_link              :string
+#  description            :text
+#  devlogs_count          :integer          default(0), not null
+#  hackatime_project_keys :string           default([]), is an Array
+#  is_deleted             :boolean          default(FALSE)
+#  is_shipped             :boolean          default(FALSE)
+#  project_type           :string
+#  readme_link            :string
+#  repo_link              :string
+#  review_status          :string
+#  title                  :string
+#  views_count            :integer          default(0), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  user_id                :bigint           not null
+#
+# Indexes
+#
+#  index_projects_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
+#
+one:
+  title: MyString
+  description: MyText
+  demo_link: MyString
+  readme_link: MyString
+  repo_link: MyString
+  project_type: 1
+  review_status: 1
+  is_shipped: false
+  is_deleted: false
+  views_count: 1
+  devlogs_count: 1
+  hackatime_project_keys: MyString
+  user: one
+
+two:
+  title: MyString
+  description: MyText
+  demo_link: MyString
+  readme_link: MyString
+  repo_link: MyString
+  project_type: 1
+  review_status: 1
+  is_shipped: false
+  is_deleted: false
+  views_count: 1
+  devlogs_count: 1
+  hackatime_project_keys: MyString
+  user: two

@@ -14,6 +14,11 @@
 #  slack_id     :string
 #
 class User < ApplicationRecord
+  has_many :projects
+  has_many :journal_entries
+  has_many :follows, dependent: :destroy
+  has_many :followed_projects, through: :follows, source: :project
+
   enum :role, { user: 0, admin: 1 }
 
   validates :role, presence: true
@@ -213,6 +218,18 @@ class User < ApplicationRecord
     end
 
     # Honeybadger.notify(e, context: { user_id: id, slack_id: slack_id })
+  end
+
+  def follow(project)
+    followed_projects << project unless following?(project)
+  end
+
+  def unfollow(project)
+    followed_projects.delete(project)
+  end
+
+  def following?(project)
+    followed_projects.include?(project)
   end
 
   def slack_user?
