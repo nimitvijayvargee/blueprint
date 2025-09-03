@@ -18,6 +18,7 @@ class User < ApplicationRecord
   has_many :journal_entries
   has_many :follows, dependent: :destroy
   has_many :followed_projects, through: :follows, source: :project
+  has_one :task_list, dependent: :destroy
 
   enum :role, { user: 0, admin: 1 }
 
@@ -234,5 +235,9 @@ class User < ApplicationRecord
 
   def slack_user?
     slack_id.present? && !slack_id.blank?
+  end
+
+  def tasks
+    task_list || create_task_list!
   end
 end
