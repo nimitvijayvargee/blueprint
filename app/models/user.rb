@@ -105,6 +105,29 @@ class User < ApplicationRecord
       raise StandardError, "Slack ID #{slack_id} has an invalid email: #{email.inspect}"
     end
 
+    # Check if user with same email already exists (from OTP login)
+    existing_user = User.find_by(email: email)
+    if existing_user.present?
+      Rails.logger.tagged("UserCreation") do
+        Rails.logger.info({
+          event: "merging_slack_data_into_existing_user",
+          existing_user_id: existing_user.id,
+          slack_id: slack_id,
+          email: email
+        }.to_json)
+      end
+
+      # Merge Slack data into existing user
+      existing_user.update!(
+        slack_id: slack_id,
+        display_name: display_name.presence || existing_user.display_name,
+        timezone: timezone.presence || existing_user.timezone,
+        avatar: avatar.presence || existing_user.avatar
+      )
+
+      return existing_user
+    end
+
     User.create!(
       slack_id: slack_id,
       display_name: display_name,
