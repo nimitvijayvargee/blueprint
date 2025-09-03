@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bp-dark: #0e305b;
+  --color-bp-darker: #081c35;
+  --color-bp-light: #dbe4ee;
+  --color-bp-danger: #fe8e86;
+  --color-bp-warning: #ffc857;
+  --color-bp-success: #a8f0ae;
+
+  --font-rcgl-full: "R&C Guidelines Full", "Poppins", sans-serif;
+  --font-rcgl-dark: "R&C Guidelines Dark", "Poppins", sans-serif;
+  --font-rcgl-light: "R&C Guidelines", "Poppins", sans-serif;
+  --font-rcgl-empty: "R&C Guidelines Empty", "Poppins", sans-serif;
+
+  --font-rc-full: "R&C Basic Full", "Poppins", sans-serif;
+  --font-rc-dark: "R&C Basic Dark", "Poppins", sans-serif;
+  --font-rc-light: "R&C Basic", "Poppins", sans-serif;
+  --font-rc-empty: "R&C Basic Empty", "Poppins", sans-serif;
+}
+
+body {
+  @apply bg-bp-dark text-white font-rc-full;
+}

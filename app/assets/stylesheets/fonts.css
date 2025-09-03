@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "R&C Basic Empty";
+  src: url("RC-BasicEmpty.eot");
+  src: url("RC-BasicEmpty.eot?#iefix") format("embedded-opentype"),
+    url("RC-BasicEmpty.woff2") format("woff2"),
+    url("RC-BasicEmpty.woff") format("woff"),
+    url("RC-BasicEmpty.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Basic";
+  src: url("RC-BasicLight.eot");
+  src: url("RC-BasicLight.eot?#iefix") format("embedded-opentype"),
+    url("RC-BasicLight.woff2") format("woff2"),
+    url("RC-BasicLight.woff") format("woff"),
+    url("RC-BasicLight.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Basic Dark";
+  src: url("RC-BasicDark.eot");
+  src: url("RC-BasicDark.eot?#iefix") format("embedded-opentype"),
+    url("RC-BasicDark.woff2") format("woff2"),
+    url("RC-BasicDark.woff") format("woff"),
+    url("RC-BasicDark.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Basic Full";
+  src: url("RC-BasicFull.eot");
+  src: url("RC-BasicFull.eot?#iefix") format("embedded-opentype"),
+    url("RC-BasicFull.woff2") format("woff2"),
+    url("RC-BasicFull.woff") format("woff"),
+    url("RC-BasicFull.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Guidelines";
+  src: url("RC-GuidelinesLight.eot");
+  src: url("RC-GuidelinesLight.eot?#iefix") format("embedded-opentype"),
+    url("RC-GuidelinesLight.woff2") format("woff2"),
+    url("RC-GuidelinesLight.woff") format("woff"),
+    url("RC-GuidelinesLight.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Guidelines Dark";
+  src: url("RC-GuidelinesDark.eot");
+  src: url("RC-GuidelinesDark.eot?#iefix") format("embedded-opentype"),
+    url("RC-GuidelinesDark.woff2") format("woff2"),
+    url("RC-GuidelinesDark.woff") format("woff"),
+    url("RC-GuidelinesDark.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Guidelines Empty";
+  src: url("RC-GuidelinesEmpty.eot");
+  src: url("RC-GuidelinesEmpty.eot?#iefix") format("embedded-opentype"),
+    url("RC-GuidelinesEmpty.woff2") format("woff2"),
+    url("RC-GuidelinesEmpty.woff") format("woff"),
+    url("RC-GuidelinesEmpty.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "R&C Guidelines Full";
+  src: url("RC-GuidelinesFull.eot");
+  src: url("RC-GuidelinesFull.eot?#iefix") format("embedded-opentype"),
+    url("RC-GuidelinesFull.woff2") format("woff2"),
+    url("RC-GuidelinesFull.woff") format("woff"),
+    url("RC-GuidelinesFull.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
