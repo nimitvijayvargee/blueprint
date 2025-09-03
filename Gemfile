@@ -28,6 +28,7 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+# Dashboard for jobs
 gem "mission_control-jobs"
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -50,6 +51,15 @@ gem "redis", "~> 5.0"
 # PostgreSQL adapter for ActiveRecord
 gem "pg", "~> 1.5"
 
+# HTTP client
+gem "faraday", "~> 2.13"
+
+# Slack client
+gem "slack-ruby-client", "~> 2.7"
+
+# Inline SVG support
+gem "inline_svg"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -67,17 +77,17 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
+  # Annotate Rails classes with schema information
   gem "annotaterb"
+
+  # Live reload for Hotwire
+  gem "hotwire-livereload", "~> 2.0"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
+
+  # Headless Chrome driver
   gem "selenium-webdriver"
 end
-
-gem "hotwire-livereload", "~> 2.0", group: :development
-
-gem "faraday", "~> 2.13"
-
-gem "slack-ruby-client", "~> 2.7"

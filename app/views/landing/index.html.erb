@@ -22,7 +22,25 @@
 
   <body>
     <main>
-      hi
+      <div class="absolute top-8 left-0">
+        <a href="https://hackclub.com?utm_source=blueprint" target="_blank">
+          <%= inline_svg 'hackclub-logo.svg', class: 'h-16' %>
+        </a>
+      </div>
+      <div class="min-h-screen h-full flex flex-col items-center justify-center px-8 text-center bg-cover bg-center bg-no-repeat space-y-48"
+          style="background-image: url('<%= asset_path('landing-bg.png') %>');">
+        <div class="relative flex flex-col items-center">
+          <h1 class="text-[10rem]/40 font-rcgl-full">Blueprint</h1>
+          <p class="text-4xl rotate-5 ml-auto bg-bp-dark p-1 -mt-7 -mr-8">...then build</p>
+        </div>
+        <div class="flex flex-col items-center text-2xl space-y-2 mb-[5%]">
+          <p class="uppercase text-3xl">Get free stickers</p>
+          <div class="flex">
+            <input type="email" class="text-left py-1.5 px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com">
+            <button type="button" class="text-bp-dark bg-white w-full px-6 hover:bg-gray-200 border-2 border-l-0 border-white hover:border-gray-200">Join</button>
+          </div>
+        </div>
+      </div>
     </main>
   </body>
 </html>
