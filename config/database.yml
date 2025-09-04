@@ -14,8 +14,9 @@ test:
   database: blueprint_test
 
 production:
-  <<: *default
-  
+  primary:
+    <<: *default
+
   cache:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
