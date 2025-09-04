@@ -22,3 +22,7 @@
 body {
   @apply bg-bp-dark text-white font-rc-full;
 }
+
+.bg-hatch {
+  background-image: url("hatch.svg");
+}
