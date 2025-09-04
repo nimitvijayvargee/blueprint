@@ -49,7 +49,7 @@ gem "tailwindcss-rails", "~> 4.0"
 gem "redis", "~> 5.0"
 
 # PostgreSQL adapter for ActiveRecord
-gem "pg", "~> 1.5"
+gem "pg", "~> 1.6"
 
 # HTTP client
 gem "faraday", "~> 2.13"
