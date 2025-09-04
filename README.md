@@ -19,10 +19,10 @@ You can spin up a local Postgres instance using Docker:
 
 ```sh
 docker run -d \
-  --name hc-rails-starter-postgres \
+  --name blueprint-postgres \
   -e POSTGRES_USER=postgres \
   -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=hc_rails_starter_development \
+  -e POSTGRES_DB=blueprint_development \
   -p 5432:5432 \
   postgres:15
 ```
@@ -30,11 +30,7 @@ docker run -d \
 Update your `.env` file with these credentials:
 
 ```
-PGHOST=localhost
-PGPORT=5432
-PGUSER=your_db_user
-PGPASSWORD=your_db_password
-PGDATABASE=hc_rails_starter_development
+DATABASE_URL=postgresql://your_db_user:your_db_password@localhost:5432/blueprint_development
 ```
 
 ### 3. Install dependencies

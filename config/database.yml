@@ -3,19 +3,15 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV["PGHOST"] || ENV["POSTGRES_HOST"] || ENV["DB_HOST"] || "localhost" %>
-  port: <%= ENV["PGPORT"] || ENV["POSTGRES_PORT"] || ENV["DB_PORT"] || 5432 %>
-  username: <%= ENV["PGUSER"] || ENV["POSTGRES_USER"] || ENV["DB_USERNAME"] %>
-  password: <%= ENV["PGPASSWORD"] || ENV["POSTGRES_PASSWORD"] || ENV["DB_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
 
 development:
   <<: *default
-  database: <%= ENV["PGDATABASE"] || ENV["POSTGRES_DB"] || ENV["DB_NAME"] || "blueprint_development" %>
+  database: blueprint_development
 
 test:
   <<: *default
-  database: <%= ENV["PGDATABASE_TEST"] || ENV["POSTGRES_DB_TEST"] || ENV["DB_NAME_TEST"] || "blueprint_test" %>
+  database: blueprint_test
 
 production:
   <<: *default
-  database: <%= ENV["PGDATABASE"] || ENV["POSTGRES_DB"] || ENV["DB_NAME"] || "blueprint_production" %>
