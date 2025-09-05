@@ -5,3 +5,6 @@ authentication: <%= ENV["SKYLIGHT_AUTHENTICATION"] %>
 
 ignored_endpoints:
   - Rails::HealthController#show
+
+deploy:
+  git_sha: <%= ENV["SOURCE_COMMIT"] %>
