@@ -97,6 +97,9 @@ group :development do
   # Annotate Rails classes with schema information
   gem "annotaterb"
 
+  # For detecting N+1 queries and unused eager loading
+  gem "bullet"
+
   # Live reload for Hotwire
   gem "hotwire-livereload", "~> 2.0"
 end

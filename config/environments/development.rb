@@ -5,6 +5,15 @@ Rails.application.configure do
   config.autoload_paths << Rails.root.join("lib/mail")
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.after_initialize do
+    Bullet.enable        = true
+    Bullet.alert         = true
+    Bullet.bullet_logger = true
+    Bullet.console       = true
+    Bullet.rails_logger  = true
+    Bullet.add_footer    = true
+  end
+
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 
