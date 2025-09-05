@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   before_action :redirect_if_logged_in, only: %i[ index new create create_email ]
 
   def index
-    render "sessions/index", layout: "auth"
+    render "sessions/index"
   end
 
   def new

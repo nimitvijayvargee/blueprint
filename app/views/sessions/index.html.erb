@@ -1,3 +1,18 @@
+<% content_for :title, "Log in - Blueprint" %>
+
+<% content_for :head do %>
+  <meta name="robots" content="noindex">
+<% end %>
+
+<div class="min-h-screen flex items-center justify-center">
+  <div class="border-2 border-white/25 bg-hatch p-12">
+    <h1 class="text-4xl">Hey! Welcome to Blueprint!</h1>
+    <div class="flex flex-col items-center">
+      <%= render partial: "shared/button" %>
+    </div>
+  </div>
+</div>
+
 <%= turbo_frame_tag "login_form" do %>
   <% if alert %>
   <p class="alert"><%= alert %></p>
