@@ -2,12 +2,9 @@ class SessionsController < ApplicationController
   allow_unauthenticated_access only: %i[ index new create create_email ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
 
-  def index
-    if user_logged_in?
-      redirect_to home_path
-      return
-    end
+  before_action :redirect_if_logged_in, only: %i[ index new create create_email ]
 
+  def index
     render "sessions/index", layout: "auth"
   end
 
@@ -31,11 +28,6 @@ class SessionsController < ApplicationController
   end
 
   def create_email
-    if user_logged_in?
-      redirect_to home_path
-      return
-    end
-
     email = params[:email]
     otp = params[:otp]
 
@@ -115,7 +107,7 @@ class SessionsController < ApplicationController
         }.to_json)
       end
       session[:state] = nil
-      redirect_to root_path, alert: "Authentication failed due to CSRF token mismatch"
+      redirect_to login_path, alert: "Authentication failed due to CSRF token mismatch"
       return
     end
 
@@ -131,7 +123,7 @@ class SessionsController < ApplicationController
         }.to_json)
       end
 
-      redirect_to root_path, notice: "Welcome back, #{user.display_name}!"
+      redirect_to home_path, notice: "Welcome back, #{user.display_name}!"
     rescue StandardError => e
       Rails.logger.tagged("Authentication") do
         Rails.logger.error({
@@ -139,7 +131,7 @@ class SessionsController < ApplicationController
           error: e.message
         }.to_json)
       end
-      redirect_to root_path, alert: e.message
+      redirect_to login_path, alert: e.message
     end
   end
 
@@ -149,6 +141,10 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def redirect_if_logged_in
+    redirect_to home_path if user_logged_in?
+  end
 
   def send_otp(email)
     otp = OneTimePassword.create!(email: email)
