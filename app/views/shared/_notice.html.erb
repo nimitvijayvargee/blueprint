@@ -1,0 +1,32 @@
+<%# Shared notice/alert popup that auto-dismisses after 5s or on X click. Uses Stimulus (see controllers/flash_controller.js). %>
+<% flash_types = flash.to_hash.slice("notice", "alert", "success", "error", "warning").presence || {} %>
+<% if flash_types.any? || true %>
+  <div class="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none">
+    <div class="w-full max-w-xl px-4">
+      <% flash_types.each do |type, message| %>
+        <% next if message.blank? %>
+        <% bg_class = case type.to_s
+          when "notice", "success" then "bg-bp-success text-bp-darker/70"
+          when "warning" then "bg-bp-warning text-bp-darker/70"
+          else "bg-bp-danger text-bp-darker/70"
+        end %>
+        <div
+          data-controller="flash"
+          data-flash-dismiss-after-value="5000"
+          class="pointer-events-auto relative mb-3 overflow-hidden rounded shadow-lg <%= bg_class %> transition-opacity duration-300 opacity-100"
+          role="status" aria-live="polite"
+        >
+          <div class="flex items-center gap-3 p-4 pl-8 pr-10">
+            <div class="text-lg leading-5"><%= message %></div>
+            <button
+              type="button"
+              data-action="click->flash#dismiss"
+              class="text-2xl absolute right-2 top-2 inline-flex items-center justify-center h-6 w-6 rounded text-bp-darker/70 hover:text-bp-darker focus:outline-none focus:ring-2 focus:ring-bp-darker/30"
+              aria-label="Dismiss"
+            >&times;</button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

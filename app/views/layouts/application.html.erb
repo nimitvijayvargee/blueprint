@@ -30,12 +30,7 @@
       <% else %>
         <%= link_to "Login with Slack", login_path %>
       <% end %>
-      <% if notice %>
-        <p>Notice: <%= notice %></p>
-      <% end %>
-      <% if alert %>
-        <p>Alert: <%= alert %></p>
-      <% end %>
+      <%= render "shared/notice" %>
       <%= yield %>
     </main>
   </body>
