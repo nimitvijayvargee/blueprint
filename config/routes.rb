@@ -62,9 +62,12 @@ Rails.application.routes.draw do
 
   get "home" => "home#index", as: :home
 
-  namespace :admin, constraint: AdminConstraint do
-    mount MissionControl::Jobs::Engine, at: "jobs"
+  namespace :admin do
+    constraints AdminConstraint do
+      mount MissionControl::Jobs::Engine, at: "jobs"
+      mount Flipper::UI.app(Flipper), at: "flipper"
 
-    get "/" => "static_pages#index", as: :root
+      get "/" => "static_pages#index", as: :root
+    end
   end
 end
