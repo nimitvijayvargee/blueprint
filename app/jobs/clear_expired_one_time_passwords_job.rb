@@ -1,5 +1,5 @@
 class ClearExpiredOneTimePasswordsJob < ApplicationJob
-  queue_as :cleanup
+  queue_as :background
 
   def perform(*args)
     OneTimePassword.find_each do |otp|

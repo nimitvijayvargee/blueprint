@@ -61,6 +61,9 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: ENV.fetch("APPLICATION_HOST") { "example.com" } }
 
+  # Configure mailers to use background queue for normal emails
+  config.action_mailer.deliver_later_queue_name = "background"
+
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.dig(:smtp, :user_name),

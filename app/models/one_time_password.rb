@@ -24,7 +24,7 @@ class OneTimePassword < ApplicationRecord
   end
 
   def send!
-    AuthMailer.with(email: email, otp: secret).otp_email.deliver_later
+    AuthMailer.with(email: email, otp: secret).otp_email.deliver_later(queue: :realtime)
     true
   end
 

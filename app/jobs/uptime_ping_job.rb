@@ -1,5 +1,5 @@
 class UptimePingJob < ApplicationJob
-  queue_as :default
+  queue_as :uptime
 
   def perform
     url = "https://uptime.hackclub.com/api/push/DbF8jziMBq?status=up&msg=OK&ping="

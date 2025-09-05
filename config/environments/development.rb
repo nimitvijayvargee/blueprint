@@ -45,6 +45,9 @@ Rails.application.configure do
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
+  # Configure mailers to use background queue for normal emails
+  config.action_mailer.deliver_later_queue_name = "background"
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
