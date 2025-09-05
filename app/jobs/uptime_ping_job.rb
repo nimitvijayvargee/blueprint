@@ -2,7 +2,7 @@ class UptimePingJob < ApplicationJob
   queue_as :default
 
   def perform
-    url = "https://uptime.hackclub.com/api/push/qVJivk7CMr?status=up&msg=OK&ping="
+    url = "https://uptime.hackclub.com/api/push/DbF8jziMBq?status=up&msg=OK&ping="
 
     begin
       response = Faraday.get(url)
