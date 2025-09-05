@@ -39,10 +39,6 @@ class SessionsController < ApplicationController
             turbo_stream.replace(
               "flash",
               partial: "shared/notice"
-            ),
-            turbo_stream.replace(
-              "login_form",
-              partial: "sessions/email_form"
             )
           ]
         end
@@ -68,10 +64,6 @@ class SessionsController < ApplicationController
               turbo_stream.replace(
                 "flash",
                 partial: "shared/notice"
-              ),
-              turbo_stream.replace(
-                "login_form",
-                partial: "sessions/email_form"
               )
             ]
           end
