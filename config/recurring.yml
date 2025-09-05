@@ -19,3 +19,8 @@ production:
     class: ClearExpiredOneTimePasswordsJob
     queue: low_priority
     schedule: every hour
+
+  uptime_ping:
+    class: UptimePingJob
+    queue: default
+    schedule: every minute
