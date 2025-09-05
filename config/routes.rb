@@ -58,7 +58,7 @@ Rails.application.routes.draw do
   get "auth/slack" => "sessions#new", as: :slack_login
   get "auth/slack/callback" => "sessions#create", as: :slack_callback
   post "auth/email" => "sessions#create_email", as: :login_email
-  delete "auth/signout" => "sessions#destroy", as: :signout
+  delete "auth/logout" => "sessions#destroy", as: :logout
 
   get "home" => "home#index", as: :home
 

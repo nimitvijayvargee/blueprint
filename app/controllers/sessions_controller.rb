@@ -32,13 +32,19 @@ class SessionsController < ApplicationController
     otp = params[:otp]
 
     if email.blank? || !(email =~ URI::MailTo::EMAIL_REGEXP)
+      flash.now[:alert] = "Invalid email address."
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "login_form",
-            partial: "sessions/email_form",
-            locals: { alert: "Invalid email address." }
-          )
+          render turbo_stream: [
+            turbo_stream.replace(
+              "flash",
+              partial: "shared/notice"
+            ),
+            turbo_stream.replace(
+              "login_form",
+              partial: "sessions/email_form"
+            )
+          ]
         end
       end
       return
@@ -49,23 +55,25 @@ class SessionsController < ApplicationController
         user = User.find_or_create_from_email(email)
         session[:user_id] = user.id
         Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
-        respond_to do |format|
-          format.turbo_stream do
-            render turbo_stream: turbo_stream.replace(
-              "login_form",
-              partial: "sessions/otp_form",
-              locals: { email: email }
-            )
-          end
+        if user.display_name.blank?
+          redirect_to home_path, notice: "Welcome back!"
+        else
+          redirect_to home_path, notice: "Welcome back, #{user.display_name}!"
         end
       else
+        flash.now[:alert] = "Invalid OTP. Please try again."
         respond_to do |format|
           format.turbo_stream do
-            render turbo_stream: turbo_stream.replace(
-              "login_form",
-              partial: "sessions/email_form",
-              locals: { alert: "Invalid OTP. Please try again." }
-            )
+            render turbo_stream: [
+              turbo_stream.replace(
+                "flash",
+                partial: "shared/notice"
+              ),
+              turbo_stream.replace(
+                "login_form",
+                partial: "sessions/email_form"
+              )
+            ]
           end
         end
       end
@@ -84,13 +92,19 @@ class SessionsController < ApplicationController
         end
       end
     else
+      flash.now[:alert] = "Failed to send OTP. Please try again."
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            "login_form",
-            partial: "sessions/email_form",
-            locals: { alert: "Failed to send OTP. Please try again." }
-          )
+          render turbo_stream: [
+            turbo_stream.replace(
+              "flash",
+              partial: "shared/notice",
+            ),
+            turbo_stream.replace(
+              "login_form",
+              partial: "sessions/email_form"
+            )
+          ]
         end
       end
     end

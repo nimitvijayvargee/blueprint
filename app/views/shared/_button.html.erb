@@ -1,0 +1,72 @@
+<%# Optional URL target (renders <a> when present, <button> when not) %>
+<% url = local_assigns[:url] || local_assigns[:href] %>
+
+<%# Inputs and defaults %>
+<% text          = local_assigns[:text] %>
+<% variant       = (local_assigns[:variant] || :primary).to_sym %>
+<% icon          = local_assigns[:icon] %>
+<% icon_position = (local_assigns[:icon_position] || :left).to_sym %>
+<% user_class    = local_assigns[:class] %>
+<% icon_class    = local_assigns[:icon_class] %>
+<% html_options  = (local_assigns[:html_options] || {}).dup %>
+
+<%# Determine label. If a non-empty block is provided, use it; else fall back to text %>
+<% if block_given? %>
+  <% _captured = capture { yield }.to_s %>
+  <% label_from_block = _captured.strip.present? %>
+  <% label = label_from_block ? _captured : text %>
+<% else %>
+  <% label_from_block = false %>
+  <% label = text %>
+<% end %>
+<% has_text = label.present? %>
+<% has_icon = icon.present? %>
+
+<%# Base/variant classes %>
+<% base_class = 
+  "btn"
+ %>
+
+<% variant_class = case variant
+when :outline
+  "btn-outline"
+else # :primary
+  "btn-primary"
+end %>
+
+<%# Merge classes with tailwind_merge via `tw` helper; allow html_options[:class] to participate %>
+<% merged_class = tw(base_class, variant_class, user_class, html_options[:class]) %>
+<% html_options[:class] = merged_class %>
+
+<%# Build content with optional icon and text/block %>
+<% parts = [] %>
+
+<% if has_icon && icon_position == :left %>
+  <% parts << inline_svg(icon, class: tw("shrink-0", icon_class)) %>
+<% end %>
+
+<% if has_text %>
+  <% if label_from_block %>
+    <% parts << label %>
+  <% else %>
+    <% parts << content_tag(:span, label) %>
+  <% end %>
+<% end %>
+
+<% if has_icon && icon_position == :right %>
+  <% parts << inline_svg(icon, class: tw("shrink-0", icon_class)) %>
+<% end %>
+
+<% if url.present? %>
+  <% wants_button_to = (local_assigns[:as]&.to_sym == :button_to) || (
+    html_options[:method].present? && html_options[:method].to_s.downcase != "get" && local_assigns[:as]&.to_sym != :link
+  ) %>
+  <% if wants_button_to %>
+    <%= button_to safe_join(parts), url, html_options %>
+  <% else %>
+    <%= link_to safe_join(parts), url, html_options %>
+  <% end %>
+<% else %>
+  <% html_options[:type] ||= "button" %>
+  <%= content_tag :button, safe_join(parts), html_options %>
+<% end %>

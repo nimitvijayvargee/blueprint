@@ -1,10 +1,8 @@
-<%= form_with url: login_email_path, method: :post, data: { turbo_frame: "login_form" } do |f| %>
-  <div>
-    <%= f.label :otp, "Enter OTP" %>
-    <%= f.text_field :otp, required: true, autofocus: true, autocomplete: "one-time-code" %>
-    <%= f.hidden_field :email, value: @email || (defined?(email) ? email : nil) %>
-  </div>
-  <div>
-    <%= f.submit "Verify OTP" %>
+<%= form_with url: login_email_path, method: :post do |f| %>
+  <%= f.hidden_field :email, value: @email || (defined?(email) ? email : nil) %>
+
+  <div class="flex flex-col space-y-4">
+    <%= f.text_field :otp, required: true, autofocus: true, autocomplete: "one-time-code", class: "input placeholder-white/75", placeholder: "Check your email for a code!" %>
+    <%= f.submit "Log in", class: "btn btn-outline w-full" %>
   </div>
 <% end %>

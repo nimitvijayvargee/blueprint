@@ -26,3 +26,19 @@ body {
 .bg-hatch {
   background-image: url("hatch.svg");
 }
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 text-xl py-2 px-6 transition-colors;
+}
+
+.btn-primary {
+  @apply bg-white text-gray-900 hover:bg-bp-light;
+}
+
+.btn-outline {
+  @apply border-2 border-white text-white hover:bg-white/10;
+}
+
+.input {
+  @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2;
+}
