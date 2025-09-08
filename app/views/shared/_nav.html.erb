@@ -5,7 +5,7 @@
     <div class="grow">
 
     </div>
-    <% if defined?(current_user) %>
+    <% if defined?(current_user) && current_user.present? %>
         <div class="flex items-center space-x-4">
             <% avatar_url = current_user.avatar || "https://hc-cdn.hel1.your-objectstorage.com/s/v3/c283ae01214b9052480f1e216e43dbe09a424048_image.png" %>
             <% name = current_user.display_name || current_user.email || "unknown" %>
