@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
     render "sessions/index"
   end
 
+  # Slack auth start
   def new
     if user_logged_in?
       redirect_to home_path

@@ -139,9 +139,97 @@ class User < ApplicationRecord
   end
 
   def self.find_or_create_from_email(email)
-    User.find_or_create_by!(email: email) do |user|
-      user.is_banned = false
-      user.role = :user
+    begin
+      user_info = fetch_slack_user_info_from_email(email)
+    rescue Slack::Web::Api::Errors::UsersNotFound => e
+      Rails.logger.warn("Slack user not found for email #{email}: #{e.message}")
+      User.find_or_create_by!(email: email) do |user|
+        user.is_banned = false
+        user.role = :user
+      end
+      return nil
+    end
+
+    if user_info.user.is_bot
+      Rails.logger.warn({
+        event: "slack_user_is_bot",
+        slack_id: slack_id,
+        user_info: user_info.to_h
+      }.to_json)
+      return nil
+    end
+
+    slack_id = user_info.user.id
+    email = user_info.user.profile.email
+    display_name = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
+    timezone = user_info.user.tz
+    avatar = user_info.user.profile.image_192 || user_info.user.profile.image_512
+
+    Rails.logger.tagged("UserCreation") do
+      Rails.logger.info({
+        event: "slack_user_found",
+        slack_id: slack_id,
+        email: email,
+        display_name: display_name,
+        timezone: timezone,
+        avatar: avatar
+      }.to_json)
+    end
+
+    if email.blank? || !(email =~ URI::MailTo::EMAIL_REGEXP)
+      Rails.logger.warn({
+        event: "slack_user_missing_or_invalid_email",
+        slack_id: slack_id,
+        email: email,
+        user_info: user_info.to_h
+      }.to_json)
+      # Honeybadger.notify("Slack email missing??", context: {
+      #   slack_id: slack_id,
+      #   email: email,
+      #   user_info: user_info.to_h
+      # })
+      raise StandardError, "Slack ID #{slack_id} has an invalid email: #{email.inspect}"
+    end
+
+    # Check if user with same slack ID already exists
+    existing_user = User.find_by(slack_id: slack_id)
+    if existing_user.present?
+      Rails.logger.tagged("UserCreation") do
+        Rails.logger.info({
+          event: "slack_user_already_exists",
+          existing_user_id: existing_user.id,
+          slack_id: slack_id,
+          email: email
+        }.to_json)
+      end
+
+      return existing_user
+    end
+
+    User.create!(
+      slack_id: slack_id,
+      display_name: display_name,
+      email: email,
+      timezone: timezone,
+      avatar: avatar,
+      is_banned: false
+    )
+  end
+
+  def self.fetch_slack_user_info_from_email(email)
+    client = Slack::Web::Client.new(token: ENV.fetch("SLACK_BOT_TOKEN", nil))
+
+    r = 0
+    begin
+      client.users_lookupByEmail(email: email)
+    rescue Slack::Web::Api::Errors::TooManyRequestsError => e
+      if r < 3
+        s = e.retry_after
+        Rails.logger.warn("Slack API ratelimit, retry in #{s} count#{r + 1}")
+        sleep s
+        r += 1
+        retry
+      end
     end
   end
 
