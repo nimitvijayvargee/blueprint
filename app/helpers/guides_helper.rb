@@ -6,7 +6,7 @@ module GuidesHelper
       renderer = Redcarpet::Render::HTML.new(
         with_toc_data: true,
         hard_wrap: true,
-        filter_html: true
+        filter_html: false
       )
       Redcarpet::Markdown.new(
         renderer,
