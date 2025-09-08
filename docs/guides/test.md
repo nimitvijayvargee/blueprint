@@ -19,6 +19,8 @@ This is a simple paragraph to test rendering.
 - _Italic text_
 - **Bold text**
 - **_Bold Italic_**
+- <u>underline</u>
+- ~~strikethrough~~
 
 ## Section 4: Lists
 

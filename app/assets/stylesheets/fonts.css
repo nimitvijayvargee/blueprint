@@ -5,7 +5,7 @@
     url("RC-BasicEmpty.woff2") format("woff2"),
     url("RC-BasicEmpty.woff") format("woff"),
     url("RC-BasicEmpty.ttf") format("truetype");
-  font-weight: 100;
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
@@ -17,7 +17,7 @@
     url("RC-BasicLight.woff2") format("woff2"),
     url("RC-BasicLight.woff") format("woff"),
     url("RC-BasicLight.ttf") format("truetype");
-  font-weight: 300;
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
@@ -29,7 +29,7 @@
     url("RC-BasicDark.woff2") format("woff2"),
     url("RC-BasicDark.woff") format("woff"),
     url("RC-BasicDark.ttf") format("truetype");
-  font-weight: 500;
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
@@ -53,7 +53,7 @@
     url("RC-GuidelinesLight.woff2") format("woff2"),
     url("RC-GuidelinesLight.woff") format("woff"),
     url("RC-GuidelinesLight.ttf") format("truetype");
-  font-weight: 300;
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }

@@ -6,7 +6,10 @@ module GuidesHelper
       renderer = Redcarpet::Render::HTML.new(
         with_toc_data: true,
         hard_wrap: true,
-        filter_html: false
+        filter_html: false,
+        prettify: true,
+        with_toc_data: true,
+        link_attributes: { rel: "nofollow", target: "_blank" }
       )
       Redcarpet::Markdown.new(
         renderer,
@@ -26,7 +29,7 @@ module GuidesHelper
   GUIDES_HTML_CACHE = ActiveSupport::Cache::MemoryStore.new(size: 32.megabytes)
 
   def render_markdown_file(path)
-    key = ["guide_md_html", path.to_s, File.mtime(path).to_i]
+    key = [ "guide_md_html", path.to_s, File.mtime(path).to_i ]
     GUIDES_HTML_CACHE.fetch(key) do
       render_markdown(File.read(path))
     end
