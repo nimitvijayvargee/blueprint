@@ -4,4 +4,8 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_paper_trail_whodunnit
+
+  def not_found
+    raise ActionController::RoutingError.new("Not Found")
+  end
 end

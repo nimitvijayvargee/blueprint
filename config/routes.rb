@@ -40,6 +40,11 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
+  # Guides: mirror docs/guides folder; supports nested paths and index.md
+  get "guides/*slug", to: "guides#show", as: :guide,
+      constraints: { slug: /[a-z0-9\/_\-]+/ }
+  get "guides", to: "guides#show"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
