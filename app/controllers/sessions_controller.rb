@@ -2,6 +2,8 @@ class SessionsController < ApplicationController
   allow_unauthenticated_access only: %i[ index new create create_email ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
 
+  layout false
+
   before_action :redirect_if_logged_in, only: %i[ index new create create_email ]
 
   def index

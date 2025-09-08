@@ -1,25 +1,50 @@
-<% content_for :title, "Log in - Blueprint" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Log in - Blueprint</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="robots" content="noindex">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
-<% content_for :head do %>
-  <meta name="robots" content="noindex">
-<% end %>
+    <%= yield :head %>
 
-<div class="min-h-screen flex items-center justify-center">
-  <div class="border-2 border-white/25 bg-hatch p-12 space-y-12">
-    <div class="text-center">
-      <h1 class="text-4xl">Hey! Welcome to Blueprint!</h1>
-      <p>If you don't already have an account, we'll make one for you<p>
-    </div>
-    <div class="flex flex-col items-center space-y-4">
-      <%= render "shared/button", url: slack_login_path, text: "Log in with Slack", class: "text-xl w-full"%>
-      <div class="w-full flex items-center before:p-[1px] before:mr-2 before:bg-white before:grow after:p-[1px] after:ml-2 after:bg-white after:grow uppercase">or</div>
-      <div class="w-full">
-        <%= turbo_frame_tag "login_form" do %>
-          <%= render partial: "email_form" %>
-        <% end %>
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= Sentry.get_trace_propagation_meta.html_safe %>
+  </head>
+
+  <body>
+    <%= render "shared/notice" %>
+
+    <main class="p-8">
+      <div class="flex items-center justify-center min-h-screen">
+        <div class="p-12 space-y-12 border-2 border-white/25 bg-hatch">
+          <div class="text-center">
+            <h1 class="text-4xl">Hey! Welcome to Blueprint!</h1>
+            <p>If you don't already have an account, we'll make one for you<p>
+          </div>
+          <div class="flex flex-col items-center space-y-4">
+            <%= render "shared/button", url: slack_login_path, text: "Log in with Slack", class: "text-xl w-full"%>
+            <div class="w-full flex items-center before:p-[1px] before:mr-2 before:bg-white before:grow after:p-[1px] after:ml-2 after:bg-white after:grow uppercase">or</div>
+            <div class="w-full">
+              <%= turbo_frame_tag "login_form" do %>
+                <%= render partial: "email_form" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
-
+    </main>
+  </body>
+</html>
