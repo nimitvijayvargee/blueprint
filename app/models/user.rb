@@ -203,6 +203,13 @@ class User < ApplicationRecord
         }.to_json)
       end
 
+      existing_user.update!(
+        slack_id: slack_id,
+        display_name: display_name.presence || existing_user.display_name,
+        timezone: timezone.presence || existing_user.timezone,
+        avatar: avatar.presence || existing_user.avatar
+      )
+
       return existing_user
     end
 
