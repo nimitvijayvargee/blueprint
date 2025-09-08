@@ -1,5 +1,7 @@
 class GuidesController < ApplicationController
   allow_unauthenticated_access only: %i[ show ]
+  skip_before_action :set_current_user, if: :turbo_frame_request?
+
   def show
     slug = params[:slug].to_s
     slug = "" if slug.blank?
@@ -21,6 +23,8 @@ class GuidesController < ApplicationController
 
     @title = File.basename(path, ".md").presence || "index"
     @content_html = helpers.render_markdown_file(path)
+
+    render("frame", layout: false) if turbo_frame_request?
   end
 
   private

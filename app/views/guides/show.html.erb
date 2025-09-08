@@ -1,14 +1,5 @@
 <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
-<div class="flex justify-center">
-  <div class="w-full max-w-6xl">
-    <div class="items-center hidden pb-3 mb-8 text-black border-b print:flex">
-      <p class="text-6xl font-rcgl-full grow">Blueprint</p>
-      <div class="flex flex-col text-right">
-        <p>https://blueprint.hackclub.com</p>
-        <p class="text-xs">Design hardware, get funding to build it! By Hack Club</p>
-      </div>
-    </div>
-    <div class="markdown"><%= @content_html %></div>
-  </div>
-</div>
+<%= turbo_frame_tag "guide_content" do %>
+  <%= render "content" %>
+<% end %>
