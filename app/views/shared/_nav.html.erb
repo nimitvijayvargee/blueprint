@@ -1,11 +1,11 @@
 <nav class="absolute left-0 top-0 bottom-0 overflow-hidden w-[15rem] bg-bp-darker flex flex-col py-8 px-6">
-    <div class="text-center">
+    <a class="text-center" href="<%= user_logged_in? ? home_path : root_path %>">
         <p class="text-4xl font-rcgl-full">Blueprint</p>
-    </div>
+    </a>
     <div class="grow">
 
     </div>
-    <% if defined?(current_user) && current_user.present? %>
+    <% if user_logged_in? %>
         <div class="flex items-center space-x-4">
             <% avatar_url = current_user.avatar || "https://hc-cdn.hel1.your-objectstorage.com/s/v3/c283ae01214b9052480f1e216e43dbe09a424048_image.png" %>
             <% name = current_user.display_name || current_user.email || "unknown" %>
