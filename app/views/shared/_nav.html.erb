@@ -19,6 +19,6 @@
             </div>
         </div>
     <% else %>
-        <%= render "shared/button", url: login_path, text: "Log in" %>
+        <%= render "shared/button", url: login_path(redirect_to: request.fullpath), text: "Log in" %>
     <% end %>
 </nav>

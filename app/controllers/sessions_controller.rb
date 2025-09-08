@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
 
   layout false
 
+  before_action :set_after_login_redirect, only: %i[ index new create_email ]
   before_action :redirect_if_logged_in, only: %i[ index new create create_email ]
 
   def index
@@ -13,7 +14,7 @@ class SessionsController < ApplicationController
   # Slack auth start
   def new
     if user_logged_in?
-      redirect_to home_path
+      redirect_to(post_login_redirect_path || home_path)
       return
     end
 
@@ -54,10 +55,11 @@ class SessionsController < ApplicationController
         user = User.find_or_create_from_email(email)
         session[:user_id] = user.id
         Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
+        redirect_target = post_login_redirect_path
         if user.display_name.blank?
-          redirect_to home_path, notice: "Welcome back!"
+          redirect_to(redirect_target || home_path, notice: "Welcome back!")
         else
-          redirect_to home_path, notice: "Welcome back, #{user.display_name}!"
+          redirect_to(redirect_target || home_path, notice: "Welcome back, #{user.display_name}!")
         end
       else
         flash.now[:alert] = "Invalid OTP. Please try again."
@@ -132,7 +134,7 @@ class SessionsController < ApplicationController
         }.to_json)
       end
 
-      redirect_to home_path, notice: "Welcome back, #{user.display_name}!"
+      redirect_to(post_login_redirect_path || home_path, notice: "Welcome back, #{user.display_name}!")
     rescue StandardError => e
       Rails.logger.tagged("Authentication") do
         Rails.logger.error({
@@ -152,7 +154,34 @@ class SessionsController < ApplicationController
   private
 
   def redirect_if_logged_in
-    redirect_to home_path if user_logged_in?
+    return unless user_logged_in?
+
+    redirect_to(post_login_redirect_path || home_path)
+  end
+
+  def set_after_login_redirect
+    path = safe_redirect_path(params[:redirect_to])
+    session[:after_login_redirect] = path if path.present?
+  end
+
+  def post_login_redirect_path
+    session.delete(:after_login_redirect) || safe_redirect_path(params[:redirect_to])
+  end
+
+  def safe_redirect_path(url)
+    return nil if url.blank?
+
+    begin
+      uri = URI.parse(url)
+      # Only allow relative paths within this app
+      if uri.scheme.nil? && uri.host.nil? && uri.path.present? && uri.path.start_with?("/")
+        return uri.path + (uri.query.present? ? "?#{uri.query}" : "")
+      end
+    rescue URI::InvalidURIError
+      # ignore
+    end
+
+    nil
   end
 
   def send_otp(email)
