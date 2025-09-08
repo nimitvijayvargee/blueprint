@@ -24,8 +24,10 @@
   </head>
 
   <body>
-    <main>
-      <%= render "shared/notice" %>
+    <%= render "shared/notice" %>
+    <%= render "shared/nav" %>
+
+    <main class="ml-[15rem] p-8">
       <%= yield %>
     </main>
   </body>

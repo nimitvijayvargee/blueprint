@@ -1,0 +1,22 @@
+<nav class="absolute left-0 top-0 bottom-0 overflow-hidden w-[15rem] bg-bp-darker flex flex-col py-8 px-6">
+    <div class="text-center">
+        <p class="text-4xl font-rcgl-full">Blueprint</p>
+    </div>
+    <div class="grow">
+
+    </div>
+    <% if defined?(current_user) %>
+        <div class="flex items-center space-x-4">
+            <% avatar_url = current_user.avatar || "https://hc-cdn.hel1.your-objectstorage.com/s/v3/c283ae01214b9052480f1e216e43dbe09a424048_image.png" %>
+            <% name = current_user.display_name || current_user.email || "unknown" %>
+            <img src="<%= avatar_url %>" alt="<%= name %>'s avatar" class="rounded-lg size-12">
+            <div>
+                <p class="w-32 truncate whitespace-nowrap"><%= name %></p>
+                <%= button_to logout_path , method: :delete, class: "flex items-center space-x-2" do %>
+                    <span>Log out</span>
+                    <%= inline_svg "icons/logout.svg", class: "size-2" %>
+                <% end %>
+            </div>
+        </div>
+    <% end %>
+</nav>
