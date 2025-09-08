@@ -18,5 +18,7 @@
                 <% end %>
             </div>
         </div>
+    <% else %>
+        <%= render "shared/button", url: login_path, text: "Log in" %>
     <% end %>
 </nav>

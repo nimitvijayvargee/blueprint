@@ -10,14 +10,16 @@
 <% icon_class    = local_assigns[:icon_class] %>
 <% html_options  = (local_assigns[:html_options] || {}).dup %>
 
-<%# Determine label. If a non-empty block is provided, use it; else fall back to text %>
-<% if block_given? %>
-  <% _captured = capture { yield }.to_s %>
-  <% label_from_block = _captured.strip.present? %>
-  <% label = label_from_block ? _captured : text %>
-<% else %>
+<%# Determine label: if :text exists, ignore block; else use block if provided %>
+<% if text.present? %>
   <% label_from_block = false %>
   <% label = text %>
+<% elsif block_given? %>
+  <% label_from_block = true %>
+  <% label = capture { yield } %>
+<% else %>
+  <% label_from_block = false %>
+  <% label = nil %>
 <% end %>
 <% has_text = label.present? %>
 <% has_icon = icon.present? %>

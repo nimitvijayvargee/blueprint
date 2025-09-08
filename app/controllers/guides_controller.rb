@@ -1,4 +1,5 @@
 class GuidesController < ApplicationController
+  allow_unauthenticated_access only: %i[ show ]
   def show
     slug = params[:slug].to_s
     slug = "" if slug.blank?
