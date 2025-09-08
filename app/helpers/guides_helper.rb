@@ -23,9 +23,11 @@ module GuidesHelper
     @__markdown_renderer.render(text).html_safe
   end
 
+  GUIDES_HTML_CACHE = ActiveSupport::Cache::MemoryStore.new(size: 32.megabytes)
+
   def render_markdown_file(path)
-    key = [ "guide_md_html", path.to_s, File.mtime(path).to_i ]
-    Rails.cache.fetch(key) do
+    key = ["guide_md_html", path.to_s, File.mtime(path).to_i]
+    GUIDES_HTML_CACHE.fetch(key) do
       render_markdown(File.read(path))
     end
   end
