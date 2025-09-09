@@ -1,9 +1,17 @@
-<nav id="global-nav" data-turbo-permanent class="fixed left-0 top-0 bottom-0 overflow-hidden w-[15rem] bg-bp-darker flex flex-col py-8 px-6 print:hidden">
+<% nav_links = {
+    "Home" => user_logged_in? ? home_path : nil,
+    "Guides" => guides_path,
+} %>
+<% current_nav = nav_links.find { |_, path| path == request.path }&.first %>
+
+<nav id="global-nav" data-turbo-permanent class="fixed left-0 top-0 bottom-0 overflow-hidden w-[15rem] bg-bp-darker flex flex-col py-8 px-6 print:hidden space-y-8">
     <a class="text-center" href="<%= user_logged_in? ? home_path : root_path %>">
         <p class="text-4xl font-rcgl-full">Blueprint</p>
     </a>
-    <div class="grow">
-
+    <div class="flex flex-col space-y-4 grow">
+        <% nav_links.each do |name, path| %>
+            <%= render "shared/button", url: path, text: name, variant: current_nav == name ? :primary : :outline %>
+        <% end %>
     </div>
     <% if user_logged_in? %>
         <div class="flex items-center space-x-4">
