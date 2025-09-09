@@ -14,12 +14,24 @@ module GuidesHelper
       attrs << %(href="#{ERB::Util.html_escape(href)}")
       attrs << %(title="#{ERB::Util.html_escape(title)}") if title
 
-      unless same_origin?(href)
+      if guide_internal_link?(href)
+        attrs << %(data-turbo-frame="guide_content")
+        attrs << %(data-turbo-action="advance")
+      elsif !same_origin?(href)
         attrs << %(target="_blank")
         attrs << %(rel="nofollow noopener")
       end
 
       "<a #{attrs.join(' ')}>#{content}</a>"
+    end
+
+    def guide_internal_link?(href)
+      return false if href.start_with?("#")
+      return true  if href.start_with?("./", "../")
+      return href.start_with?("/guides") if href.start_with?("/")
+      # No scheme or root slash: treat as relative within guides
+      return false if href =~ /\A[a-z][a-z0-9+.-]*:/i
+      true
     end
 
     private
