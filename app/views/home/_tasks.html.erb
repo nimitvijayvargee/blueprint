@@ -12,8 +12,25 @@
         <% tasks.each do |name, task| %>
             <div class="text-xl border-0 flex items-center space-x-4">
                 <div class="border-2 size-4"></div>
-                <p class=""><%= task[:msg] %></p>
+                <button type="button" 
+                data-controller="modal"
+                data-modal-target-id-value="slack-join"
+                data-action="click->modal#show"
+                class="underline underline-offset-2"><%= task[:msg] %></p>
             </div>
         <% end %>
     </div>
+    <p class="text-right -mb-2 -mr-2">Click on a task to begin!</p>
+</div>
+
+<div 
+     data-controller="modal"
+     data-action="modal:show-slack-join@window->modal#show modal:hide-slack-join@window->modal#hide modal:toggle-slack-join@window->modal#toggle"
+     class="hidden">
+  <div class="absolute inset-0 flex items-center justify-center p-4">
+    <div data-modal-target="panel" class="bg-red-200 z-10">
+        <button type="button" data-action="click->modal#hide">Close</button>
+    </div>
+    <div data-modal-target="overlay" class="fixed inset-0 bg-black/50"></div>
+  </div>
 </div>
