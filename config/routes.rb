@@ -50,6 +50,8 @@ Rails.application.routes.draw do
   get "starter-projects/*slug", to: "guides#starter_projects",
       constraints: { slug: /[a-z0-9\/_\-]+/ }
 
+  get "faq", to: "guides#faq", as: :faq
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -71,6 +73,9 @@ Rails.application.routes.draw do
   delete "auth/logout" => "sessions#destroy", as: :logout
 
   get "home" => "home#index", as: :home
+  get "projects" => "projects#index", as: :projects
+  get "explore" => "projects#explore", as: :explore
+  get "shop" => "shop#index", as: :shop
 
   namespace :admin do
     constraints AdminConstraint do

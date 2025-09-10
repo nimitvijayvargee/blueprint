@@ -1,7 +1,11 @@
 <% nav_links = {
     "Home" => user_logged_in? ? home_path : nil,
+    "My Projects" => user_logged_in? ? projects_path : nil,
+    "Explore" => explore_path,
+    "Shop" => shop_path,
     "Starter Projects" => starter_projects_path,
     "Hardware Guides" => hardware_guides_path,
+    "FAQ" => faq_path,
 } %>
 
 <% normalize_path = ->(p) { p.to_s.sub(%r{/$}, "") } %>

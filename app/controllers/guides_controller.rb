@@ -10,6 +10,10 @@ class GuidesController < ApplicationController
     render_from_base Rails.root.join("docs", "starter-projects"), params[:slug]
   end
 
+  def faq
+    render_from_base Rails.root.join("docs"), "faq"
+  end
+
   private
 
   def render_from_base(base, slug)
