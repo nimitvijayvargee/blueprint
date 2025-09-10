@@ -28,7 +28,9 @@ module GuidesHelper
     def guide_internal_link?(href)
       return false if href.start_with?("#")
       return true  if href.start_with?("./", "../")
-      return href.start_with?("/guides") if href.start_with?("/")
+      if href.start_with?("/")
+        return href.start_with?("/guides", "/hardware-guides", "/starter-projects")
+      end
       # No scheme or root slash: treat as relative within guides
       return false if href =~ /\A[a-z][a-z0-9+.-]*:/i
       true

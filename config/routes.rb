@@ -40,10 +40,15 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
-  # Guides: mirror docs/guides folder; supports nested paths and index.md
-  get "guides/*slug", to: "guides#show", as: :guide,
+  # Hardware Guides -> docs/hardware-guides
+  get "hardware-guides", to: "guides#hardware", as: :hardware_guides
+  get "hardware-guides/*slug", to: "guides#hardware",
       constraints: { slug: /[a-z0-9\/_\-]+/ }
-  get "guides", to: "guides#show"
+
+  # Starter Projects -> docs/guides/starter-projects
+  get "starter-projects", to: "guides#starter_projects", as: :starter_projects
+  get "starter-projects/*slug", to: "guides#starter_projects",
+      constraints: { slug: /[a-z0-9\/_\-]+/ }
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
