@@ -1,6 +1,11 @@
-<div>
-  <h1 class="font-bold text-4xl">Home#index</h1>
-  <p>Find me in app/views/home/index.html.erb</p>
-  <p>You're logged in as <%= current_user.display_name %> (<%= current_user.email %>)</p>
-</div>
-
+<section class="flex justify-center">
+  <div class="w-full max-w-6xl space-y-4">
+    <div class="py-4">
+      <h1 class="text-5xl">Home</h1>
+      <p class="text-xl">Here's what's cooking today</p>
+    </div>
+    <div class="grid grid-cols-2">
+      <%= render 'tasks' %>
+    </div>
+  </div>
+</section>

@@ -19,8 +19,8 @@
   --font-rc-empty: "R&C Basic Empty", "Poppins", sans-serif;
 }
 
-body {
-  @apply bg-bp-dark text-white font-rc-full;
+:root {
+  @apply bg-bp-dark text-white font-rc-full overscroll-none;
 }
 
 @layer components {
@@ -41,7 +41,7 @@ body {
   }
 
   .btn-nav {
-    @apply bg-bp-dark border-2 border-bp-dark;
+    @apply bg-bp-dark !py-[8px] inset-shadow-sm inset-shadow-black/25;
   }
 
   .btn-nav-active {

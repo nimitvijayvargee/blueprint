@@ -1,0 +1,19 @@
+<% tasks = current_user.tasks.task_requirements %>
+
+<div class="space-y-4 bg-bp-darker px-8 py-6 shadow-black/30 shadow-lg relative">
+    <div class="absolute size-32 bg-red-200/25 -right-1 -top-3 -rotate-5">
+        stickers go here
+    </div>
+    <div class="">
+        <h2 class="text-3xl">Your tasks</h2>
+        <p>Get stickers when you finish!</p>
+    </div>
+    <div class="space-y-4">
+        <% tasks.each do |name, task| %>
+            <div class="text-xl border-0 flex items-center space-x-4">
+                <div class="border-2 size-4"></div>
+                <p class=""><%= task[:msg] %></p>
+            </div>
+        <% end %>
+    </div>
+</div>
