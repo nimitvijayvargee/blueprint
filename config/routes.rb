@@ -77,6 +77,8 @@ Rails.application.routes.draw do
   get "explore" => "projects#explore", as: :explore
   get "shop" => "shop#index", as: :shop
 
+  resources :users, only: [ :show ]
+
   namespace :admin do
     constraints AdminConstraint do
       mount MissionControl::Jobs::Engine, at: "jobs"

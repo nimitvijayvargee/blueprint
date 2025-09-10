@@ -56,11 +56,7 @@ class SessionsController < ApplicationController
         session[:user_id] = user.id
         Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
         redirect_target = post_login_redirect_path
-        if user.display_name.blank?
-          redirect_to(redirect_target || home_path, notice: "Welcome back!")
-        else
-          redirect_to(redirect_target || home_path, notice: "Welcome back, #{user.display_name}!")
-        end
+        redirect_to(redirect_target || home_path)
       else
         flash.now[:alert] = "Invalid OTP. Please try again."
         respond_to do |format|

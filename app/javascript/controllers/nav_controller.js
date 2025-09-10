@@ -33,8 +33,8 @@ export default class extends Controller {
   }
 
   toggleVariant(el, active) {
-    const ACTIVE = "btn-primary"
-    const INACTIVE = "btn-outline"
+    const ACTIVE = "btn-nav-active"
+    const INACTIVE = "btn-nav"
     if (active) {
       el.classList.add(ACTIVE)
       el.classList.remove(INACTIVE)
