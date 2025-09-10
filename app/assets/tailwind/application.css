@@ -23,29 +23,30 @@ body {
   @apply bg-bp-dark text-white font-rc-full;
 }
 
-.bg-hatch {
-  background-image: url("hatch.svg");
-}
+@layer components {
+  .bg-hatch {
+    background-image: url("hatch.svg");
+  }
 
-.btn {
-  @apply inline-flex items-center justify-center gap-2 text-xl py-2 px-6 transition-colors;
-}
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 text-xl py-2 px-6 transition-colors;
+  }
 
-.btn-primary {
-  @apply bg-white text-gray-900 hover:bg-bp-light;
-}
+  .btn-primary {
+    @apply bg-white text-gray-900 hover:bg-bp-light;
+  }
 
-.btn-outline {
-  @apply border-2 border-white text-white hover:bg-white/10;
-}
+  .btn-outline {
+    @apply border-2 border-white text-white hover:bg-white/10;
+  }
 
-.input {
-  @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2;
+  .input {
+    @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2;
+  }
 }
-
 .markdown {
   /* Base */
-  @apply text-white leading-relaxed font-rc-light print:text-black print:bg-white print:leading-normal print:text-sm;
+  @apply text-white leading-relaxed font-rc-full print:text-black print:bg-white print:leading-normal print:text-sm;
 
   /* Trim outer whitespace */
   > *:first-child {
@@ -57,33 +58,27 @@ body {
 
   /* Headings */
   h1 {
-    @apply mt-8 mb-4 pb-2 text-5xl font-bold leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20;
+    @apply mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20;
   }
   h2 {
-    @apply mt-8 mb-3 pb-2 text-4xl font-bold leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20;
+    @apply mt-8 mb-3 pb-2 text-4xl leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20;
   }
   h3 {
-    @apply mt-6 mb-2 text-3xl font-semibold;
+    @apply mt-6 mb-2 text-3xl;
   }
   h4 {
-    @apply mt-4 mb-2 text-2xl font-semibold;
+    @apply mt-4 mb-2 text-2xl;
   }
   h5 {
-    @apply mt-4 mb-2 text-xl font-semibold;
+    @apply mt-4 mb-2 text-xl;
   }
   h6 {
-    @apply mt-3 mb-2 text-lg font-semibold;
+    @apply mt-3 mb-2 text-lg;
   }
 
   /* Paragraphs */
   p {
     @apply my-3 print:my-2;
-  }
-
-  /* Emphasis */
-  strong,
-  b {
-    @apply font-rc-full font-black;
   }
 
   /* Links */
@@ -142,7 +137,7 @@ body {
     @apply w-full table-auto text-left border-collapse my-6;
   }
   thead th {
-    @apply border-b border-white/30 py-2 px-3 font-semibold print:border-black/40;
+    @apply border-b border-white/30 py-2 px-3 print:border-black/40;
   }
   tbody td {
     @apply border-b border-white/10 py-2 px-3 align-top print:border-black/20;
@@ -162,7 +157,6 @@ body {
     } /* string  - pink */
     .kwd {
       color: #f0e68c;
-      font-weight: bold;
     }
     .com {
       color: #87ceeb;
@@ -181,11 +175,9 @@ body {
     } /* plaintext */
     .tag {
       color: #f0e68c;
-      font-weight: bold;
     } /* html/xml tag    - lightyellow */
     .atn {
       color: #bdb76b;
-      font-weight: bold;
     } /* attribute name  - khaki */
     .atv {
       color: #ffa0a0;
@@ -220,7 +212,6 @@ body {
       .kwd,
       code .kwd {
         color: #006;
-        font-weight: bold;
       }
       .com,
       code .com {
@@ -230,7 +221,6 @@ body {
       .typ,
       code .typ {
         color: #404;
-        font-weight: bold;
       }
       .lit,
       code .lit {
@@ -247,7 +237,6 @@ body {
       .tag,
       code .tag {
         color: #006;
-        font-weight: bold;
       }
       .atn,
       code .atn {

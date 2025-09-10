@@ -5,7 +5,7 @@
     url("RC-BasicEmpty.woff2") format("woff2"),
     url("RC-BasicEmpty.woff") format("woff"),
     url("RC-BasicEmpty.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
@@ -17,7 +17,7 @@
     url("RC-BasicLight.woff2") format("woff2"),
     url("RC-BasicLight.woff") format("woff"),
     url("RC-BasicLight.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
@@ -29,7 +29,7 @@
     url("RC-BasicDark.woff2") format("woff2"),
     url("RC-BasicDark.woff") format("woff"),
     url("RC-BasicDark.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
@@ -41,7 +41,7 @@
     url("RC-BasicFull.woff2") format("woff2"),
     url("RC-BasicFull.woff") format("woff"),
     url("RC-BasicFull.ttf") format("truetype");
-  font-weight: bold;
+  /* font-weight: bold; */
   font-style: normal;
   font-display: swap;
 }
@@ -53,7 +53,7 @@
     url("RC-GuidelinesLight.woff2") format("woff2"),
     url("RC-GuidelinesLight.woff") format("woff"),
     url("RC-GuidelinesLight.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
@@ -65,7 +65,7 @@
     url("RC-GuidelinesDark.woff2") format("woff2"),
     url("RC-GuidelinesDark.woff") format("woff"),
     url("RC-GuidelinesDark.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
@@ -77,7 +77,7 @@
     url("RC-GuidelinesEmpty.woff2") format("woff2"),
     url("RC-GuidelinesEmpty.woff") format("woff"),
     url("RC-GuidelinesEmpty.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
@@ -89,7 +89,7 @@
     url("RC-GuidelinesFull.woff2") format("woff2"),
     url("RC-GuidelinesFull.woff") format("woff"),
     url("RC-GuidelinesFull.ttf") format("truetype");
-  font-weight: normal;
+  /* font-weight: normal; */
   font-style: normal;
   font-display: swap;
 }
