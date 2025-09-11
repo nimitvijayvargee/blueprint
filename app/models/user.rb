@@ -358,4 +358,8 @@ class User < ApplicationRecord
   def tasks
     task_list || create_task_list!
   end
+
+  def invite_to_slack!
+    nil
+  end
 end

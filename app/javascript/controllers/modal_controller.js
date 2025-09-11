@@ -8,7 +8,7 @@ import { Controller } from "@hotwired/stimulus"
 //   data-modal-target-id-value="example"
 //   data-action="click->modal#show"
 export default class extends Controller {
-  static targets = ["panel", "overlay", "initialFocus"]
+  static targets = ["panel", "overlay", "initialFocus", "step"]
 
   static values = {
     open: { type: Boolean, default: false },
@@ -21,10 +21,14 @@ export default class extends Controller {
   connect() {
     if (this.hasTargetIdValue) return
 
+    this._currentStep = 0
     this._onKeydown = this._onKeydown.bind(this)
     this._onBackdropClick = this._onBackdropClick.bind(this)
 
     if (this.hasOverlayTarget) this.overlayTarget.addEventListener("click", this._onBackdropClick)
+
+    // Initialize step visibility
+    this._updateSteps()
 
     this._applyOpenState(this.openValue)
   }
@@ -45,6 +49,8 @@ export default class extends Controller {
 
     if (this.openValue) return
     this.openValue = true
+    this._currentStep = 0
+    this._updateSteps()
     this._applyOpenState(true)
   }
 
@@ -66,6 +72,24 @@ export default class extends Controller {
     }
 
     this.openValue ? this.hide() : this.show()
+  }
+
+  next() {
+    if (this.hasTargetIdValue) {
+      this.dispatch(`next-${this.targetIdValue}`, { target: window })
+    }
+    
+    this._currentStep = Math.min(this._currentStep + 1, this.stepTargets.length - 1)
+    this._updateSteps()
+  }
+
+  previous() {
+    if (this.hasTargetIdValue) {
+      this.dispatch(`previous-${this.targetIdValue}`, { target: window })
+    }
+    
+    this._currentStep = Math.max(this._currentStep - 1, 0)
+    this._updateSteps()
   }
 
   // Internal
@@ -125,5 +149,19 @@ export default class extends Controller {
     if (!this._scrollLocked) return
     document.body.style.overflow = this._prevBodyOverflow || ""
     this._scrollLocked = false
+  }
+
+  _updateSteps() {
+    if (!this.hasStepTarget && this.stepTargets.length === 0) return
+    this.stepTargets.forEach((el, idx) => {
+      const active = idx === this._currentStep
+      el.hidden = !active
+      el.setAttribute("aria-hidden", String(!active))
+      if (active) {
+        el.classList.remove("hidden")
+      } else {
+        el.classList.add("hidden")
+      }
+    })
   }
 }
