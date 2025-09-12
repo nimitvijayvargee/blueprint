@@ -116,10 +116,11 @@
 
   /* Code */
   code {
-    @apply rounded bg-white/10 px-1.5 py-0.5 text-sm font-mono print:bg-white print:text-black;
+    @apply rounded bg-bp-darker px-1.5 py-0.5 text-sm font-mono print:bg-white print:text-black;
   }
+
   pre {
-    @apply my-4 overflow-x-auto rounded-lg bg-black/50 border border-white/10 p-4 print:bg-white print:border-black/20;
+    @apply my-4 overflow-x-auto rounded-lg bg-bp-darker p-4 print:bg-white print:border-black/20;
   }
   pre code {
     @apply bg-transparent p-0 text-inherit;
@@ -137,7 +138,14 @@
 
   /* Images */
   img {
-    @apply my-4 block mx-auto w-full max-w-5xl h-auto rounded-lg border border-white/10 print:max-w-full print:border-black/10;
+    @apply w-auto h-auto max-w-[min(100%,64rem)] max-h-[80vh] my-4 block mx-auto rounded-lg border border-white/10 print:border-black/10;
+  }
+
+  @media print {
+    img {
+      max-width: 100%;
+      max-height: none;
+    }
   }
 
   /* Tables */
@@ -156,9 +164,16 @@
 
   pre {
     display: block;
+  }
+
+  aside {
+    @apply my-6 p-4 bg-bp-darker border-l-4 border-bp-light rounded-r-lg;
+  }
+
+  code {
     .nocode {
       background-color: none;
-      color: #000;
+      color: #ffffff;
     }
     .str {
       color: #ffa0a0;

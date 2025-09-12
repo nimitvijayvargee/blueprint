@@ -40,10 +40,9 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
-  # Hardware Guides -> docs/hardware-guides
-  get "hardware-guides", to: "guides#hardware", as: :hardware_guides
-  get "hardware-guides/*slug", to: "guides#hardware",
-      constraints: { slug: /[a-z0-9\/_\-]+/ }
+  # Guides -> docs/guides
+  get "guides", to: "guides#guides", as: :guides
+  get "guides/*slug", to: "guides#guides"
 
   # Starter Projects -> docs/guides/starter-projects
   get "starter-projects", to: "guides#starter_projects", as: :starter_projects

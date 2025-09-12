@@ -1,3 +1,7 @@
+| title | Example Project Wiring |
+| --- | --- |
+| description | A simple example of wiring common components together. |
+
 # Example Project Wiring
 
 A simple example of wiring components.
@@ -9,4 +13,4 @@ A simple example of wiring components.
 [SCL] -----> [Sensor SCL]
 ```
 
-[Back to index](/hardware-guides)
+[Back to index](/guides)

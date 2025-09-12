@@ -1,3 +1,15 @@
+<%# Turbo Streams to update head on frame navigations %>
+<% if @page_title.present? %>
+  <%= turbo_stream.replace "document-title" do %>
+    <title id="document-title"><%= @page_title %></title>
+  <% end %>
+<% end %>
+<% if @page_description.present? %>
+  <%= turbo_stream.replace "meta-description" do %>
+    <meta name="description" id="meta-description" content="<%= @page_description %>">
+  <% end %>
+<% end %>
+
 <div class="flex justify-center">
   <div class="w-full max-w-6xl">
     <div class="items-center hidden pb-3 mb-8 text-black border-b print:flex">

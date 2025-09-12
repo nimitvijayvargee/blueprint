@@ -1,4 +1,6 @@
-# jlc-ordering
+| title       | Ordering from JLC                                                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------------- |
+| description | Step-by-step guide to ordering PCBs (and optional PCBA) from JLCPCB, including Gerbers, settings, and assembly. |
 
 # How to Order from JLCPCB
 
@@ -10,22 +12,19 @@ PCB fabs take files called **Gerbers**. These are essentially outputted directio
 
 Getting Gerbers is easy. They are usually under some sort of `export` or `output` section of your software.
 
-For EasyEDA, simply go to your PCB view (not the schematic view) and click 
+For EasyEDA, simply go to your PCB view (not the schematic view) and click
 
 > File>Export>PCB Fabrication File(Gerber).
-> 
 
 It will prompt you to check DRC which you should ALWAYS do
 
 ![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/0c7636de3e8bfdc9d81aa68422c288ad41d1bf29_image.png)
 
-If you are doing PCBA (A PCB board with the parts assembled at the factory), you will also need the Bill of Materials(BOM), and a Pick and Place File. You can get them by doing: 
+If you are doing PCBA (A PCB board with the parts assembled at the factory), you will also need the Bill of Materials(BOM), and a Pick and Place File. You can get them by doing:
 
 > File>Export>Bill of Materials(BOM)
-> 
 
 > File>Export>Pick and Place File
-> 
 
 ## 2. Uploading to JLCPCB
 
@@ -44,9 +43,7 @@ Base options (These are all the default options so you likely don’t need to ch
 - **Base Material**: Use FR-4.
 - **Layers**: 2 is the most common.
 - **Dimensions**: Auto-filled from your Gerbers.
-    
-    > Note: The PCB is a lot cheaper when below 100mmx100mm so if you are close to that number, maybe try redesigning to be under
-    > 
+  > Note: The PCB is a lot cheaper when below 100mmx100mm so if you are close to that number, maybe try redesigning to be under
 - **PCB QTY**: Choose 5 (minimum allowed).
 - **Product Type**: Keep as Industrial/Consumer Electronics.
 
@@ -75,7 +72,7 @@ Try and always keep the high-spec options on the default. Changing them is quite
 <aside>
 👉
 
-*This only applies to you if you are doing PCBA (PCB Assembly). If you are not, skip this step
+\*This only applies to you if you are doing PCBA (PCB Assembly). If you are not, skip this step
 
 </aside>
 
@@ -97,7 +94,7 @@ Then upload your `bom.csv` and `positions.csv` (KiCad) or `BOM_PCB.csv` and `Pic
 
 BOM Upload
 
-If parts like the NFC antenna are unselected, click *“Do Not Place”*.
+If parts like the NFC antenna are unselected, click _“Do Not Place”_.
 
 ![Orientation](https://hc-cdn.hel1.your-objectstorage.com/s/v3/9cdf44ed3edd19917da5a82fa9920a7c4790a1d0_orientation.png)
 
@@ -122,8 +119,7 @@ Learn more: [YouTube guide](https://www.youtube.com/watch?v=5AyxuuFjZSI) or [PCB
 Click **checkout** and fill out your information.
 
 > To avoid excess shipping fees or customs, check out the Shipping Tips doc!
-The TLDR is that you should select Global Standard Direct for your shipping only if you can!
-> 
+> The TLDR is that you should select Global Standard Direct for your shipping only if you can!
 
 Then choose “Pay after Review” or “Pay Directly”, and click **Submit Order**.
 
@@ -140,9 +136,8 @@ Go to [My Orders](https://jlcpcb.com/user-center/orders/) and take a screenshot 
 ![Cart screenshot](https://hc-cdn.hel1.your-objectstorage.com/s/v3/51761af33c599ad46040b56176a516b543293c64_cart.png)
 
 <aside>
-👉
 
-### You will need this screenshot for your PCB approval!
+##### 👉 You will need this screenshot for your PCB approval!
 
 </aside>
 

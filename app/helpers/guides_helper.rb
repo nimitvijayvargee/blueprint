@@ -29,7 +29,7 @@ module GuidesHelper
       return false if href.start_with?("#")
       return true  if href.start_with?("./", "../")
       if href.start_with?("/")
-        return href.start_with?("/guides", "/hardware-guides", "/starter-projects")
+        return href.start_with?("/guides", "/starter-projects", "/hardware-guides")
       end
       # No scheme or root slash: treat as relative within guides
       return false if href =~ /\A[a-z][a-z0-9+.-]*:/i
@@ -81,16 +81,169 @@ module GuidesHelper
       @__markdown_renderer_base_url = base_url
     end
 
-    @__markdown_renderer.render(text).html_safe
+    processed = preprocess_callouts(text, @__markdown_renderer)
+    @__markdown_renderer.render(processed).html_safe
   end
 
-  GUIDES_HTML_CACHE = ActiveSupport::Cache::MemoryStore.new(size: 32.megabytes)
+  def preprocess_callouts(text, renderer)
+    return text unless text.include?("<aside")
+
+    text.gsub(%r{<aside(\s[^>]*)?>\s*(.*?)\s*</aside>}m) do
+      attrs = Regexp.last_match(1).to_s
+      inner_md = Regexp.last_match(2)
+      inner_html = renderer.render(inner_md)
+      "<aside#{attrs}>#{inner_html}</aside>"
+    end
+  end
+
+  GUIDES_HTML_CACHE = if Rails.env.production?
+    ActiveSupport::Cache::MemoryStore.new(size: 32.megabytes)
+  else
+    ActiveSupport::Cache::NullStore.new
+  end
 
   def render_markdown_file(path)
     base_url = request.base_url rescue nil
     key = [ "guide_md_html", path.to_s, File.mtime(path).to_i, base_url ]
     GUIDES_HTML_CACHE.fetch(key) do
-      render_markdown(File.read(path))
+      raw = File.read(path)
+      cleaned = strip_front_matter_table(raw)
+      render_markdown(cleaned)
     end
+  end
+
+  # Generic metadata builder for a docs section
+  # base: Pathname to the docs root (e.g., Rails.root.join("docs", "hardware-guides"))
+  # url_prefix: String like "/hardware-guides" (no trailing slash)
+  # default_index_title: Fallback title for the root index
+  def docs_metadata(base:, url_prefix:, default_index_title: "")
+    paths = Dir.glob(base.join("**/*.md").to_s)
+    stats = paths.map { |p| [ p, File.mtime(p).to_i ] }.sort_by(&:first)
+    GUIDES_HTML_CACHE.fetch([ "docs_metadata", base.to_s, url_prefix, default_index_title, stats ]) do
+      items = []
+      paths.each do |p|
+        rel = Pathname.new(p).relative_path_from(base).to_s
+
+        slug = nil
+        url  = nil
+        if rel == "index.md"
+          slug = ""
+          url  = url_prefix
+        else
+          s = rel.sub(/\.md\z/, "")
+          if File.basename(s) == "index"
+            dir = File.dirname(s)
+            slug = (dir == "." ? "" : dir)
+          else
+            slug = s
+          end
+          url = slug.blank? ? url_prefix : "#{url_prefix}/#{slug}"
+        end
+
+        meta = parse_guide_metadata(p)
+        fallback_title = if slug.blank?
+          default_index_title
+        else
+          slug.tr("-_/", " ").split.map(&:capitalize).join(" ")
+        end
+        title = meta[:title].presence || fallback_title
+        desc  = meta[:description].presence
+        items << { title: title, path: url, description: desc, slug: slug, file: p }
+      end
+      items
+    end
+  end
+
+  # Guides-specific convenience wrappers (used by nav)
+  def guides_metadata
+    base = Rails.root.join("docs", "guides")
+    docs_metadata(base: base, url_prefix: "/guides", default_index_title: "Guides")
+  end
+
+  def guides_menu_items
+    guides_metadata
+      .reject { |i| i[:slug].blank? }
+      .sort_by { |h| h[:title].downcase }
+      .map { |i| { title: i[:title], path: i[:path], description: i[:description] } }
+  end
+
+  def guide_meta_for_url(url)
+    guides_metadata.find { |i| i[:path] == url }
+  end
+
+  # Starter projects convenience wrappers (for future use)
+  def starter_projects_metadata
+    base = Rails.root.join("docs", "starter-projects")
+    docs_metadata(base: base, url_prefix: "/starter-projects", default_index_title: "Starter Projects")
+  end
+
+  def starter_project_meta_for_url(url)
+    starter_projects_metadata.find { |i| i[:path] == url }
+  end
+
+  private
+
+  def strip_front_matter_table(text)
+    lines = text.lines
+    # find first non-blank
+    i = 0
+    i += 1 while i < lines.length && lines[i].strip.empty?
+    # require a table row
+    return text unless i < lines.length && lines[i].lstrip.start_with?("|")
+    # consume table and following blanks
+    j = i
+    while j < lines.length
+      line = lines[j]
+      break unless line.lstrip.start_with?("|") || line.strip.empty?
+      j += 1
+    end
+    # return remaining content without leading blanks
+    (lines[j..] || []).join.lstrip
+  end
+
+  def parse_guide_metadata(path)
+    key = [ "guide_md_meta", path.to_s, File.mtime(path).to_i ]
+    GUIDES_HTML_CACHE.fetch(key) do
+      meta = { title: nil, description: nil }
+      in_table = false
+      File.foreach(path) do |raw|
+        line = raw.rstrip
+        # Stop if we've passed the initial table block
+        break if in_table && !(line.start_with?("|") || line.strip.empty?)
+
+        # Skip leading blank lines
+        next if !in_table && line.strip.empty?
+
+        if line.start_with?("|")
+          in_table = true
+          # Split cells and strip
+          cells = line.split("|")
+          # remove leading and trailing empty caused by leading/ending |
+          cells.shift if cells.first&.strip == ""
+          cells.pop   if cells.last&.strip == ""
+          cells = cells.map { |c| c.strip }
+
+          # Skip separator rows like |---|---|
+          if cells.all? { |c| c.match?(/\A:?-{3,}:?\z/) }
+            next
+          end
+
+          # Expect key | value rows
+          if cells.length >= 2
+            key = cells[0].to_s.downcase
+            val = cells[1].to_s
+            if %w[title description].include?(key)
+              meta[key.to_sym] = val
+            end
+          end
+        else
+          # First non-table, non-blank line: stop scanning
+          break
+        end
+      end
+      meta
+    end
+  rescue Errno::ENOENT
+    { title: nil, description: nil }
   end
 end

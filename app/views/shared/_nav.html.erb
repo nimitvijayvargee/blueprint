@@ -4,7 +4,7 @@
     "Explore" => explore_path,
     "Shop" => shop_path,
     "Starter Projects" => starter_projects_path,
-    "Hardware Guides" => hardware_guides_path,
+    "Guides" => guides_path,
     "FAQ" => faq_path,
 } %>
 
@@ -21,8 +21,18 @@
     </a>
     <div class="flex flex-col space-y-3 grow">
         <% nav_links.each do |name, path| %>
-            <% match = ["Starter Projects", "Hardware Guides"].include?(name) ? "prefix" : "exact" %>
+            <% match = ["Starter Projects", "Guides"].include?(name) ? "prefix" : "exact" %>
             <%= render "shared/button", url: path, text: name, variant: current_nav == name ? :nav_active : :nav, class: "text-base py-1.5", html_options: { data: { nav_target: "link", nav_match: match } } %>
+
+            <% if name == "Guides" %>
+                <ul data-nav-target="submenu" data-submenu-base="/guides" class="text-sm flex-col space-y-1 list-disc list-inside hidden">
+                    <% guides_menu_items.each do |item| %>
+                      <li>
+                        <a href="<%= item[:path] %>" data-nav-target="sublink" data-nav-match="prefix" title="<%= item[:description] %>"><%= item[:title] %></a>
+                      </li>
+                    <% end %>
+                </ul>
+            <% end %>
         <% end %>
     </div>
     <% if user_logged_in? %>
