@@ -2,17 +2,17 @@
 #
 # Table name: users
 #
-#  id           :bigint           not null, primary key
-#  avatar       :string
-#  display_name :string
-#  email        :string           not null
-#  is_banned    :boolean          default(FALSE), not null
-#  is_mcg       :boolean          default(FALSE), not null
-#  role         :integer          default("user"), not null
-#  timezone     :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  slack_id     :string
+#  id         :bigint           not null, primary key
+#  avatar     :string
+#  email      :string           not null
+#  is_banned  :boolean          default(FALSE), not null
+#  is_mcg     :boolean          default(FALSE), not null
+#  role       :integer          default("user"), not null
+#  timezone   :string
+#  username   :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  slack_id   :string
 #
 class User < ApplicationRecord
   has_many :projects
@@ -76,7 +76,7 @@ class User < ApplicationRecord
     end
 
     email = user_info.user.profile.email
-    display_name = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
+    username_from_slack = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
     timezone = user_info.user.tz
     avatar = user_info.user.profile.image_192 || user_info.user.profile.image_512
 
@@ -85,7 +85,7 @@ class User < ApplicationRecord
         event: "slack_user_found",
         slack_id: slack_id,
         email: email,
-        display_name: display_name,
+        username: username_from_slack,
         timezone: timezone,
         avatar: avatar
       }.to_json)
@@ -121,7 +121,7 @@ class User < ApplicationRecord
       # Merge Slack data into existing user
       existing_user.update!(
         slack_id: slack_id,
-        display_name: display_name.presence || existing_user.display_name,
+        username: username_from_slack.presence || existing_user.display_name,
         timezone: timezone.presence || existing_user.timezone,
         avatar: avatar.presence || existing_user.avatar
       )
@@ -131,7 +131,7 @@ class User < ApplicationRecord
 
     User.create!(
       slack_id: slack_id,
-      display_name: display_name,
+      username: username_from_slack,
       email: email,
       timezone: timezone,
       avatar: avatar,
@@ -162,7 +162,7 @@ class User < ApplicationRecord
 
     slack_id = user_info.user.id
     email = user_info.user.profile.email
-    display_name = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
+    username_from_slack = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
     timezone = user_info.user.tz
     avatar = user_info.user.profile.image_192 || user_info.user.profile.image_512
 
@@ -171,7 +171,7 @@ class User < ApplicationRecord
         event: "slack_user_found",
         slack_id: slack_id,
         email: email,
-        display_name: display_name,
+        username: username_from_slack,
         timezone: timezone,
         avatar: avatar
       }.to_json)
@@ -206,7 +206,7 @@ class User < ApplicationRecord
 
       existing_user.update!(
         slack_id: slack_id,
-        display_name: display_name.presence || existing_user.display_name,
+        username: username_from_slack.presence || existing_user.username,
         timezone: timezone.presence || existing_user.timezone,
         avatar: avatar.presence || existing_user.avatar
       )
@@ -216,7 +216,7 @@ class User < ApplicationRecord
 
     User.create!(
       slack_id: slack_id,
-      display_name: display_name,
+      username: username_from_slack,
       email: email,
       timezone: timezone,
       avatar: avatar,
@@ -286,14 +286,14 @@ class User < ApplicationRecord
 
     user_info = User.fetch_slack_user_info(slack_id)
 
-    new_display_name = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
+    new_username = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
     new_email = user_info.user.profile.email
     new_timezone = user_info.user.tz
     new_avatar = user_info.user.profile.image_original.presence || user_info.user.profile.image_512
     new_is_mcg = !!user_info.user.is_restricted
 
     changes = {}
-    changes[:display_name] = { from: display_name, to: new_display_name } if display_name != new_display_name
+    changes[:username] = { from: username, to: new_username } if username != new_username
     changes[:email] = { from: email, to: new_email } if email != new_email
     changes[:timezone] = { from: timezone, to: new_timezone } if timezone != new_timezone
     changes[:avatar] = { from: avatar, to: new_avatar } if avatar != new_avatar
@@ -310,7 +310,7 @@ class User < ApplicationRecord
       end
 
       update!(
-        display_name: new_display_name,
+        username: new_username,
         email: new_email,
         timezone: new_timezone,
         avatar: new_avatar,
@@ -444,6 +444,16 @@ class User < ApplicationRecord
 
     Rails.logger.tagged("SlackInvite") do
       Rails.logger.info({ event: "invite_success", user_id: id, email: email }.to_json)
+    end
+  end
+
+  def display_name
+    if username.present?
+      username
+    elsif email.present?
+      email.split("@").first
+    else
+      "User#{id}"
     end
   end
 end

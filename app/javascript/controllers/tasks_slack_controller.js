@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["button"]
+    static targets = ["button1", "button2"]
 
     static values = {
         targetId: String
@@ -12,10 +12,15 @@ export default class extends Controller {
     }
 
     sendInvite() {
-        if (!this.hasButtonTarget) return
+        if (!this.hasButton1Target) return
 
-        this.buttonTarget.innerText = "Sending..."
-        this.buttonTarget.disabled = true
+        // TODO: TESTING PLEASE REMOVE THIS
+        this.dispatch(`modal:next-${this.targetIdValue}`, { target: window, prefix: false })
+        return
+        // REMEMBER TO REMOVE THIS PLSSSS
+
+        this.button1Target.innerText = "Sending..."
+        this.button1Target.disabled = true
 
         // post to /users/invite_to_slack
         fetch("/users/invite_to_slack", {
@@ -30,9 +35,45 @@ export default class extends Controller {
             if (response.ok) {
                 this.dispatch(`modal:next-${this.targetIdValue}`, { target: window, prefix: false })
             } else {
-                this.buttonTarget.innerText = "Error, try again"
-                this.buttonTarget.disabled = false
+                this.button1Target.innerText = "Error, try again?"
+                this.button1Target.disabled = false
             }
+        }).catch(error => {
+            console.error("Error:", error)
+            this.button1Target.innerText = "Error, try again?"
+            this.button1Target.disabled = false
+        });
+    }
+
+    checkVerified() {
+        if (!this.hasButton2Target) return
+        
+        this.button2Target.innerText = "Running some checks..."
+        this.button2Target.disabled = true
+
+        fetch("/users/mcg_check", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({})
+        }).then(async response => {
+            if (!response.ok) {
+                this.button2Target.innerText = "Error, try again?"
+                this.button2Target.disabled = false
+                return
+            }
+            const data = await response.json()
+            if (!data.is_mcg) {
+                window.location.reload()
+            } else {
+                this.button2Target.innerText = "You're not verified!"
+                this.button2Target.disabled = false
+            }
+        }).catch(() => {
+            this.button2Target.innerText = "Error, try again?"
+            this.button2Target.disabled = false
         })
     }
 }

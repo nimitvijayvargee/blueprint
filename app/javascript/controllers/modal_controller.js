@@ -15,13 +15,14 @@ export default class extends Controller {
     closeOnEscape: { type: Boolean, default: true },
     closeOnBackdrop: { type: Boolean, default: true },
     disableScroll: { type: Boolean, default: true },
-    targetId: String
+    targetId: String,
+    startingStep: { type: Number, default: 0 }
   }
 
   connect() {
     if (this.hasTargetIdValue) return
 
-    this._currentStep = 0
+    this._currentStep = this.startingStepValue
     this._onKeydown = this._onKeydown.bind(this)
     this._onBackdropClick = this._onBackdropClick.bind(this)
 
@@ -49,7 +50,7 @@ export default class extends Controller {
 
     if (this.openValue) return
     this.openValue = true
-    this._currentStep = 0
+    this._currentStep = this.startingStepValue
     this._updateSteps()
     this._applyOpenState(true)
   }
