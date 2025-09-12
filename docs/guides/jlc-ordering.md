@@ -70,9 +70,8 @@ Try and always keep the high-spec options on the default. Changing them is quite
 ## 3. PCB Assembly
 
 <aside>
-👉
 
-\*This only applies to you if you are doing PCBA (PCB Assembly). If you are not, skip this step
+👉 This only applies to you if you are doing PCBA (PCB Assembly). If you are not, skip this step
 
 </aside>
 
