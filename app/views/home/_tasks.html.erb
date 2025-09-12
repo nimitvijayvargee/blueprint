@@ -25,9 +25,9 @@
 
 <div 
   data-controller="modal"
-  data-action="modal:show-slack-join@window->modal#show modal:hide-slack-join@window->modal#hide modal:toggle-slack-join@window->modal#toggle"
+  data-action="modal:show-slack-join@window->modal#show modal:hide-slack-join@window->modal#hide modal:toggle-slack-join@window->modal#toggle modal:next-slack-join@window->modal#next"
   class="hidden absolute inset-0">
-  <div class="absolute inset-0 flex items-center justify-center p-4">
+  <div class="absolute inset-0 flex items-center justify-center p-4" data-controller="tasks-slack" data-tasks-slack-target-id-value="slack-join">
     <%= render "shared/card", html_options: { data: { modal_target: "panel" } }, class: "z-50 min-w-xl space-y-0" do %>
       <div data-modal-target="step" class="space-y-6">
         <div>
@@ -37,7 +37,7 @@
         <div class="bg-gray-500 aspect-video"> placeholder image</div>
         <%= render "shared/button", 
             text: "Join the Slack!",
-            class: "w-full", html_options: { data: { action: "click->modal#next" } } 
+            class: "w-full", html_options: { data: { action: "click->tasks-slack#sendInvite", tasks_slack_target: "button" } } 
             %>
       </div>
       <div data-modal-target="step" class="space-y-2">

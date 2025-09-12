@@ -7,6 +7,7 @@
 #  display_name :string
 #  email        :string           not null
 #  is_banned    :boolean          default(FALSE), not null
+#  is_mcg       :boolean          default(FALSE), not null
 #  role         :integer          default("user"), not null
 #  timezone     :string
 #  created_at   :datetime         not null
@@ -289,12 +290,14 @@ class User < ApplicationRecord
     new_email = user_info.user.profile.email
     new_timezone = user_info.user.tz
     new_avatar = user_info.user.profile.image_original.presence || user_info.user.profile.image_512
+    new_is_mcg = !!user_info.user.is_restricted
 
     changes = {}
     changes[:display_name] = { from: display_name, to: new_display_name } if display_name != new_display_name
     changes[:email] = { from: email, to: new_email } if email != new_email
     changes[:timezone] = { from: timezone, to: new_timezone } if timezone != new_timezone
     changes[:avatar] = { from: avatar, to: new_avatar } if avatar != new_avatar
+    changes[:is_mcg] = { from: is_mcg, to: new_is_mcg } if is_mcg != new_is_mcg
 
     if changes.any?
       Rails.logger.tagged("ProfileRefresh") do
@@ -310,7 +313,8 @@ class User < ApplicationRecord
         display_name: new_display_name,
         email: new_email,
         timezone: new_timezone,
-        avatar: new_avatar
+        avatar: new_avatar,
+        is_mcg: new_is_mcg
       )
 
       Rails.logger.tagged("ProfileRefresh") do
@@ -363,10 +367,6 @@ class User < ApplicationRecord
   end
 
   def invite_to_slack!
-    SlackInviteJob.perform_later(id)
-  end
-
-  def invite_to_slack_sync!
     xoxc = ENV.fetch("SLACK_XOXC", nil)
     xoxd = ENV.fetch("SLACK_XOXD", nil)
     channels = ENV.fetch("SLACK_CHANNELS", "").split(",").map(&:strip).reject(&:blank?)
@@ -398,13 +398,23 @@ class User < ApplicationRecord
 
     result = JSON.parse(response.body) rescue { "ok" => false, "error" => "invalid_json" }
 
-    unless (response.status == 200 && result["ok"] != false) || (response.status == 200 && result["invites"]&.first["ok"] != true)
+    unless response.status == 200 && result["ok"] != false && result["invites"]&.first["ok"] != false
       Rails.logger.tagged("SlackInvite") do
         Rails.logger.error({ event: "invite_failed", user_id: id, email: email, status: response.status, body: response.body }.to_json)
       end
       raise StandardError, "Slack invite failed: status=#{response.status} body=#{response.body}"
     end
 
+    Rails.logger.tagged("SlackInvite") do
+      Rails.logger.info({ event: "invite_enqueued_followup", user_id: id, email: email, response: result }.to_json)
+    end
+
+    SlackInviteFinalizeJob.perform_later(id)
+
+    result
+  end
+
+  def finalize_slack_invite!
     begin
       user_info = nil
       retries = 0
@@ -433,9 +443,7 @@ class User < ApplicationRecord
     refresh_profile!
 
     Rails.logger.tagged("SlackInvite") do
-      Rails.logger.info({ event: "invite_success", user_id: id, email: email, response: result }.to_json)
+      Rails.logger.info({ event: "invite_success", user_id: id, email: email }.to_json)
     end
-
-    result
   end
 end

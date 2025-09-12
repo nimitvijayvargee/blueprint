@@ -76,7 +76,9 @@ Rails.application.routes.draw do
   get "explore" => "projects#explore", as: :explore
   get "shop" => "shop#index", as: :shop
 
-  resources :users, only: [ :show ]
+  resources :users, only: [ :show ] do
+    post :invite_to_slack, on: :collection
+  end
 
   namespace :admin do
     constraints AdminConstraint do
