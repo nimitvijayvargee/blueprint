@@ -143,11 +143,11 @@ class User < ApplicationRecord
       user_info = fetch_slack_user_info_from_email(email)
     rescue Slack::Web::Api::Errors::UsersNotFound => e
       Rails.logger.warn("Slack user not found for email #{email}: #{e.message}")
-      User.find_or_create_by!(email: email) do |user|
+      user = User.find_or_create_by!(email: email) do |user|
         user.is_banned = false
         user.role = :user
       end
-      return nil
+      return user
     end
 
     if user_info.user.is_bot
@@ -236,6 +236,9 @@ class User < ApplicationRecord
         sleep s
         r += 1
         retry
+      else
+        Rails.logger.error("Slack API ratelimit, max retries on users_lookupByEmail for #{email}.")
+        raise
       end
     end
   end
@@ -360,6 +363,79 @@ class User < ApplicationRecord
   end
 
   def invite_to_slack!
-    nil
+    SlackInviteJob.perform_later(id)
+  end
+
+  def invite_to_slack_sync!
+    xoxc = ENV.fetch("SLACK_XOXC", nil)
+    xoxd = ENV.fetch("SLACK_XOXD", nil)
+    channels = ENV.fetch("SLACK_CHANNELS", "").split(",").map(&:strip).reject(&:blank?)
+
+    payload = {
+      token: xoxc,
+      email: email,
+      invites: [
+        {
+          email: email,
+          type: "restricted",
+          mode: "manual"
+        }
+      ],
+      restricted: true,
+      channels: channels
+    }
+
+    Rails.logger.tagged("SlackInvite") do
+      Rails.logger.info({ event: "inviting_user", user_id: id, email: email, channels_count: channels.size }.to_json)
+    end
+
+    response = Faraday.post("https://slack.com/api/users.admin.inviteBulk") do |req|
+      req.headers["Content-Type"] = "application/json"
+      req.headers["Authorization"] = "Bearer #{xoxc}"
+      req.headers["Cookie"] = "d=#{xoxd}"
+      req.body = JSON.generate(payload)
+    end
+
+    result = JSON.parse(response.body) rescue { "ok" => false, "error" => "invalid_json" }
+
+    unless (response.status == 200 && result["ok"] != false) || (response.status == 200 && result["invites"]&.first["ok"] != true)
+      Rails.logger.tagged("SlackInvite") do
+        Rails.logger.error({ event: "invite_failed", user_id: id, email: email, status: response.status, body: response.body }.to_json)
+      end
+      raise StandardError, "Slack invite failed: status=#{response.status} body=#{response.body}"
+    end
+
+    begin
+      user_info = nil
+      retries = 0
+      max_retries = 10
+      delay = 5
+      begin
+        user_info = User.fetch_slack_user_info_from_email(email)
+      rescue Slack::Web::Api::Errors::UsersNotFound
+        if retries < max_retries
+          Rails.logger.info("Slack user not found for #{email}, waiting #{delay}s and retrying (#{retries + 1}/#{max_retries})")
+          sleep delay
+          retries += 1
+          retry
+        else
+          raise
+        end
+      end
+    rescue StandardError => e
+      Rails.logger.tagged("SlackInvite") do
+        Rails.logger.error({ event: "no_slack_user_after_invite", user_id: id, email: email, error: e.message }.to_json)
+      end
+      return
+    end
+
+    update!(slack_id: user_info.user.id)
+    refresh_profile!
+
+    Rails.logger.tagged("SlackInvite") do
+      Rails.logger.info({ event: "invite_success", user_id: id, email: email, response: result }.to_json)
+    end
+
+    result
   end
 end
