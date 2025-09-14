@@ -28,8 +28,11 @@
         <% end %>
       </div>
     <% end %>
+    <div class="mb-1">
+      <p class="">Click on a task to begin!</p>
+      <%= render "shared/button", text: "Claim Stickers", class: "w-full", html_options: { disabled: true } %>
+    </div>
   </div>
-  <p class="text-right -mb-2 -mr-2">Click on a task to begin!</p>
 <% end %>
 
 <div 
@@ -44,7 +47,9 @@
           <p class="text-3xl">Join the Hack Club Slack</p>
           <p>Slack is where Hack Club communicates!</p>
         </div>
-        <div class="bg-gray-500 aspect-video"> placeholder image</div>
+        <div class="bg-gray-500 max-w-xl">
+          <video src="<%= video_path('slack-intro.mp4') %>" alt="Slack onboarding video" autoplay loop class="object-fit"></video>
+        </div>
         <%= render "shared/button", 
             text: "Join the Slack!",
             class: "w-full", html_options: { data: { action: "click->tasks-slack#sendInvite", tasks_slack_target: "button1" } } 
@@ -55,18 +60,24 @@
           <p class="text-3xl">Check your inbox!</p>
           <p>Slack has sent you an invite. (Check your spam folder)</p>
         </div>
-        <div class="bg-gray-500 aspect-video"> placeholder image</div>
-        <%= render "shared/button", 
+        <div class="bg-gray-500 max-w-xl">
+          <video src="<%= video_path('slack-onboarding.mp4') %>" alt="Slack onboarding video" autoplay loop class="object-fit"></video>
+        </div>
+        <div class="bg-gray-500 max-w-xl">
+          <%= render "shared/button", 
             text: "I'm in!",
             class: "w-full", html_options: { data: { action: "click->modal#next" } } 
             %>
+        </div>
       </div>
       <div data-modal-target="step" class="space-y-6">
         <div>
           <p class="text-3xl">Verify your Slack account</p>
           <p>Head over to #slack-welcome-start and "Explore the Cave"</p>
         </div>
-        <div class="bg-gray-500 aspect-video"> placeholder image</div>
+        <div class="bg-gray-500 max-w-xl">
+          <video src="<%= video_path('slack-onboarding.mp4') %>" alt="Slack onboarding video" autoplay loop class="object-fit"></video>
+        </div>
         <%= render "shared/button", 
             text: "I'm done!",
             class: "w-full", html_options: { data: { action: "click->tasks-slack#checkVerified", tasks_slack_target: "button2" } } 
