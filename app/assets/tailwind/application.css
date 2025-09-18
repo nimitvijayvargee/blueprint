@@ -26,8 +26,13 @@
 
 /* Custom scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
+}
+
+/* Force scrollbar for testing */
+body {
+  overflow-y: scroll;
 }
 
 ::-webkit-scrollbar-track {
@@ -108,7 +113,7 @@
     @apply border-2 border-white bg-bp-dark hover:bg-bp-lighter;
   }
 
-  .input {
+  .form-input {
     @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2;
   }
 
@@ -129,14 +134,14 @@
     @apply bg-white text-gray-900;
   }
   trix-toolbar .trix-input--dialog {
-    @apply input bg-bp-darker text-white border-white;
+    @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2 bg-bp-darker text-white border-white;
   }
   trix-toolbar .trix-dialog {
     @apply bg-bp-darker text-white border-2 border-white shadow-lg p-3 rounded-none;
   }
 
   trix-editor {
-    @apply input w-full bg-bp-darker text-white border-white min-h-[12rem];
+    @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2 w-full bg-bp-darker text-white border-white min-h-[12rem];
   }
 }
 
@@ -179,7 +184,6 @@
   > *:last-child { @apply mb-0; }
 
   /* Headings */
-<<<<<<< HEAD
   h1 {
     @apply mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20;
   }
@@ -203,26 +207,15 @@
   h6 {
     @apply mt-3 mb-2 text-lg;
   }
-=======
-  h1 { @apply mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20; }
-  h2 { @apply mt-8 mb-3 pb-2 text-4xl leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20; }
-  h3 { @apply mt-6 mb-2 text-3xl; }
-  h4 { @apply mt-4 mb-2 text-2xl; }
-  h5 { @apply mt-4 mb-2 text-xl; }
-  h6 { @apply mt-3 mb-2 text-lg; }
->>>>>>> b1fb3bf998f5da014c4191bee4f22834aa486194
 
   /* Paragraphs */
   p { @apply my-3 print:my-2; }
 
   /* Links */
-<<<<<<< HEAD
   a {
     @apply underline decoration-white/30 underline-offset-2 text-bp-warning hover:decoration-white print:no-underline print:text-black;
   }
-=======
-  a { @apply underline decoration-white/30 underline-offset-2 text-bp-light hover:decoration-white print:no-underline print:text-black; }
->>>>>>> b1fb3bf998f5da014c4191bee4f22834aa486194
+
 
   /* Lists */
   ul { @apply my-3 list-disc list-inside print:my-2; }

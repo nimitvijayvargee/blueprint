@@ -6,7 +6,7 @@
 #  avatar     :string
 #  email      :string           not null
 #  is_banned  :boolean          default(FALSE), not null
-#  is_mcg     :boolean          default(FALSE), not null
+#  is_mcg     :boolean          default(TRUE), not null
 #  role       :integer          default("user"), not null
 #  timezone   :string
 #  username   :string

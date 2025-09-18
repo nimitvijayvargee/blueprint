@@ -136,8 +136,6 @@ Go to [My Orders](https://jlcpcb.com/user-center/orders/) and take a screenshot 
 
 <aside>
 
-##### 👉 You will need this screenshot for your PCB approval!
+####  You will need this screenshot for your PCB approval!
 
 </aside>
-
-[https://www.notion.so](https://www.notion.so)
