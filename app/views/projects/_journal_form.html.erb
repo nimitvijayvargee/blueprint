@@ -1,0 +1,11 @@
+<%= render "shared/card" do %>
+  <%= form_with model: [@project, (@journal_entry || JournalEntry.new)], class: "space-y-4" do |f| %>
+    <div>
+      <%= f.label :content, "Write a new journal entry", class: "block mb-2 text-2xl" %>
+      <%= f.rich_text_area :content, class: "w-full", data: { direct_upload: true } %>
+    </div>
+    <div class="flex gap-2">
+      <%= f.submit "Save", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>
