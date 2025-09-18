@@ -111,170 +111,139 @@
   .input {
     @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2;
   }
+
+  /* ActionText / Trix editor */
+  trix-toolbar {
+    @apply mb-3;
+  }
+  trix-toolbar .trix-button-row {
+    @apply flex flex-wrap items-center justify-between gap-2 overflow-x-auto;
+  }
+  trix-toolbar .trix-button-group {
+    @apply flex border-2 border-white bg-bp-dark;
+  }
+  trix-toolbar .trix-button {
+    @apply text-white/80 px-2 py-1 border-l border-white/20 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed;
+  }
+  trix-toolbar .trix-button.trix-active {
+    @apply bg-white text-gray-900;
+  }
+  trix-toolbar .trix-input--dialog {
+    @apply input bg-bp-darker text-white border-white;
+  }
+  trix-toolbar .trix-dialog {
+    @apply bg-bp-darker text-white border-2 border-white shadow-lg p-3 rounded-none;
+  }
+
+  trix-editor {
+    @apply input w-full bg-bp-darker text-white border-white min-h-[12rem];
+  }
 }
+
+/* Rendered rich text (ActionText) */
+.trix-content {
+  @apply text-white leading-relaxed font-rc-full;
+}
+.trix-content p { @apply my-3; }
+.trix-content a { @apply underline decoration-white/30 underline-offset-2 text-bp-light hover:decoration-white; }
+.trix-content h1 { @apply mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20; }
+.trix-content h2 { @apply mt-8 mb-3 pb-2 text-4xl leading-tight tracking-tight border-b border-white/20; }
+.trix-content h3 { @apply mt-6 mb-2 text-3xl; }
+.trix-content h4 { @apply mt-4 mb-2 text-2xl; }
+.trix-content h5 { @apply mt-4 mb-2 text-xl; }
+.trix-content h6 { @apply mt-3 mb-2 text-lg; }
+.trix-content ul { @apply my-3 list-disc list-inside; }
+.trix-content ol { @apply my-3 list-decimal list-inside; }
+.trix-content li { @apply my-1; }
+.trix-content blockquote { @apply my-4 border-l-4 border-white/30 pl-4 italic text-white/80; }
+.trix-content hr { @apply my-6 border-t border-white/20; }
+.trix-content pre { @apply my-4 overflow-x-auto rounded-lg bg-bp-darker p-4; }
+.trix-content code { @apply rounded bg-bp-darker px-1.5 py-0.5 text-sm font-mono; }
+.trix-content img { @apply w-auto h-auto max-w-[min(100%,64rem)] max-h-[80vh] my-4 block mx-auto rounded-lg border border-white/10; }
+
+/* Attachment galleries */
+.trix-content .attachment-gallery > action-text-attachment,
+.trix-content .attachment-gallery > .attachment { @apply flex-[1_0_33%] max-w-[33%] px-2; }
+.trix-content .attachment-gallery.attachment-gallery--2 > action-text-attachment,
+.trix-content .attachment-gallery.attachment-gallery--2 > .attachment,
+.trix-content .attachment-gallery.attachment-gallery--4 > action-text-attachment,
+.trix-content .attachment-gallery.attachment-gallery--4 > .attachment { @apply basis-1/2 max-w-1/2; }
+
+/* Markdown-rendered content */
 .markdown {
   /* Base */
   @apply text-white leading-relaxed font-rc-full print:text-black print:bg-white print:leading-normal print:text-sm;
 
   /* Trim outer whitespace */
-  > *:first-child {
-    @apply mt-0;
-  }
-  > *:last-child {
-    @apply mb-0;
-  }
+  > *:first-child { @apply mt-0; }
+  > *:last-child { @apply mb-0; }
 
   /* Headings */
-  h1 {
-    @apply mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20;
-  }
-  h2 {
-    @apply mt-8 mb-3 pb-2 text-4xl leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20;
-  }
-  h3 {
-    @apply mt-6 mb-2 text-3xl;
-  }
-  h4 {
-    @apply mt-4 mb-2 text-2xl;
-  }
-  h5 {
-    @apply mt-4 mb-2 text-xl;
-  }
-  h6 {
-    @apply mt-3 mb-2 text-lg;
-  }
+  h1 { @apply mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20; }
+  h2 { @apply mt-8 mb-3 pb-2 text-4xl leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20; }
+  h3 { @apply mt-6 mb-2 text-3xl; }
+  h4 { @apply mt-4 mb-2 text-2xl; }
+  h5 { @apply mt-4 mb-2 text-xl; }
+  h6 { @apply mt-3 mb-2 text-lg; }
 
   /* Paragraphs */
-  p {
-    @apply my-3 print:my-2;
-  }
+  p { @apply my-3 print:my-2; }
 
   /* Links */
-  a {
-    @apply underline decoration-white/30 underline-offset-2 text-bp-light hover:decoration-white print:no-underline print:text-black;
-  }
+  a { @apply underline decoration-white/30 underline-offset-2 text-bp-light hover:decoration-white print:no-underline print:text-black; }
 
   /* Lists */
-  ul {
-    @apply my-3 list-disc list-inside print:my-2;
-  }
-  ol {
-    @apply my-3 list-decimal list-inside print:my-2;
-  }
-  li {
-    @apply my-1 print:my-0;
-  }
-  /* Tighter spacing for paragraphs within list items */
-  li p {
-    @apply my-1 print:my-0;
-  }
-  /* Nested lists get a small visual indent */
+  ul { @apply my-3 list-disc list-inside print:my-2; }
+  ol { @apply my-3 list-decimal list-inside print:my-2; }
+  li { @apply my-1 print:my-0; }
+  li p { @apply my-1 print:my-0; }
   li > ul,
-  li > ol {
-    @apply mt-1 ml-4;
-  }
+  li > ol { @apply mt-1 ml-4; }
 
   /* Code */
-  code {
-    @apply rounded bg-bp-darker px-1.5 py-0.5 text-sm font-mono print:bg-white print:text-black;
-  }
-
-  pre {
-    @apply my-4 overflow-x-auto rounded-lg bg-bp-darker p-4 print:bg-white print:border-black/20;
-  }
-  pre code {
-    @apply bg-transparent p-0 text-inherit;
-  }
+  code { @apply rounded bg-bp-darker px-1.5 py-0.5 text-sm font-mono print:bg-white print:text-black; }
+  pre { @apply my-4 overflow-x-auto rounded-lg bg-bp-darker p-4 print:bg-white print:border-black/20; }
+  pre code { @apply bg-transparent p-0 text-inherit; }
 
   /* Blockquote */
-  blockquote {
-    @apply my-4 border-l-4 border-white/30 pl-4 italic text-white/80 print:border-black/20 print:text-black;
-  }
+  blockquote { @apply my-4 border-l-4 border-white/30 pl-4 italic text-white/80 print:border-black/20 print:text-black; }
 
   /* Horizontal rule */
-  hr {
-    @apply my-6 border-t border-white/20 print:border-black/20;
-  }
+  hr { @apply my-6 border-t border-white/20 print:border-black/20; }
 
   /* Images */
-  img {
-    @apply w-auto h-auto max-w-[min(100%,64rem)] max-h-[80vh] my-4 block mx-auto rounded-lg border border-white/10 print:border-black/10;
-  }
+  img { @apply w-auto h-auto max-w-[min(100%,64rem)] max-h-[80vh] my-4 block mx-auto rounded-lg border border-white/10 print:border-black/10; }
 
   @media print {
-    img {
-      max-width: 100%;
-      max-height: none;
-    }
+    img { max-width: 100%; max-height: none; }
   }
 
   /* Tables */
-  table {
-    @apply w-full table-auto text-left border-collapse my-6;
-  }
-  thead th {
-    @apply border-b border-white/30 py-2 px-3 print:border-black/40;
-  }
-  tbody td {
-    @apply border-b border-white/10 py-2 px-3 align-top print:border-black/20;
-  }
-  tbody tr:last-child td {
-    @apply border-b-0;
-  }
+  table { @apply w-full table-auto text-left border-collapse my-6; }
+  thead th { @apply border-b border-white/30 py-2 px-3 print:border-black/40; }
+  tbody td { @apply border-b border-white/10 py-2 px-3 align-top print:border-black/20; }
+  tbody tr:last-child td { @apply border-b-0; }
 
-  pre {
-    display: block;
-  }
+  pre { display: block; }
 
-  aside {
-    @apply my-6 p-4 bg-bp-darker border-l-4 border-bp-light rounded-r-lg;
-  }
+  aside { @apply my-6 p-4 bg-bp-darker border-l-4 border-bp-light rounded-r-lg; }
 
   code {
-    .nocode {
-      background-color: none;
-      color: #ffffff;
-    }
-    .str {
-      color: #ffa0a0;
-    } /* string  - pink */
-    .kwd {
-      color: #f0e68c;
-    }
-    .com {
-      color: #87ceeb;
-    } /* comment - skyblue */
-    .typ {
-      color: #98fb98;
-    } /* type    - lightgreen */
-    .lit {
-      color: #cd5c5c;
-    } /* literal - darkred */
-    .pun {
-      color: #fff;
-    } /* punctuation */
-    .pln {
-      color: #fff;
-    } /* plaintext */
-    .tag {
-      color: #f0e68c;
-    } /* html/xml tag    - lightyellow */
-    .atn {
-      color: #bdb76b;
-    } /* attribute name  - khaki */
-    .atv {
-      color: #ffa0a0;
-    } /* attribute value - pink */
-    .dec {
-      color: #98fb98;
-    } /* decimal         - lightgreen */
+    .nocode { background-color: none; color: #ffffff; }
+    .str { color: #ffa0a0; }
+    .kwd { color: #f0e68c; }
+    .com { color: #87ceeb; }
+    .typ { color: #98fb98; }
+    .lit { color: #cd5c5c; }
+    .pun { color: #fff; }
+    .pln { color: #fff; }
+    .tag { color: #f0e68c; }
+    .atn { color: #bdb76b; }
+    .atv { color: #ffa0a0; }
+    .dec { color: #98fb98; }
 
     /* Specify class=linenums on a pre to get line numbering */
-    ol.linenums {
-      margin-top: 0;
-      margin-bottom: 0;
-      color: #aeaeae;
-    } /* IE indents via margin-left */
+    ol.linenums { margin-top: 0; margin-bottom: 0; color: #aeaeae; }
     li.L0,
     li.L1,
     li.L2,
@@ -282,53 +251,21 @@
     li.L5,
     li.L6,
     li.L7,
-    li.L8 {
-      list-style-type: none;
-    }
+    li.L8 { list-style-type: none; }
 
     @media print {
       background-color: none;
-      .str,
-      code .str {
-        color: #060;
-      }
-      .kwd,
-      code .kwd {
-        color: #006;
-      }
-      .com,
-      code .com {
-        color: #600;
-        font-style: italic;
-      }
-      .typ,
-      code .typ {
-        color: #404;
-      }
-      .lit,
-      code .lit {
-        color: #044;
-      }
-      .pun,
-      code .pun {
-        color: #440;
-      }
-      .pln,
-      code .pln {
-        color: #000;
-      }
-      .tag,
-      code .tag {
-        color: #006;
-      }
-      .atn,
-      code .atn {
-        color: #404;
-      }
-      .atv,
-      code .atv {
-        color: #060;
-      }
+      .str, code .str { color: #060; }
+      .kwd, code .kwd { color: #006; }
+      .com, code .com { color: #600; font-style: italic; }
+      .typ, code .typ { color: #404; }
+      .lit, code .lit { color: #044; }
+      .pun, code .pun { color: #440; }
+      .pln, code .pln { color: #000; }
+      .tag, code .tag { color: #006; }
+      .atn, code .atn { color: #404; }
+      .atv, code .atv { color: #060; }
     }
   }
 }
+

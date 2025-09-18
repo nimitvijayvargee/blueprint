@@ -4,7 +4,6 @@
 #
 #  id               :bigint           not null, primary key
 #  duration_seconds :integer          default(0), not null
-#  text             :text
 #  views_count      :integer          default(0), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
