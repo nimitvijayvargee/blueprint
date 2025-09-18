@@ -131,14 +131,19 @@
   h2 {
     @apply mt-8 mb-3 pb-2 text-4xl leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20;
   }
+
   h3 {
     @apply mt-6 mb-2 text-3xl;
   }
+
+  /*Same as H2 but as a green accent color*/
   h4 {
-    @apply mt-4 mb-2 text-2xl;
+    @apply text-bp-success mt-8 mb-3 pb-2 text-3xl leading-tight tracking-tight border-b border-white/20 print:mt-3 print:mb-1 print:pb-1 print:border-black/20;
   }
+
+  /*Same as h1 but it has the fancy blueprint lines*/
   h5 {
-    @apply mt-4 mb-2 text-xl;
+    @apply font-rcgl-full mt-8 mb-4 pb-2 text-5xl leading-tight tracking-tight border-b border-white/20 print:mt-4 print:mb-2 print:pb-1 print:border-black/20;
   }
   h6 {
     @apply mt-3 mb-2 text-lg;
@@ -151,7 +156,7 @@
 
   /* Links */
   a {
-    @apply underline decoration-white/30 underline-offset-2 text-bp-light hover:decoration-white print:no-underline print:text-black;
+    @apply underline decoration-white/30 underline-offset-2 text-bp-warning hover:decoration-white print:no-underline print:text-black;
   }
 
   /* Lists */

@@ -2,7 +2,7 @@
 | ----------- | ------------------------------------------ |
 | description | Frequently asked questions about Blueprint |
 
-# FAQ
+##### FAQ
 
 ## When does this program end?
 Currently, the end-date of Blueprint is December 1st
