@@ -24,7 +24,7 @@
     <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
 
-  <body>
+  <body class="<%= request.path != '/' && request.path != home_path ? 'grid-bg' : '' %>"
     <%= render "shared/notice" %>
     <%= render "shared/nav" %>
 
