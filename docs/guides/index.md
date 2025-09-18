@@ -6,7 +6,10 @@
 
 Welcome to the guides.
 
-- [Ordering from JLCPCB](/guides/jlc-ordering)
 - [Getting started](/guides/getting-started)
-- [Example project wiring](/guides/example-wiring)
+- [Custom Projects](/)
+- [What is a Shipped Project](/)
+- [Ordering from JLCPCB](/guides/jlc-ordering)
+- [Custom Parts Sourcing](/)
+- [The Talk](/guides/the-talk)
 
