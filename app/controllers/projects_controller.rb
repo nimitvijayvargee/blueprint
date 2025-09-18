@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   allow_unauthenticated_access only: %i[explore show]
 
   def index
-    @projects = current_user.projects
+    @projects = current_user.projects.with_attached_banner
   end
 
   def explore; end

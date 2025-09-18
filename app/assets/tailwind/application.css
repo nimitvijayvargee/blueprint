@@ -40,6 +40,10 @@
     @apply border-2 border-white text-white hover:bg-white/10 disabled:hover:bg-transparent;
   }
 
+  .btn-inset {
+    @apply bg-bp-dark inset-shadow-sm inset-shadow-black/25 hover:bg-sky-900;
+  }
+
   .btn-nav {
     @apply bg-bp-dark !py-[8px] inset-shadow-sm inset-shadow-black/25;
   }
