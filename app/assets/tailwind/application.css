@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --color-bp-lighter: #344b6a;
   --color-bp-dark: #0e305b;
   --color-bp-darker: #081c35;
   --color-bp-light: #dbe4ee;
@@ -65,15 +66,15 @@
   }
 
   .btn-inset {
-    @apply bg-bp-dark inset-shadow-sm inset-shadow-black/25 hover:bg-sky-900;
+    @apply bg-bp-dark inset-shadow-sm inset-shadow-black/25 hover:bg-bp-lighter;
   }
 
   .btn-nav {
-    @apply bg-bp-dark !py-[8px] inset-shadow-sm inset-shadow-black/25;
+    @apply bg-bp-dark !py-[8px] inset-shadow-sm inset-shadow-black/25 hover:bg-bp-lighter;
   }
 
   .btn-nav-active {
-    @apply border-2 border-white bg-bp-dark;
+    @apply border-2 border-white bg-bp-dark hover:bg-bp-lighter;
   }
 
   .input {

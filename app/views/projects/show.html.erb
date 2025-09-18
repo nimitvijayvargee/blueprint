@@ -4,7 +4,14 @@
       <div class="h-48 bg-gray-200 bg-cover bg-center -mt-6 -mx-8" style="background-image: url(<%= @project.banner.attached? ? url_for(@project.banner) : nil %>)">
       </div>
       <div class="space-y-2">
-        <p class="text-3xl"><%= @project.title %></p>
+        <div class="flex items-start">
+          <p class="text-3xl grow"><%= @project.title %></p>
+          <div>
+            <% if current_user.admin? || current_user == @project.user %>
+              <%= render "shared/button", text: "Edit", url: edit_project_path(@project), class: "py-1 px-6" %>
+            <% end %>
+          </div>
+        </div>
         <p class="text-xl"><%= @project.description.empty? ? "No description yet" : @project.description %></p>
       </div>
     <% end %>
