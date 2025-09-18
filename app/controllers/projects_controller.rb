@@ -25,6 +25,22 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def edit
+    @project = current_user.projects.find_by(id: params[:id])
+    not_found unless @project
+  end
+
+  def update
+    @project = current_user.projects.find_by(id: params[:id])
+    not_found and return unless @project
+
+    if @project.update(project_params)
+      redirect_to project_path(@project), notice: "Project updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def project_params

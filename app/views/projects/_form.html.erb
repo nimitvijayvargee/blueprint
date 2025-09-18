@@ -1,6 +1,6 @@
 <%= form_with model: @project, html: { class: "space-y-6" } do |f| %>
   <% if @project.errors.any? %>
-    <div class="rounded-md bg-red-50 p-4 text-red-700">
+    <div class="rounded-md bg-bp-danger p-4 text-red-900">
       <p><strong><%= pluralize(@project.errors.count, "error") %></strong> prevented this project from being saved:</p>
       <ul class="list-disc pl-5">
         <% @project.errors.full_messages.each do |msg| %>
