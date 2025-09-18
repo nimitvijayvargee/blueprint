@@ -1,5 +1,5 @@
 class GuidesController < ApplicationController
-  allow_unauthenticated_access only: %i[ show guides starter_projects ]
+  allow_unauthenticated_access only: %i[ show guides starter_projects faq ]
   skip_before_action :set_current_user, if: :turbo_frame_request?
 
   def guides
