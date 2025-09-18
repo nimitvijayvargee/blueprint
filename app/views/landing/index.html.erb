@@ -21,7 +21,14 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="grainy-bg">
+    <svg width="0" height="0" class="block">
+      <filter id="grainy" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".5" numOctaves="2"/>
+        <feColorMatrix type="saturate" values="0"/>
+        <feBlend in="SourceGraphic" mode="multiply"/>
+      </filter>
+    </svg>
     <%= render "shared/notice" %>
     <main>
       <div class="fixed top-8 left-0">
