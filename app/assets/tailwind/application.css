@@ -23,6 +23,30 @@
   @apply bg-bp-dark text-white font-rc-full overscroll-none;
 }
 
+.grid-bg {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0, 0 0;
+  background-attachment: fixed;
+  position: relative;
+}
+
+/* Grain overlay atop grid */
+.grid-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse, #000, transparent);
+  opacity: 0.2;
+  filter: url(#grainy);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 @layer components {
   .bg-hatch {
     background-image: url("hatch.svg");
