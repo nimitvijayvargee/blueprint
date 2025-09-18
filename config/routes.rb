@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   delete "auth/logout" => "sessions#destroy", as: :logout
 
   get "home" => "home#index", as: :home
-  get "projects" => "projects#index", as: :projects
+  resources :projects, only: [ :index, :new, :create, :show ]
   get "explore" => "projects#explore", as: :explore
   get "shop" => "shop#index", as: :shop
 
