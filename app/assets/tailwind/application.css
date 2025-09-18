@@ -33,7 +33,7 @@
   }
 
   .btn-primary {
-    @apply border-2 border-white bg-white text-gray-900 hover:bg-bp-light disabled:hover:bg-white;
+    @apply border-2 border-white bg-white text-gray-900 hover:bg-bp-light hover:border-bp-light disabled:hover:bg-white disabled:hover:border-white;
   }
 
   .btn-outline {

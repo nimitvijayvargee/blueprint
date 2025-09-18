@@ -1,0 +1,12 @@
+<section class="flex flex-col items-center grow space-y-6">
+  <div class="w-full max-w-3xl min-h-full flex flex-col m-8">
+    <%= render "shared/card", class: "space-y-6" do %>
+      <div class="h-48 bg-gray-200 bg-cover bg-center -mt-6 -mx-8" style="background-image: url(<%= @project.banner.attached? ? url_for(@project.banner) : nil %>)">
+      </div>
+      <div class="space-y-2">
+        <p class="text-3xl"><%= @project.title %></p>
+        <p class="text-xl"><%= @project.description.empty? ? "No description yet" : @project.description %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
