@@ -3,6 +3,7 @@
 # Table name: journal_entries
 #
 #  id               :bigint           not null, primary key
+#  content          :text
 #  duration_seconds :integer          default(0), not null
 #  views_count      :integer          default(0), not null
 #  created_at       :datetime         not null

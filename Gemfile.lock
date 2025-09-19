@@ -220,6 +220,8 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
+    marksmith (0.4.7)
+      activesupport
     matrix (0.4.3)
     mini_magick (5.3.0)
       logger
@@ -523,6 +525,7 @@ DEPENDENCIES
   inline_svg
   jbuilder
   kamal
+  marksmith
   mission_control-jobs
   paper_trail
   pg (~> 1.6)

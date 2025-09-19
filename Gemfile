@@ -51,6 +51,9 @@ gem "redis", "~> 5.0"
 # PostgreSQL adapter for ActiveRecord
 gem "pg", "~> 1.6"
 
+# GitHub-style Markdown editor for Rails
+gem "marksmith"
+
 # HTTP client
 gem "faraday", "~> 2.13"
 

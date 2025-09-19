@@ -3,6 +3,7 @@
 # Table name: journal_entries
 #
 #  id               :bigint           not null, primary key
+#  content          :text
 #  duration_seconds :integer          default(0), not null
 #  views_count      :integer          default(0), not null
 #  created_at       :datetime         not null
@@ -23,8 +24,6 @@
 class JournalEntry < ApplicationRecord
   belongs_to :user
   belongs_to :project
-
-  has_rich_text :content
 
   has_one_attached :attachment
 end

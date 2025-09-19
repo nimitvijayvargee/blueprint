@@ -1,0 +1,25 @@
+<div class="marksmith-tabs flex-1 flex items-center">
+  <!-- Hidden original tabs to keep controller targets working -->
+  <button class="marksmith-tab marksmith-write-tab hidden"
+          data-action="click->marksmith#switchToWrite"
+          data-marksmith-target="writeTabButton"
+          type="button">
+    <%= t('marksmith.write').humanize %>
+  </button>
+  <button class="marksmith-tab marksmith-preview-tab hidden"
+          data-action="click->marksmith#switchToPreview"
+          data-marksmith-target="previewTabButton"
+          type="button">
+    <%= t('marksmith.preview').humanize %>
+  </button>
+
+  <!-- Visible tabs (write/preview) controlled by our Stimulus controller -->
+  <div data-controller="marksmith-tabs" class="bp-ms-tabs flex items-center">
+    <button type="button" class="bp-ms-tab py-1 hover:bg-bp-lighter" data-role="write" data-action="click->marksmith-tabs#write">
+      <%= t('marksmith.write').humanize %>
+    </button>
+    <button type="button" class="bp-ms-tab py-1 hover:bg-bp-lighter" data-role="preview" data-action="click->marksmith-tabs#preview">
+      <%= t('marksmith.preview').humanize %>
+    </button>
+  </div>
+</div>
