@@ -43,7 +43,7 @@
             <p>If you don't already have an account, we'll make one for you<p>
           </div>
           <div class="flex flex-col items-center space-y-4">
-          <%= render "shared/button", url: slack_login_path(redirect_to: params[:redirect_to]), text: "Log in with Slack", class: "text-xl w-full"%>
+          <%= render "shared/button", url: slack_login_path(redirect_to: params[:redirect_to]), text: "Log in with Hack Club Slack", class: "text-xl w-full"%>
           <div class="w-full flex items-center before:p-[1px] before:mr-2 before:bg-white before:grow after:p-[1px] after:ml-2 after:bg-white after:grow uppercase">or</div>
           <div class="w-full">
           <%= turbo_frame_tag "login_form" do %>
