@@ -42,7 +42,6 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :cloudflare
 
-
   # Use custom Airtable delivery method for mailer
   config.action_mailer.delivery_method = :airtable_delivery_method
   # Don't care if the mailer can't send.
