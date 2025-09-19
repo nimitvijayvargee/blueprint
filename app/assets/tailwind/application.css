@@ -113,7 +113,7 @@ body {
     @apply border-2 border-white bg-bp-dark hover:bg-bp-lighter;
   }
 
-  .form-input {
+  .input {
     @apply text-left text-xl py-2 px-4 appearance-none outline-0 border-2;
   }
 
@@ -166,7 +166,8 @@ body {
   }
 
   /* Emphasis */
-  em, i {
+  em,
+  i {
     font-style: italic !important;
   }
 
