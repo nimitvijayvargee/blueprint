@@ -76,7 +76,7 @@ Rails.application.routes.draw do
     resources :journal_entries, only: [ :create, :update, :destroy ]
   end
   get "explore" => "projects#explore", as: :explore
-  get "shop" => "shop#index", as: :shop
+  get "toolbag" => "toolbag#index", as: :toolbag
 
   resources :users, only: [ :show ] do
     post :invite_to_slack, on: :collection

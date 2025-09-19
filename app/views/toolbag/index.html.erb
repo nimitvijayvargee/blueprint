@@ -1,0 +1,124 @@
+<div class="p-8">
+  <div class="max-w-6xl mx-auto">
+    <!-- Under Construction Banner -->
+    <div class="text-center mb-16">
+      <div class="bg-bp-warning text-bp-dark py-8 px-4 rounded-lg mb-8">
+        <h1 class="text-6xl font-bold mb-4">UNDER CONSTRUCTION</h1>
+        <p class="text-3xl font-bold">COMING SOON!</p>
+      </div>
+    </div>
+    
+    <!-- Points Balance -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 bg-bp-darker border-2 border-white/25 rounded-lg px-6 py-3">
+        <span class="text-lg">Your Balance:</span>
+        <span class="text-2xl font-bold text-bp-warning"> tickets</span>
+      </div>
+    </div>
+    
+    <h1 class="text-5xl font-bold text-center mb-12">Blueprint Tool Bag</h1>
+    <p class="text-center text-lg mb-16">Welcome <%= current_user.display_name %>! Spend your tickets on amazing rewards.</p>
+    
+    <!-- Tool Bag Items Grid -->
+    <div class="grid grid-cols-3 gap-8">
+      
+      <!-- Item 1: Blueprint T-Shirt -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">👕</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Blueprint T-Shirt</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Official Blueprint program t-shirt in navy blue</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 2: Hack Club Stickers -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">🏷️</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Hack Club Sticker Pack</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Collection of 20+ premium Hack Club stickers</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 3: Arduino Uno Kit -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">🔧</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Arduino Uno Starter Kit</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Complete Arduino kit with sensors and components</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 4: GitHub Pro -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">💻</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">GitHub Pro (1 Year)</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">One year subscription to GitHub Pro features</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 5: Raspberry Pi 4 -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">🖥️</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Raspberry Pi 4 (4GB)</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Latest Raspberry Pi with 4GB RAM and accessories</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 6: Mechanical Keyboard -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">⌨️</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Mechanical Keyboard</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">RGB mechanical keyboard perfect for coding</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 7: Hack Club Hoodie -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">🧥</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Hack Club Hoodie</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Cozy hoodie with Hack Club logo, multiple sizes</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+      <!-- Item 8: 3D Printer Filament -->
+      <div class="flex flex-col border-2 border-white/25 bg-hatch rounded-lg p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+        <div class="w-full h-48 rounded-lg mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+          <span class="text-4xl">🧶</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">3D Printer Filament Pack</h3>
+        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Multi-color PLA filament pack for 3D printing</p>
+        <div class="mt-auto">
+          <button class="w-full py-2 px-6 text-xl rounded border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+        </div>
+      </div>
+
+    </div>
+    
+  </div>
+</div>
