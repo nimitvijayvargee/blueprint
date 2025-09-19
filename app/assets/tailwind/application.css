@@ -227,6 +227,10 @@ body {
     }
   }
 
+  .external-image-callout {
+    @apply w-full text-center bg-bp-darker py-2;
+  }
+
   /* Tables */
   table {
     @apply w-full table-auto text-left border-collapse my-6;
