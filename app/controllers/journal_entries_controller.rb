@@ -1,6 +1,6 @@
 class JournalEntriesController < ApplicationController
   before_action :set_project
-  before_action :set_journal_entry, only: [:update, :destroy]
+  before_action :set_journal_entry, only: [ :update, :destroy ]
 
   def create
     @journal_entry = @project.journal_entries.build(journal_entry_params.merge(user: current_user))
