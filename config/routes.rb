@@ -64,12 +64,12 @@ Rails.application.routes.draw do
   # Defines the root path route for unauthenticated users
   root "landing#index"
 
-  # Slack authentication
-  get "auth/login" => "sessions#index", as: :login
-  get "auth/slack" => "sessions#new", as: :slack_login
-  get "auth/slack/callback" => "sessions#create", as: :slack_callback
-  post "auth/email" => "sessions#create_email", as: :login_email
-  delete "auth/logout" => "sessions#destroy", as: :logout
+  # Authentication
+  get "auth/login" => "auth#index", as: :login
+  get "auth/slack" => "auth#new", as: :slack_login
+  get "auth/slack/callback" => "auth#create", as: :slack_callback
+  post "auth/email" => "auth#create_email", as: :login_email
+  delete "auth/logout" => "auth#destroy", as: :logout
 
   get "home" => "home#index", as: :home
   resources :projects, only: [ :index, :new, :create, :show, :edit, :update ] do

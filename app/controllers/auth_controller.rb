@@ -1,6 +1,6 @@
-class SessionsController < ApplicationController
+class AuthController < ApplicationController
   allow_unauthenticated_access only: %i[ index new create create_email ]
-  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
+  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to slack_login_url, alert: "Try again later." }
 
   layout false
 
@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   before_action :redirect_if_logged_in, only: %i[ index new create create_email ]
 
   def index
-    render "sessions/index"
+    render "auth/index"
   end
 
   # Slack auth start
@@ -73,13 +73,12 @@ class SessionsController < ApplicationController
       return
     end
 
-    # Logic to send OTP
     if send_otp(email)
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
             "login_form",
-            partial: "sessions/otp_form",
+            partial: "auth/otp_form",
             locals: { email: email }
           )
         end
@@ -95,14 +94,13 @@ class SessionsController < ApplicationController
             ),
             turbo_stream.replace(
               "login_form",
-              partial: "sessions/email_form"
+              partial: "auth/email_form"
             )
           ]
         end
       end
     end
   end
-
 
   def create
     if params[:state] != session[:state]
@@ -169,12 +167,10 @@ class SessionsController < ApplicationController
 
     begin
       uri = URI.parse(url)
-      # Only allow relative paths within this app
       if uri.scheme.nil? && uri.host.nil? && uri.path.present? && uri.path.start_with?("/")
         return uri.path + (uri.query.present? ? "?#{uri.query}" : "")
       end
     rescue URI::InvalidURIError
-      # ignore
     end
 
     nil
