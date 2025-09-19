@@ -365,6 +365,7 @@ body {
   }
   .marksmith .marksmith-editor-content {
     background-color: var(--color-bp-darker) !important;
+    width: 100% !important;
   }
   .marksmith .marksmith-textarea {
     background-color: var(--color-bp-darker) !important;
@@ -374,8 +375,15 @@ body {
     color: rgba(255, 255, 255, 0.4) !important;
   }
   .marksmith .marksmith-preview-pane {
-    background-color: var(--color-bp-darker) !important;
-    color: #fff !important;
+    background-color: var(--color-bp-dark) !important;
+    color: #fff;
+    width: 100% !important;
+    min-height: 8rem; /* ensure space for spinner */
+    padding: 1rem !important;
+  }
+  .marksmith .marksmith-loading-indicator .double-bounce1,
+  .marksmith .marksmith-loading-indicator .double-bounce2 {
+    background-color: #fff !important;
   }
   .marksmith .marksmith-bottom-toolbar {
     background-color: var(--color-bp-dark) !important;
@@ -417,11 +425,11 @@ body {
     align-items: center !important;
     padding: 0 0.75rem !important;
     border-radius: 0 !important; /* square corners */
-    background: transparent !important;
-    color: #fff !important;
+    background: transparent; /* allow per-button classes to override */
+    color: #fff; /* allow per-button classes to override */
   }
   .marksmith .marksmith-action-bar > *:hover {
-    background: var(--color-bp-light) !important; /* full-area hover */
-    color: var(--color-bp-dark) !important;
+    background: var(--color-bp-light); /* full-area hover */
+    color: var(--color-bp-dark);
   }
 }

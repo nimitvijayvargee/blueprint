@@ -1,0 +1,6 @@
+<%= content_tag :div,
+  class: "marksmith-preview-pane ms:hidden",
+  id: editor.preview_pane_id,
+  data: { marksmith_target: "previewPane" } do %>
+  <%= render partial: "marksmith/shared/loading_indicator" %>
+<% end %>
