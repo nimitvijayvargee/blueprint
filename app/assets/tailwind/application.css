@@ -165,6 +165,11 @@ body {
     @apply my-3 print:my-2;
   }
 
+  /* Emphasis */
+  em, i {
+    font-style: italic !important;
+  }
+
   /* Links */
   a {
     @apply underline decoration-white/30 underline-offset-2 text-bp-warning hover:decoration-white print:no-underline print:text-black;
@@ -397,6 +402,15 @@ body {
   .marksmith .marksmith-upload-button,
   .marksmith .marksmith-gallery-link {
     color: #fff !important;
+  }
+  .marksmith .marksmith-help-link svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.375rem;
+    flex-shrink: 0;
+    fill: currentColor;
   }
 
   /* Two-tab styling (Write / Preview) */
