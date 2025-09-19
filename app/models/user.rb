@@ -456,4 +456,8 @@ class User < ApplicationRecord
       "User#{id}"
     end
   end
+
+  def tickets
+    0
+  end
 end
