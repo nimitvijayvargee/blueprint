@@ -5,15 +5,16 @@
           <%= f.label :content, "Write a new journal entry", class: "block text-2xl" %>
           <p>Share what you've been working on!
       </div>
-      <div class="flex flex-col space-y-1" data-controller="journal-validator" data-journal-validator-min-chars-value="250" data-journal-validator-image-required-value="true">
+      <div class="flex flex-col space-y-1" data-controller="journal-validator journal-draft" data-journal-validator-min-chars-value="250" data-journal-validator-image-required-value="true" data-journal-draft-project-id-value="<%= @project.id %>">
         <%= marksmith_tag :content,
               form: f,
               placeholder: "Write a few sentences about what you did...\nHow you did it...\nWhat went well, etc...\n\nInclude some images of your work!\n\nTip: Markdown is supported and you can drag and drop images.",
               enable_file_uploads: true,
               classes: "min-h-80 text-base" %>
-        <div class="ml-auto text-xs flex gap-4">
-          <div>Characters: <span data-journal-validator-target="charCount" class="font-medium">0/100</span></div>
-          <div>Images: <span data-journal-validator-target="imageCount" class="font-medium">0/1</span></div>
+        <div class="text-xs flex gap-4">
+          <p class="grow"><span data-journal-draft-target="status" hidden>Draft Saved Locally</span></p>
+          <p>Characters: <span data-journal-validator-target="charCount" class="font-medium">0/250</span></p>
+          <p>Images: <span data-journal-validator-target="imageCount" class="font-medium">0/1</span></p>
         </div>
       </div>
       <div class="space-y-2">
@@ -27,11 +28,12 @@
               min: 1,
               step: 1,
               inputmode: "numeric",
+              data: { "journal-draft-target": "hours" },
               class: "input w-full" %>
       </div>
     </div>
     <div class="flex justify-end gap-2">
-      <%= f.submit "Publish", class: "btn btn-primary py-1" %>
+      <%= f.submit "Publish", class: "btn btn-primary py-1", data: { "journal-draft-target": "submit", "journal-validator-target": "submit" } %>
     </div>
   <% end %>
 <% end %>

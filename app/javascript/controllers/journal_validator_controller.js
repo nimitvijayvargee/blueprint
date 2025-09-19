@@ -10,25 +10,22 @@ export default class extends Controller {
     minChars: { type: Number, default: 100 },
     imageRequired: { type: Boolean, default: true }
   }
-  static targets = ["charCount", "imageCount"]
+  static targets = ["charCount", "imageCount", "textarea", "submit"]
 
   connect() {
-    this.textarea = this.element.querySelector(".marksmith-textarea")
-    this.submitButton = this.element.closest("form")?.querySelector('[type="submit"]')
-
-    if (!this.textarea) return
+    if (!this.hasTextareaTarget) return
 
     this._onInput = this.onInput.bind(this)
-    this.textarea.addEventListener("input", this._onInput)
-    this.textarea.addEventListener("change", this._onInput)
-    this.textarea.addEventListener("keyup", this._onInput)
+    this.textareaTarget.addEventListener("input", this._onInput)
+    this.textareaTarget.addEventListener("change", this._onInput)
+    this.textareaTarget.addEventListener("keyup", this._onInput)
 
     // Fallback: poll for programmatic changes after uploads/insertions
-    this._lastValue = this.textarea.value
+    this._lastValue = this.textareaTarget.value
     this._poll = setInterval(() => {
-      if (!this.textarea) return
-      if (this.textarea.value !== this._lastValue) {
-        this._lastValue = this.textarea.value
+      if (!this.hasTextareaTarget) return
+      if (this.textareaTarget.value !== this._lastValue) {
+        this._lastValue = this.textareaTarget.value
         this.onInput()
       }
     }, 300)
@@ -38,16 +35,16 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.textarea && this._onInput) {
-      this.textarea.removeEventListener("input", this._onInput)
-      this.textarea.removeEventListener("change", this._onInput)
-      this.textarea.removeEventListener("keyup", this._onInput)
+    if (this.hasTextareaTarget && this._onInput) {
+      this.textareaTarget.removeEventListener("input", this._onInput)
+      this.textareaTarget.removeEventListener("change", this._onInput)
+      this.textareaTarget.removeEventListener("keyup", this._onInput)
     }
     if (this._poll) clearInterval(this._poll)
   }
 
   onInput() {
-    const content = this.textarea?.value || ""
+    const content = this.hasTextareaTarget ? (this.textareaTarget.value || "") : ""
     const imageRegex = /!\[[^\]]*\]\([^)]+\)/g
 
     const imageMatches = content.match(imageRegex) || []
@@ -71,8 +68,8 @@ export default class extends Controller {
     const okImages = this.imageRequiredValue ? images >= 1 : true
     const valid = okChars && okImages
 
-    if (this.submitButton) {
-      this.submitButton.disabled = !valid
+    if (this.hasSubmitTarget) {
+      this.submitTarget.disabled = !valid
     }
 
     // Optionally add classes to the counters
