@@ -410,8 +410,8 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sin_lru_redux (2.5.2)
-    skylight (6.0.4)
-      activesupport (>= 5.2.0)
+    skylight (7.0.0)
+      activesupport (>= 7.1.0)
     slack-ruby-client (2.7.0)
       faraday (>= 2.0.1)
       faraday-mashify
