@@ -388,7 +388,7 @@ body {
     background-color: var(--color-bp-dark) !important;
     color: #fff;
     width: 100% !important;
-    min-height: 8rem; /* ensure space for spinner */
+    min-height: 22.37rem !important; /* kind of cooked but it works */
     padding: 1rem !important;
   }
   .marksmith .marksmith-loading-indicator .double-bounce1,
