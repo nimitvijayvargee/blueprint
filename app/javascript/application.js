@@ -5,5 +5,4 @@ import "controllers"
 import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()
 
-import "trix"
-import "@rails/actiontext"
+

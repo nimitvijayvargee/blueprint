@@ -220,6 +220,8 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
+    marksmith (0.4.7)
+      activesupport
     matrix (0.4.3)
     mini_magick (5.3.0)
       logger
@@ -294,7 +296,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (7.0.2)
+    puma (7.0.3)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -357,7 +359,7 @@ GEM
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
-    rexml (3.4.1)
+    rexml (3.4.2)
     rubocop (1.80.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -408,8 +410,8 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sin_lru_redux (2.5.2)
-    skylight (6.0.4)
-      activesupport (>= 5.2.0)
+    skylight (7.0.0)
+      activesupport (>= 7.1.0)
     slack-ruby-client (2.7.0)
       faraday (>= 2.0.1)
       faraday-mashify
@@ -523,6 +525,7 @@ DEPENDENCIES
   inline_svg
   jbuilder
   kamal
+  marksmith
   mission_control-jobs
   paper_trail
   pg (~> 1.6)

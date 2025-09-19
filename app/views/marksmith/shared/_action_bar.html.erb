@@ -1,0 +1,16 @@
+<% button_classes = "hover:bg-bp-lighter! text-white!"%>
+<%= tag.markdown_toolbar for: textarea_id,
+  class: class_names("marksmith-action-bar flex flex-wrap px-2", "pointer-events-none": disabled),
+  data: { marksmith_target: "toolbar" } do
+%>
+  <%= marksmith_toolbar_button "bold",           hotkey: "Meta+b", hotkey_scope: textarea_id, class: button_classes %>
+  <%= marksmith_toolbar_button "header",         hotkey: "Meta+h", hotkey_scope: textarea_id, class: button_classes %>
+  <%= marksmith_toolbar_button "italic",         hotkey: "Meta+i", hotkey_scope: textarea_id, class: button_classes %>
+  <%= marksmith_toolbar_button "quote",          class: button_classes %>
+  <%= marksmith_toolbar_button "code",           class: button_classes %>
+  <%= marksmith_toolbar_button "link",           hotkey: "Meta+k", hotkey_scope: textarea_id, class: button_classes %>
+  <%= marksmith_toolbar_button "image",          class: button_classes %>
+  <%= marksmith_toolbar_button "unordered-list", class: button_classes %>
+  <%= marksmith_toolbar_button "ordered-list",   class: button_classes %>
+  <%= marksmith_toolbar_button "task-list",      class: button_classes %>
+<% end %>
