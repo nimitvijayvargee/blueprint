@@ -1,6 +1,6 @@
 <% button_classes = "hover:bg-bp-lighter! text-white!"%>
 <%= tag.markdown_toolbar for: textarea_id,
-  class: class_names("marksmith-action-bar flex flex-wrap px-2", "pointer-events-none": disabled),
+  class: class_names("marksmith-action-bar flex flex-wrap", "pointer-events-none": disabled),
   data: { marksmith_target: "toolbar" } do
 %>
   <%= marksmith_toolbar_button "bold",           hotkey: "Meta+b", hotkey_scope: textarea_id, class: button_classes %>
@@ -12,5 +12,5 @@
   <%= marksmith_toolbar_button "image",          class: button_classes %>
   <%= marksmith_toolbar_button "unordered-list", class: button_classes %>
   <%= marksmith_toolbar_button "ordered-list",   class: button_classes %>
-  <%= marksmith_toolbar_button "task-list",      class: button_classes %>
+  <%# marksmith_toolbar_button "task-list",      class: button_classes %>
 <% end %>

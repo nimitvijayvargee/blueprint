@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
 <%= content_tag :div, class: "markdown w-full" do %>
-  <%= sanitize(body, tags: %w(table th tr td span) + ActionView::Helpers::SanitizeHelper.sanitizer_vendor.safe_list_sanitizer.allowed_tags.to_a) %>
+  <%= sanitize_marksmith_html(body) %>
 <% end %>
