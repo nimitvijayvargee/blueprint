@@ -17,9 +17,9 @@
     style: editor.style
   %>
   <% toolbar_button_classes = "cursor-pointer hover:bg-bp-lighter px-3 py-2 rounded text-sm" %>
-  <div class="marksmith-bottom-toolbar flex flex-1 flex-grow space-x-2 border-t border-neutral-500 font-sans text-sm">
+  <div class="marksmith-bottom-toolbar flex flex-1 flex-grow border-t border-neutral-500 font-sans text-sm">
     <% if editor.enable_file_uploads %>
-      <%= button_tag data: { action: "click->marksmith#buttonUpload" }, class: class_names("marksmith-upload-button bg-none border-none bg-transparent items-center flex gap-1", toolbar_button_classes) do %>
+      <%= button_tag type: "button", data: { action: "click->marksmith#buttonUpload" }, class: class_names("marksmith-upload-button bg-none border-none bg-transparent items-center flex gap-1", toolbar_button_classes) do %>
         <%= marksmith_inline_svg("app/assets/images/marksmith/svgs/paperclip.svg") %> <span>Paste, click, or drop to add files</span>
       <% end %>
     <% end %>
@@ -27,6 +27,10 @@
       <%= link_to editor.gallery_full_path, data: { turbo_frame: editor.gallery_turbo_frame }, class: class_names("marksmith-gallery-link flex items-center no-underline gap-1", toolbar_button_classes) do %>
         <%= marksmith_inline_svg("app/assets/images/marksmith/svgs/gallery.svg") %> <span><%= t("marksmith.attach_from_gallery").humanize %></span>
       <% end %>
+    <% end %>
+    <div class="grow"></div>
+    <%= link_to "https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax", target: "_blank", class: class_names("bg-none border-none bg-transparent items-center flex gap-1", toolbar_button_classes) do %>
+      <%= marksmith_inline_svg("app/assets/images/marksmith/svgs/markdown.svg") %>
     <% end %>
   </div>
 <% end %>

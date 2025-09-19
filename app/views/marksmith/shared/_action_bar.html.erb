@@ -9,7 +9,11 @@
   <%= marksmith_toolbar_button "quote",          class: button_classes %>
   <%= marksmith_toolbar_button "code",           class: button_classes %>
   <%= marksmith_toolbar_button "link",           hotkey: "Meta+k", hotkey_scope: textarea_id, class: button_classes %>
-  <%= marksmith_toolbar_button "image",          class: button_classes %>
+  <%= button_tag type: "button", title: t("marksmith.image").humanize,
+        class: button_classes,
+        data: { action: "click->marksmith#buttonUpload" } do %>
+    <%= marksmith_toolbar_svg("image") %>
+  <% end %>
   <%= marksmith_toolbar_button "unordered-list", class: button_classes %>
   <%= marksmith_toolbar_button "ordered-list",   class: button_classes %>
   <%# marksmith_toolbar_button "task-list",      class: button_classes %>

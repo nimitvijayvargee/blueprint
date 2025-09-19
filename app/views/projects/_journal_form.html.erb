@@ -1,15 +1,34 @@
 <%= render "shared/card" do %>
   <%= form_with model: [@project, (@journal_entry || JournalEntry.new)], class: "space-y-4 dark" do |f| %>
-    <div class="flex flex-col space-y-4">
+    <div class="flex flex-col space-y-6">
       <div>
-        <%= f.label :content, "Write a new journal entry", class: "block text-2xl" %>
-        <p>Share what you've been working on!
+          <%= f.label :content, "Write a new journal entry", class: "block text-2xl" %>
+          <p>Share what you've been working on!
       </div>
-      <%= marksmith_tag :content,
-            form: f,
-            placeholder: "Write a few sentences about what you did...\nHow you did it...\nWhat went well, etc...\n\nInclude some images of your work!",
-            enable_file_uploads: true,
-            classes: "min-h-80 text-base" %>
+      <div class="flex flex-col space-y-1" data-controller="journal-validator" data-journal-validator-min-chars-value="250" data-journal-validator-image-required-value="true">
+        <%= marksmith_tag :content,
+              form: f,
+              placeholder: "Write a few sentences about what you did...\nHow you did it...\nWhat went well, etc...\n\nInclude some images of your work!\n\nTip: Markdown is supported and you can drag and drop images.",
+              enable_file_uploads: true,
+              classes: "min-h-80 text-base" %>
+        <div class="ml-auto text-xs flex gap-4">
+          <div>Characters: <span data-journal-validator-target="charCount" class="font-medium">0/100</span></div>
+          <div>Images: <span data-journal-validator-target="imageCount" class="font-medium">0/1</span></div>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <div>
+          <%= f.label :duration_hours, "How many hours did you spend since the last journal?", class: "block" %>
+          <p class="text-sm">It's okay if you don't know. This can be an estimate.</p>
+        </div>
+        <%= f.number_field :duration_hours,
+              value: (f.object.duration_seconds.to_i / 3600),
+              required: true,
+              min: 1,
+              step: 1,
+              inputmode: "numeric",
+              class: "input w-full" %>
+      </div>
     </div>
     <div class="flex justify-end gap-2">
       <%= f.submit "Publish", class: "btn btn-primary py-1" %>
