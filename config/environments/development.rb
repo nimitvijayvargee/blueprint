@@ -39,10 +39,9 @@ Rails.application.configure do
   # Change to :null_store to avoid any caching.
   config.cache_store = :memory_store
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
+  # Store uploaded files on the cloudflare r2 (see config/storage.yml for options).
   config.active_storage.service = :cloudflare
   config.active_storage.routes_prefix = "/user-attachments"
-  config.active_storage.service_urls_expire_in = 9999.years
 
   # Use custom Airtable delivery method for mailer
   config.action_mailer.delivery_method = :airtable_delivery_method
