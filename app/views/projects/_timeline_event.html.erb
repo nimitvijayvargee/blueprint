@@ -6,7 +6,7 @@
   <% entry = event[:entry] %>
   <%= render "timeline_event_card", class: "flex flex-col space-y-2" do %>
     <p class="grow"><%= render "shared/user_inline", user: project.user %> added to the journal <%= time_ago_in_words(event[:date]) %> ago</p>
-    <div class="markdown">
+    <div class="markdown timeline-journal">
         <h1><%= entry.summary %></h1>
         <%= sanitize_marksmith_html(marksmithed(entry.content)) %>
     </div>

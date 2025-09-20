@@ -47,18 +47,8 @@ export default class extends Controller {
       }
     }, 300)
 
-    // Clear on submit (standard submit, Turbo success, and direct button click)
+    // Clear only on successful Turbo submission
     if (this.form) {
-      this._onSubmit = () => this.clear()
-      this.form.addEventListener("submit", this._onSubmit)
-
-      // Direct button click (clears immediately when user clicks Publish)
-      this._submitBtnRef = this.submitButton
-      if (this._submitBtnRef) {
-        this._onSubmitClick = () => { this.clear(); this.afterSubmitTeardown() }
-        this._submitBtnRef.addEventListener("click", this._onSubmitClick)
-      }
-
       this._onTurboSubmitEnd = (event) => {
         if (event.target === this.form && event.detail && event.detail.success) {
           this.clear()
@@ -81,13 +71,6 @@ export default class extends Controller {
     if (this.hasSummaryTarget && this._onFieldInput) {
       this.summaryTarget.removeEventListener("input", this._onFieldInput)
       this.summaryTarget.removeEventListener("change", this._onFieldInput)
-    }
-    if (this.form && this._onSubmit) {
-      this.form.removeEventListener("submit", this._onSubmit)
-    }
-    if (this._submitBtnRef && this._onSubmitClick) {
-      this._submitBtnRef.removeEventListener("click", this._onSubmitClick)
-      this._submitBtnRef = null
     }
     if (this._onTurboSubmitEnd) {
       document.removeEventListener("turbo:submit-end", this._onTurboSubmitEnd)
@@ -114,9 +97,13 @@ export default class extends Controller {
         this.summaryTarget.value = data.summary
         restoredSomething = true
       }
-      if (this.hasHoursTarget && !this.hoursTarget.value && data.duration_hours != null) {
-        this.hoursTarget.value = data.duration_hours
-        restoredSomething = true
+      if (this.hasHoursTarget && data.duration_hours != null) {
+        const current = this.hoursTarget.value
+        const num = current === "" ? null : Number(current)
+        if (current === "" || !Number.isFinite(num) || num <= 0) {
+          this.hoursTarget.value = data.duration_hours
+          restoredSomething = true
+        }
       }
       return restoredSomething
     } catch (_) { return false }

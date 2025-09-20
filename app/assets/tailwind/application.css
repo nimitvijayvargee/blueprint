@@ -356,6 +356,17 @@ body {
   }
 }
 
+.markdown.timeline-journal {
+  .external-image-callout {
+    @apply bg-bp-dark!;
+  }
+
+  pre,
+  code {
+    @apply bg-bp-dark!;
+  }
+}
+
 /* Marksmith editor overrides to match app theme */
 @layer components {
   /* Increase specificity and force overrides against gem utilities */
