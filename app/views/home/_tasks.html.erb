@@ -119,7 +119,9 @@
         </div>
         <%= render "shared/button", 
             text: "Link GitHub Account!",
-            class: "w-full", html_options: { data: { action: "click->tasks-github#auth", tasks_github_target: "button1" } } 
+            class: "w-full",
+            url: github_login_path,
+            html_options: { data: { turbo: false } }
             %>
       </div>
       <div data-modal-target="step" class="space-y-6">

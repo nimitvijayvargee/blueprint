@@ -31,6 +31,7 @@ class AuthController < ApplicationController
     redirect_to "https://slack.com/oauth/v2/authorize?#{params.to_query}", allow_other_host: true
   end
 
+  # email login
   def create_email
     email = params[:email]
     otp = params[:otp]
@@ -102,6 +103,7 @@ class AuthController < ApplicationController
     end
   end
 
+  # Slack auth callback
   def create
     if params[:state] != session[:state]
       Rails.logger.tagged("Authentication") do
@@ -140,6 +142,61 @@ class AuthController < ApplicationController
     end
   end
 
+  # GitHub auth start
+  def github
+    state = SecureRandom.hex(24)
+    session[:state] = state
+
+    params = {
+      client_id: ENV.fetch("GITHUB_CLIENT_ID", nil),
+      redirect_uri: github_callback_url,
+      state: state,
+      scope: "public_repo,read:user",
+      prompt: current_user.github_user? ? "select_account": nil
+    }
+    redirect_to "https://github.com/login/oauth/authorize?#{params.to_query}", allow_other_host: true
+  end
+
+  # GitHub auth callback
+  def create_github
+    if params[:state] != session[:state]
+      Rails.logger.tagged("Authentication") do
+        Rails.logger.error({
+          event: "github_csrf_validation_failed",
+          expected_state: session[:state],
+          received_state: params[:state],
+          user_id: current_user.id
+        }.to_json)
+      end
+      session[:state] = nil
+      redirect_to home_path, alert: "GitHub authentication failed due to CSRF token mismatch"
+      return
+    end
+
+    begin
+      current_user.exchange_github_token(params[:code], github_callback_url)
+
+      Rails.logger.tagged("Authentication") do
+        Rails.logger.info({
+          event: "github_authentication_successful",
+          user_id: current_user.id,
+          github_login: current_user.github_username
+        }.to_json)
+      end
+
+      redirect_to(home_path, notice: "GitHub account linked to @#{current_user.github_username || 'unknown'}!")
+    rescue StandardError => e
+      Rails.logger.tagged("Authentication") do
+        Rails.logger.error({
+          event: "github_authentication_failed",
+          error: e.message
+        }.to_json)
+      end
+      redirect_to home_path, alert: e.message
+    end
+  end
+
+  # Logout
   def destroy
     terminate_session
     redirect_to root_path, notice: "Signed out successfully. Cya!"

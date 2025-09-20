@@ -266,6 +266,36 @@ class User < ApplicationRecord
     end
   end
 
+  def exchange_github_token(code, redirect_uri)
+    response = Faraday.post("https://github.com/login/oauth/access_token",
+                            {
+                              client_id: ENV.fetch("GITHUB_CLIENT_ID", nil),
+                              client_secret: ENV.fetch("GITHUB_CLIENT_SECRET", nil),
+                              redirect_uri: redirect_uri,
+                              code: code
+                            },
+                            {
+                              "Accept" => "application/json"
+                            })
+
+    # if result is not successful
+    if response.status != 200
+      Rails.logger.error("GitHub OAuth error: #{response.body}")
+      raise StandardError, "Failed to authenticate with GitHub: #{response.body}"
+    end
+
+    result = JSON.parse(response.body)
+
+    access_token = result["access_token"]
+    if access_token.blank?
+      Rails.logger.error("GitHub OAuth error: access token is blank")
+      raise StandardError, "Failed to authenticate with GitHub: access token is blank"
+    end
+
+    update!(github_access_token: access_token)
+    refresh_profile!
+  end
+
   def refresh_profile!
     Rails.logger.tagged("ProfileRefresh") do
       Rails.logger.info({
@@ -274,6 +304,8 @@ class User < ApplicationRecord
         slack_id: slack_id
       }.to_json)
     end
+
+    refresh_github_profile!
 
     unless slack_user?
       Rails.logger.tagged("ProfileRefresh") do
@@ -345,6 +377,37 @@ class User < ApplicationRecord
     end
 
     # Honeybadger.notify(e, context: { user_id: id, slack_id: slack_id })
+  end
+
+  def refresh_github_profile!
+    unless github_user?
+      Rails.logger.tagged("ProfileRefresh") do
+        Rails.logger.info({
+          event: "profile_refresh_no_github",
+          user_id: id
+        }.to_json)
+      end
+      return
+    end
+
+    response = Faraday.get("https://api.github.com/user", nil, {
+      "Authorization" => "Bearer #{github_access_token}"
+    })
+
+    if response.status == 401
+      Rails.logger.tagged("ProfileRefresh") do
+        Rails.logger.warn({
+          event: "github_token_invalid",
+          user_id: id
+        }.to_json)
+      end
+      update!(github_access_token: nil)
+      return
+    end
+
+    result = JSON.parse(response.body)
+
+    update!(github_username: result["login"]) if result["login"].present?
   end
 
   def follow(project)
