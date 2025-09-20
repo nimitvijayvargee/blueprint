@@ -25,10 +25,10 @@
         <%= f.number_field :duration_hours,
               value: (f.object.duration_seconds.to_i / 3600),
               required: true,
-              min: 1,
+              min: 0,
               step: 1,
               inputmode: "numeric",
-              data: { "journal-draft-target": "hours" },
+              data: { "journal-draft-target": "hours", "journal-validator-target": "hours" },
               class: "input w-full" %>
       </div>
     </div>

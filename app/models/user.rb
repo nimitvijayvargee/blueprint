@@ -391,7 +391,9 @@ class User < ApplicationRecord
     end
 
     response = Faraday.get("https://api.github.com/user", nil, {
-      "Authorization" => "Bearer #{github_access_token}"
+      "Authorization" => "Bearer #{github_access_token}",
+      "X-GitHub-Api-Version" => "2022-11-28",
+      "Accept" => "application/vnd.github+json"
     })
 
     if response.status == 401
@@ -513,6 +515,74 @@ class User < ApplicationRecord
     Rails.logger.tagged("SlackInvite") do
       Rails.logger.info({ event: "invite_success", user_id: id, email: email }.to_json)
     end
+  end
+
+  def check_github_repo(org = nil, repo_name)
+    unless github_user?
+      Rails.logger.tagged("GitHubFetch") do
+        Rails.logger.info({
+          event: "fetch_no_github",
+          user_id: id
+        }.to_json)
+      end
+      return false
+    end
+    org ||= github_username
+
+    response = fetch_github("/repos/#{org}/#{repo_name}", :get)
+
+    if response.status == 404 || response.status == 301
+      return { ok: false, error: "This repo does not exist, or is private." }
+    end
+
+    data = JSON.parse(response.body)
+
+    can_push = data["permissions"]["push"]
+
+    if can_push
+      { ok: true, can_push: can_push }
+    else
+      { ok: false, error: "You do not have permission to write to this repo." }
+    end
+  end
+
+  def fetch_github(path, method = :get, check_token = true, get_all = false, params = {}, data = {}, headers = {})
+    unless github_user?
+      Rails.logger.tagged("GitHubFetch") do
+        Rails.logger.info({
+          event: "fetch_no_github",
+          user_id: id
+        }.to_json)
+      end
+      raise StandardError, "No GitHub account linked"
+    end
+
+    headers = {
+      "Authorization" => "Bearer #{github_access_token}",
+      "X-GitHub-Api-Version" => "2022-11-28",
+      "Accept" => "application/vnd.github+json"
+    }.merge(headers)
+
+    base_url = path.start_with?("http") ? path : "https://api.github.com#{path}"
+
+    response = case method
+    when :get
+      Faraday.get(base_url, params.presence, headers)
+    when :post
+      url = params.present? ? "#{base_url}?#{params.to_query}" : base_url
+      Faraday.post(url, data.to_json, headers)
+    else
+      raise ArgumentError, "Unsupported HTTP method: #{method}"
+    end
+
+    if check_token && response.status == 401
+      Rails.logger.tagged("GitHubFetch") do
+        Rails.logger.warn({ event: "fetch_401", user_id: id }.to_json)
+      end
+      update!(github_access_token: nil)
+    end
+
+    response
   end
 
   def display_name

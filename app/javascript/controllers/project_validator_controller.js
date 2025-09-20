@@ -1,0 +1,149 @@
+import { Controller } from "@hotwired/stimulus"
+import { csrfHeader } from "helpers/csrf"
+
+// data-controller="project-validator"
+// Targets: title, description, repo, status (message under repo), submit (button)
+export default class extends Controller {
+  static targets = ["title", "description", "repo", "status", "submit"]
+  static values = {
+    debounce: { type: Number, default: 700 },
+    url: { type: String, default: "/projects/check_github_repo" }
+  }
+
+  connect() {
+    this._timer = null
+    this._abort = null
+    this._repoState = { kind: "idle" } // idle | empty | checking | ok | no_push | error
+
+    // Initial validation on connect
+    this.validate()
+
+    // If repo has a value on load, kick off a check
+    if (this.hasRepoTarget) {
+      const value = (this.repoTarget.value || "").trim()
+      if (value.length > 0) this.queueRepoCheck()
+    }
+  }
+
+  disconnect() {
+    if (this._timer) clearTimeout(this._timer)
+    if (this._abort) this._abort.abort()
+  }
+
+  // Event handlers
+  validate() {
+    const title = this.hasTitleTarget ? (this.titleTarget.value || "").trim() : ""
+    const desc = this.hasDescriptionTarget ? (this.descriptionTarget.value || "").trim() : ""
+    const repo = this.hasRepoTarget ? (this.repoTarget.value || "").trim() : ""
+
+    // Determine repo validity
+    let repoValid = true
+    if (repo.length === 0) {
+      this._repoState = { kind: "empty" }
+      repoValid = true
+      // Don't force any status if empty; clear it
+      this.clearStatus()
+    } else {
+      // If we don't have a positive result, it's not valid yet
+      if (this._repoState.kind === "ok") {
+        repoValid = true
+      } else if (this._repoState.kind === "no_push" || this._repoState.kind === "error") {
+        repoValid = false
+      } else {
+        // idle or checking -> not valid yet
+        repoValid = false
+      }
+    }
+
+    const formValid = title.length > 0 && desc.length > 0 && repoValid
+
+    if (this.hasSubmitTarget) {
+      this.submitTarget.disabled = !formValid
+    }
+  }
+
+  queueRepoCheck() {
+    if (!this.hasRepoTarget) return
+
+    const value = (this.repoTarget.value || "").trim()
+
+    // Always validate immediately to update submit disabled state
+    // (repo will be invalid until a positive check arrives)
+    this._repoState = value.length === 0 ? { kind: "empty" } : { kind: "checking" }
+    this.setStatus(value.length === 0 ? "" : "Checking…", { neutral: true })
+    this.validate()
+
+    if (this._timer) clearTimeout(this._timer)
+    if (value.length === 0) return
+
+    this._timer = setTimeout(() => this.runRepoCheck(value), this.debounceValue)
+  }
+
+  async runRepoCheck(repo) {
+    // Cancel any in-flight request
+    if (this._abort) this._abort.abort()
+    this._abort = new AbortController()
+
+    try {
+      const res = await fetch(this.urlValue, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          ...csrfHeader(),
+        },
+        body: JSON.stringify({ repo }),
+        signal: this._abort.signal,
+      })
+
+      if (!res.ok) {
+        this._repoState = { kind: "error" }
+        this.setStatus("Error checking repository.", { danger: true })
+        this.validate()
+        return
+      }
+
+      const data = await res.json()
+      if (data.ok) {
+        if (data.can_push) {
+          this._repoState = { kind: "ok" }
+          this.setStatus("You have push access to this repository.", { success: true })
+        } else {
+          this._repoState = { kind: "no_push" }
+          this.setStatus("You do not have push access to this repository.", { danger: true })
+        }
+      } else {
+        const msg = data.error || "Unable to verify repository."
+        this._repoState = { kind: "error" }
+        this.setStatus(msg, { danger: true })
+      }
+      this.validate()
+    } catch (e) {
+      if (e?.name === "AbortError") return
+      this._repoState = { kind: "error" }
+      this.setStatus("Network error while checking repository.", { danger: true })
+      this.validate()
+    }
+  }
+
+  // Status helpers
+  setStatus(text, { success = false, danger = false, neutral = false } = {}) {
+    if (!this.hasStatusTarget) return
+    const el = this.statusTarget
+
+    el.textContent = text || ""
+    el.classList.remove("text-bp-success", "text-bp-danger")
+
+    if (success) {
+      el.classList.add("text-bp-success")
+    } else if (danger) {
+      el.classList.add("text-bp-danger")
+    }
+  }
+
+  clearStatus() {
+    if (!this.hasStatusTarget) return
+    this.statusTarget.textContent = "You must have write access to the repository."
+    this.statusTarget.classList.remove("text-bp-success", "text-bp-danger")
+  }
+}

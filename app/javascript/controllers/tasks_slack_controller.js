@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { csrfHeader } from "helpers/csrf"
 
 export default class extends Controller {
     static targets = ["button1", "button2"]
@@ -14,10 +15,7 @@ export default class extends Controller {
     sendInvite() {
         if (!this.hasButton1Target) return
 
-        // TODO: TESTING PLEASE REMOVE THIS
         this.dispatch(`modal:next-${this.targetIdValue}`, { target: window, prefix: false })
-        return
-        // REMEMBER TO REMOVE THIS PLSSSS
 
         this.button1Target.innerText = "Sending..."
         this.button1Target.disabled = true
@@ -27,7 +25,7 @@ export default class extends Controller {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+                ...csrfHeader()
             },
             body: JSON.stringify({})
         }).then(response => {
@@ -55,7 +53,7 @@ export default class extends Controller {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+                ...csrfHeader()
             },
             body: JSON.stringify({})
         }).then(async response => {

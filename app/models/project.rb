@@ -48,4 +48,25 @@ class Project < ApplicationRecord
   validates :title, presence: true
   validates :description, presence: true
   has_one_attached :banner
+
+  def self.parse_repo(repo)
+    # three possibilities:
+    # 1. full url: (has to be github.com)
+    # 2. org/repo
+    # 3. repo (assume current user's org)
+    repo = repo.to_s.strip
+    if repo =~ %r{\Ahttps://github\.com/([^/]+)/([^/]+)(/.*)?\z}i
+      org = $1
+      repo_name = $2
+    elsif repo =~ %r{\A([^/]+)/([^/]+)\z}
+      org = $1
+      repo_name = $2
+    elsif repo =~ %r{\A([\w.-]+)\z}
+      org = nil
+      repo_name = repo
+    else
+      return nil
+    end
+    { org: org, repo_name: repo_name }
+  end
 end

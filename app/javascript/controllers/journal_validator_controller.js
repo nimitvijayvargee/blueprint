@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 // data-controller="journal-validator"
-// Enforces a minimum character count (excluding image markdown) and a minimum image count.
+// Enforces a minimum character count (excluding image markdown), a minimum image count,
+// and a positive hour count.
 // Configure via data values:
 //   data-journal-validator-min-chars-value="100"
 //   data-journal-validator-image-required-value="true"
@@ -10,7 +11,7 @@ export default class extends Controller {
     minChars: { type: Number, default: 100 },
     imageRequired: { type: Boolean, default: true }
   }
-  static targets = ["charCount", "imageCount", "textarea", "submit"]
+  static targets = ["charCount", "imageCount", "textarea", "hours", "submit"]
 
   connect() {
     if (!this.hasTextareaTarget) return
@@ -19,6 +20,11 @@ export default class extends Controller {
     this.textareaTarget.addEventListener("input", this._onInput)
     this.textareaTarget.addEventListener("change", this._onInput)
     this.textareaTarget.addEventListener("keyup", this._onInput)
+
+    if (this.hasHoursTarget) {
+      this.hoursTarget.addEventListener("input", this._onInput)
+      this.hoursTarget.addEventListener("change", this._onInput)
+    }
 
     // Fallback: poll for programmatic changes after uploads/insertions
     this._lastValue = this.textareaTarget.value
@@ -40,6 +46,10 @@ export default class extends Controller {
       this.textareaTarget.removeEventListener("change", this._onInput)
       this.textareaTarget.removeEventListener("keyup", this._onInput)
     }
+    if (this.hasHoursTarget && this._onInput) {
+      this.hoursTarget.removeEventListener("input", this._onInput)
+      this.hoursTarget.removeEventListener("change", this._onInput)
+    }
     if (this._poll) clearInterval(this._poll)
   }
 
@@ -59,6 +69,10 @@ export default class extends Controller {
     const chars = normalized.length
     const images = imageMatches.length
 
+    // Hours validation (> 0)
+    const hoursValue = this.hasHoursTarget ? Number(this.hoursTarget.value) : NaN
+    const okHours = this.hasHoursTarget ? Number.isFinite(hoursValue) && hoursValue > 0 : true
+
     // Update UI
     if (this.hasCharCountTarget) this.charCountTarget.textContent = `${chars}/${this.minCharsValue}`
     if (this.hasImageCountTarget) this.imageCountTarget.textContent = `${images}/1`
@@ -66,7 +80,7 @@ export default class extends Controller {
     // Toggle submit availability
     const okChars = chars >= this.minCharsValue
     const okImages = this.imageRequiredValue ? images >= 1 : true
-    const valid = okChars && okImages
+    const valid = okChars && okImages && okHours
 
     if (this.hasSubmitTarget) {
       this.submitTarget.disabled = !valid

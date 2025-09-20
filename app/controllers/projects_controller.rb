@@ -41,6 +41,27 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def check_github_repo
+    unless current_user.github_user?
+      render json: { ok: false, error: "GitHub account not linked" }, status: :unprocessable_entity
+      return
+    end
+
+    repo = params[:repo].to_s.strip
+
+    parsed_repo = Project.parse_repo(repo)
+    unless parsed_repo
+      render json: { ok: false, error: "Invalid GitHub repo" }, status: :unprocessable_entity
+      return
+    end
+    org = parsed_repo[:org]
+    repo_name = parsed_repo[:repo_name]
+
+    render json: current_user.check_github_repo(org, repo_name)
+  rescue StandardError => e
+    render json: { ok: false, error: e.message }, status: :unprocessable_entity
+  end
+
   private
 
   def project_params

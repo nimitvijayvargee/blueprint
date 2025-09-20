@@ -40,17 +40,6 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
-  # Guides -> docs/guides
-  get "guides", to: "guides#guides", as: :guides
-  get "guides/*slug", to: "guides#guides"
-
-  # Starter Projects -> docs/guides/starter-projects
-  get "starter-projects", to: "guides#starter_projects", as: :starter_projects
-  get "starter-projects/*slug", to: "guides#starter_projects",
-      constraints: { slug: /[a-z0-9\/_\-]+/ }
-
-  get "faq", to: "guides#faq", as: :faq
-
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -74,16 +63,29 @@ Rails.application.routes.draw do
   delete "auth/logout" => "auth#destroy", as: :logout
 
   get "home" => "home#index", as: :home
+
   resources :projects, only: [ :index, :new, :create, :show, :edit, :update ] do
     resources :journal_entries, only: [ :create, :update, :destroy ]
+    post :check_github_repo, on: :collection
   end
   get "explore" => "projects#explore", as: :explore
+
   get "toolbag" => "toolbag#index", as: :toolbag
 
   resources :users, only: [ :show ] do
     post :invite_to_slack, on: :collection
     post :mcg_check, on: :collection
   end
+
+  # Guides -> docs/guides
+  get "guides", to: "guides#guides", as: :guides
+  get "guides/*slug", to: "guides#guides"
+
+  # Starter Projects -> docs/guides/starter-projects
+  get "starter-projects", to: "guides#starter_projects", as: :starter_projects
+  get "starter-projects/*slug", to: "guides#starter_projects",
+      constraints: { slug: /[a-z0-9\/_\-]+/ }
+  get "faq", to: "guides#faq", as: :faq
 
   namespace :admin do
     constraints AdminConstraint do

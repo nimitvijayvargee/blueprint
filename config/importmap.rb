@@ -8,3 +8,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 
 pin "@rails/activestorage", to: "activestorage.esm.js"
 pin "@avo-hq/marksmith", to: "@avo-hq--marksmith.js" # @0.4.7
+pin_all_from "app/javascript/helpers", under: "helpers"
