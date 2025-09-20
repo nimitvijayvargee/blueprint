@@ -49,24 +49,58 @@ class Project < ApplicationRecord
   validates :description, presence: true
   has_one_attached :banner
 
+  before_validation :normalize_repo_link
+
   def self.parse_repo(repo)
-    # three possibilities:
-    # 1. full url: (has to be github.com)
-    # 2. org/repo
-    # 3. repo (assume current user's org)
+    # Supports:
+    # - Full URL (http/https): https://github.com/org/repo[.git][/...]
+    # - SSH: git@github.com:org/repo[.git]
+    # - Bare: org/repo
+    # - Repo only: repo (org inferred by caller)
     repo = repo.to_s.strip
-    if repo =~ %r{\Ahttps://github\.com/([^/]+)/([^/]+)(/.*)?\z}i
-      org = $1
-      repo_name = $2
-    elsif repo =~ %r{\A([^/]+)/([^/]+)\z}
-      org = $1
-      repo_name = $2
-    elsif repo =~ %r{\A([\w.-]+)\z}
+    return nil if repo.blank?
+
+    case repo
+    when %r{\Ahttps?://github\.com/([^/]+)/([^/]+)}i
+      org = Regexp.last_match(1)
+      repo_name = Regexp.last_match(2)
+    when %r{\Agit@github\.com:([^/]+)/([^/]+)\z}i,
+         %r{\Agit@github\.com:([^/]+)/([^/]+)\.git\z}i
+      org = Regexp.last_match(1)
+      repo_name = Regexp.last_match(2)
+    when %r{\Agithub\.com/([^/]+)/([^/]+)}i
+      org = Regexp.last_match(1)
+      repo_name = Regexp.last_match(2)
+    when %r{\A([^/]+)/([^/]+)\z}
+      org = Regexp.last_match(1)
+      repo_name = Regexp.last_match(2)
+    when %r{\A([\w.-]+)\z}
       org = nil
       repo_name = repo
     else
       return nil
     end
+
+    # Strip common suffixes
+    repo_name = repo_name.sub(/\.git\z/i, "")
+
     { org: org, repo_name: repo_name }
+  end
+
+  private
+
+  def normalize_repo_link
+    raw = self.repo_link.to_s.strip
+    return if raw.blank?
+
+    parsed = Project.parse_repo(raw)
+    return unless parsed
+
+    org = parsed[:org] || self.user&.github_username
+    repo = parsed[:repo_name]
+
+    return if org.blank? || repo.blank?
+
+    self.repo_link = "https://github.com/#{org}/#{repo}"
   end
 end
