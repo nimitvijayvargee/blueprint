@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_20_043209) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_20_233457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,12 +70,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_043209) do
 
   create_table "journal_entries", force: :cascade do |t|
     t.integer "duration_seconds", default: 0, null: false
-    t.integer "views_count", default: 0, null: false
     t.bigint "user_id", null: false
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "content"
+    t.string "summary"
+    t.bigint "views", default: [], null: false, array: true
     t.index ["project_id"], name: "index_journal_entries_on_project_id"
     t.index ["user_id"], name: "index_journal_entries_on_user_id"
   end
@@ -100,7 +101,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_043209) do
     t.boolean "is_shipped", default: false
     t.boolean "is_deleted", default: false
     t.integer "views_count", default: 0, null: false
-    t.integer "devlogs_count", default: 0, null: false
     t.string "hackatime_project_keys", default: [], array: true
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false

@@ -11,7 +11,7 @@ export default class extends Controller {
     minChars: { type: Number, default: 100 },
     imageRequired: { type: Boolean, default: true },
   };
-  static targets = ["charCount", "imageCount", "textarea", "hours", "submit"];
+  static targets = ["charCount", "imageCount", "summaryCount", "textarea", "summary", "hours", "submit"];
 
   connect() {
     console.log("Journal validator connected");
@@ -24,6 +24,11 @@ export default class extends Controller {
       inputEl.addEventListener("change", this._onInput);
       inputEl.addEventListener("keyup", this._onInput);
       this._boundInputEl = inputEl;
+    }
+
+    if (this.hasSummaryTarget) {
+      this.summaryTarget.addEventListener("input", this._onInput);
+      this.summaryTarget.addEventListener("change", this._onInput);
     }
 
     if (this.hasHoursTarget) {
@@ -68,6 +73,10 @@ export default class extends Controller {
       this._boundInputEl.removeEventListener("change", this._onInput);
       this._boundInputEl.removeEventListener("keyup", this._onInput);
     }
+    if (this.hasSummaryTarget && this._onInput) {
+      this.summaryTarget.removeEventListener("input", this._onInput);
+      this.summaryTarget.removeEventListener("change", this._onInput);
+    }
     if (this.hasHoursTarget && this._onInput) {
       this.hoursTarget.removeEventListener("input", this._onInput);
       this.hoursTarget.removeEventListener("change", this._onInput);
@@ -105,24 +114,32 @@ export default class extends Controller {
       ? Number.isFinite(hoursValue) && hoursValue > 0 && decimalsOk
       : true;
 
-    // Update UI
+    // Summary validation (required, <= 60 chars)
+    const summary = this.hasSummaryTarget ? (this.summaryTarget.value || "") : "";
+    const summaryLen = summary.length;
+    const okSummary = this.hasSummaryTarget ? summaryLen > 0 && summaryLen <= 60 : true;
+
+       // Update UI
     if (this.hasCharCountTarget)
       this.charCountTarget.textContent = `${chars}/${this.minCharsValue}`;
     if (this.hasImageCountTarget)
       this.imageCountTarget.textContent = `${images}/1`;
-
+       if (this.hasSummaryCountTarget)
+      this.summaryCountTarget.textContent = `${summaryLen}/60`;
+    
     // Toggle submit availability
-    const okChars = chars >= this.minCharsValue;
+       const okChars = chars >= this.minCharsValue;
     const okImages = this.imageRequiredValue ? images >= 1 : true;
-    const valid = okChars && okImages && okHours;
-
+    const valid = okChars && okImages && okHours && okSummary;
+    
     if (this.hasSubmitTarget) {
       this.submitTarget.disabled = !valid;
     }
-
+ 
     // Optionally add classes to the counters
     this.toggleStateClass(this.charCountTarget, okChars);
     this.toggleStateClass(this.imageCountTarget, okImages);
+    this.toggleStateClass(this.summaryCountTarget, okSummary);
   }
 
   toggleStateClass(el, ok) {

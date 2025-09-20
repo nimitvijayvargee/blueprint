@@ -38,7 +38,7 @@ class JournalEntriesController < ApplicationController
   end
 
   def journal_entry_params
-    permitted = params.require(:journal_entry).permit(:content, :duration_hours)
+    permitted = params.require(:journal_entry).permit(:content, :summary, :duration_hours)
 
     if permitted[:duration_hours].present?
       raw = permitted.delete(:duration_hours).to_s

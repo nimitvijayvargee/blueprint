@@ -1,15 +1,29 @@
 <%= render "shared/card" do %>
-  <%= form_with model: [@project, (@journal_entry || JournalEntry.new)], class: "space-y-4 dark", data: { controller: "journal-validator", "journal-validator-min-chars-value": 250, "journal-validator-image-required-value": true } do |f| %>
+  <%= form_with model: [@project, (@journal_entry || JournalEntry.new)], class: "space-y-4 dark", data: { controller: "journal-validator journal-draft", "journal-validator-min-chars-value": 250, "journal-validator-image-required-value": true, "journal-draft-project-id-value": @project.id } do |f| %>
     <div class="flex flex-col space-y-6">
       <div>
-          <%= f.label :content, "Write a new journal entry", class: "block text-3xl" %>
-          <p>Share what you've been working on!
+        <p class="block text-3xl">Write a new journal entry</p>
+          <p>Share what you've been working on!</p>
       </div>
-      <div class="flex flex-col space-y-1" data-controller="journal-draft" data-journal-draft-project-id-value="<%= @project.id %>">
+      <div class="space-y-2">
+        <%= f.label :summary, "Describe what you did in a few words", class: "block text-xl" %>
+        <%= f.text_field :summary,
+              class: "input w-full",
+              placeholder: "e.g. Routed the PCB",
+              maxlength: 60,
+              required: true,
+              data: { "journal-draft-target": "summary", "journal-validator-target": "summary" } %>
+        <div class="text-xs">
+          <p class="text-right">Max characters: <span data-journal-validator-target="summaryCount" class="font-medium">0/60</span></p>
+        </div>
+      </div>
+
+      <div class="flex flex-col space-y-1">
         <%= marksmith_tag :content,
               form: f,
               placeholder: "Write a few sentences about what you did...\nHow you did it...\nWhat went well, etc...\n\nInclude some images of your work!\n\nTip: Markdown is supported and you can drag and drop images.",
               enable_file_uploads: true,
+              data: { "journal-draft-target": "textarea" },
               classes: "min-h-80 text-base" %>
         <div class="text-xs flex gap-4">
           <p class="grow"><span data-journal-draft-target="status" hidden>Draft Saved Locally</span></p>

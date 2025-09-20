@@ -7,7 +7,7 @@ export default class extends Controller {
   static values = {
     projectId: Number
   }
-  static targets = ["status", "textarea", "hours", "submit"]
+  static targets = ["status", "textarea", "summary", "hours", "submit"]
 
   connect() {
     this.form = this.element.closest("form")
@@ -27,6 +27,10 @@ export default class extends Controller {
 
     this.textareaTarget.addEventListener("input", this._onFieldInput)
     this.textareaTarget.addEventListener("change", this._onFieldInput)
+    if (this.hasSummaryTarget) {
+      this.summaryTarget.addEventListener("input", this._onFieldInput)
+      this.summaryTarget.addEventListener("change", this._onFieldInput)
+    }
     if (this.hasHoursTarget) {
       this.hoursTarget.addEventListener("input", this._onFieldInput)
       this.hoursTarget.addEventListener("change", this._onFieldInput)
@@ -74,6 +78,10 @@ export default class extends Controller {
       this.hoursTarget.removeEventListener("input", this._onFieldInput)
       this.hoursTarget.removeEventListener("change", this._onFieldInput)
     }
+    if (this.hasSummaryTarget && this._onFieldInput) {
+      this.summaryTarget.removeEventListener("input", this._onFieldInput)
+      this.summaryTarget.removeEventListener("change", this._onFieldInput)
+    }
     if (this.form && this._onSubmit) {
       this.form.removeEventListener("submit", this._onSubmit)
     }
@@ -102,6 +110,10 @@ export default class extends Controller {
         this.textareaTarget.value = data.content
         restoredSomething = true
       }
+      if (this.hasSummaryTarget && !this.summaryTarget.value && typeof data.summary === "string" && data.summary.trim().length > 0) {
+        this.summaryTarget.value = data.summary
+        restoredSomething = true
+      }
       if (this.hasHoursTarget && !this.hoursTarget.value && data.duration_hours != null) {
         this.hoursTarget.value = data.duration_hours
         restoredSomething = true
@@ -113,22 +125,25 @@ export default class extends Controller {
   save() {
     try {
       const content = (this.hasTextareaTarget ? (this.textareaTarget.value || "") : "").trim()
+      const summary = (this.hasSummaryTarget ? (this.summaryTarget.value || "") : "").trim()
       const hoursRaw = this.hasHoursTarget ? this.hoursTarget.value : ""
       let hours = hoursRaw === "" ? null : (parseFloat(hoursRaw) || null)
-      if (hours != null) hours = Math.round(hours * 10) / 10
-
+           if (hours != null) hours = Math.round(hours * 10) / 10
+      
       // Only persist if we actually have something meaningful
       const hasContent = content.length > 0
+           const hasSummary = summary.length > 0
       const hasHours = hours != null
-
-      if (!hasContent && !hasHours) {
-        this.clear()
+      
+      if (!hasContent && !hasSummary && !hasHours) {
+      this.clear()
         this.hideStatus()
-        return
+             return
       }
-
+      
       const payload = {
-        content,
+      content,
+        summary,
         duration_hours: hours,
         updatedAt: Date.now()
       }
@@ -148,6 +163,10 @@ export default class extends Controller {
       this.textareaTarget.removeEventListener("input", this._onFieldInput)
       this.textareaTarget.removeEventListener("change", this._onFieldInput)
     }
+    if (this.hasSummaryTarget && this._onFieldInput) {
+      this.summaryTarget.removeEventListener("input", this._onFieldInput)
+      this.summaryTarget.removeEventListener("change", this._onFieldInput)
+    }
     if (this.hasHoursTarget && this._onFieldInput) {
       this.hoursTarget.removeEventListener("input", this._onFieldInput)
       this.hoursTarget.removeEventListener("change", this._onFieldInput)
@@ -160,8 +179,9 @@ export default class extends Controller {
       if (!raw) return false
       const data = JSON.parse(raw)
       const hasContent = typeof data.content === "string" && data.content.trim().length > 0
+      const hasSummary = typeof data.summary === "string" && data.summary.trim().length > 0
       const hasHours = data.duration_hours != null
-      return hasContent || hasHours
+      return hasContent || hasSummary || hasHours
     } catch (_) { return false }
   }
 
@@ -184,8 +204,9 @@ export default class extends Controller {
 
   snapshot() {
     const content = this.hasTextareaTarget ? (this.textareaTarget.value || "") : ""
+    const summary = this.hasSummaryTarget ? (this.summaryTarget.value || "") : ""
     const hoursRaw = this.hasHoursTarget ? (this.hoursTarget.value || "") : ""
-    return `${content}||${hoursRaw}`
+    return `${content}||${summary}||${hoursRaw}`
   }
 
   debounce(fn, wait) {

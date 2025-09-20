@@ -5,7 +5,6 @@
 #  id                     :bigint           not null, primary key
 #  demo_link              :string
 #  description            :text
-#  devlogs_count          :integer          default(0), not null
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
 #  is_shipped             :boolean          default(FALSE)

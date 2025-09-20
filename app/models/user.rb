@@ -6,6 +6,7 @@
 #  avatar              :string
 #  email               :string           not null
 #  github_access_token :string
+#  github_username     :string
 #  is_banned           :boolean          default(FALSE), not null
 #  is_mcg              :boolean          default(FALSE), not null
 #  role                :integer          default("user"), not null

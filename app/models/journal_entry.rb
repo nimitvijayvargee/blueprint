@@ -5,7 +5,8 @@
 #  id               :bigint           not null, primary key
 #  content          :text
 #  duration_seconds :integer          default(0), not null
-#  views_count      :integer          default(0), not null
+#  summary          :string
+#  views            :bigint           default([]), not null, is an Array
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  project_id       :bigint           not null
@@ -31,6 +32,7 @@ class JournalEntry < ApplicationRecord
 
   validate :content_min_chars_excluding_images
   validate :content_must_include_image
+  validates :summary, presence: true, length: { maximum: 60 }
 
   private
 
