@@ -97,12 +97,12 @@ export default class extends Controller {
     const chars = normalized.length;
     const images = imageMatches.length;
 
-    // Hours validation (> 0)
-    const hoursValue = this.hasHoursTarget
-      ? Number(this.hoursTarget.value)
-      : NaN;
+    // Hours validation (> 0, max 1 decimal place)
+    const hoursRaw = this.hasHoursTarget ? (this.hoursTarget.value || "") : "";
+    const hoursValue = this.hasHoursTarget ? Number(hoursRaw) : NaN;
+    const decimalsOk = !hoursRaw.includes(".") || ((hoursRaw.split(".")[1] || "").length <= 1);
     const okHours = this.hasHoursTarget
-      ? Number.isFinite(hoursValue) && hoursValue > 0
+      ? Number.isFinite(hoursValue) && hoursValue > 0 && decimalsOk
       : true;
 
     // Update UI

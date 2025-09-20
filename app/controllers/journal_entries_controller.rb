@@ -41,9 +41,12 @@ class JournalEntriesController < ApplicationController
     permitted = params.require(:journal_entry).permit(:content, :duration_hours)
 
     if permitted[:duration_hours].present?
-      hours = permitted.delete(:duration_hours).to_i
-      # Enforce positive integer hours; client-side requires min:1, step:1
-      permitted[:duration_seconds] = hours * 3600 if hours.positive?
+      raw = permitted.delete(:duration_hours).to_s
+      hours = Float(raw) rescue nil
+      if hours && hours.positive?
+        hours_1dp = (hours * 10).round / 10.0
+        permitted[:duration_seconds] = (hours_1dp * 3600).round
+      end
     end
 
     permitted

@@ -1,0 +1,15 @@
+<% show_line = local_assigns.fetch(:show_line, true) %>
+
+<div class="px-4">
+    <div class="flex items-center space-x-4">
+        <div class="flex items-center justify-center p-2 bg-bp-darker">
+            <%= inline_svg local_assigns[:icon], class: "size-5" %>
+        </div>
+        <div class="flex text-lg">
+            <%= yield %>
+        </div>
+    </div>
+    <% if show_line %>
+        <div class="border-l-2 h-8 ml-[calc(1rem+1px)] border-white/20"></div>
+    <% end %>
+</div>

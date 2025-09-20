@@ -5,7 +5,6 @@
 #  id                     :bigint           not null, primary key
 #  demo_link              :string
 #  description            :text
-#  devlogs_count          :integer          default(0), not null
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
 #  is_shipped             :boolean          default(FALSE)
@@ -85,6 +84,18 @@ class Project < ApplicationRecord
     repo_name = repo_name.sub(/\.git\z/i, "")
 
     { org: org, repo_name: repo_name }
+  end
+
+  def generate_timeline
+    timeline = []
+
+    timeline << { type: :creation, date: created_at }
+
+    journal_entries.order(created_at: :asc).each do |entry|
+      timeline << { type: :journal, date: entry.created_at, entry: entry }
+    end
+
+    timeline
   end
 
   private

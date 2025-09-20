@@ -114,7 +114,8 @@ export default class extends Controller {
     try {
       const content = (this.hasTextareaTarget ? (this.textareaTarget.value || "") : "").trim()
       const hoursRaw = this.hasHoursTarget ? this.hoursTarget.value : ""
-      const hours = hoursRaw === "" ? null : (parseInt(hoursRaw, 10) || null)
+      let hours = hoursRaw === "" ? null : (parseFloat(hoursRaw) || null)
+      if (hours != null) hours = Math.round(hours * 10) / 10
 
       // Only persist if we actually have something meaningful
       const hasContent = content.length > 0

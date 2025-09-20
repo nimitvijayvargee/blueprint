@@ -1,0 +1,14 @@
+<% if event[:type] == :creation %>
+  <%= render "timeline_event_basic", icon: "icons/create.svg", show_line: false do %>
+    <p><%= render "shared/user_inline", user: project.user %> started <%= project.title %> <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+  <% end %>
+<% elsif event[:type] == :journal %>
+  <% entry = event[:entry] %>
+  <%= render "timeline_event_card", class: "flex flex-col space-y-2" do %>
+    <p class="grow"><%= render "shared/user_inline", user: project.user %> added to the journal <%= time_ago_in_words(event[:date]) %> ago</p>
+    <div class="markdown">
+        <%= sanitize_marksmith_html(marksmithed(entry.content)) %>
+    </div>
+    <p>This entry covers <%= pluralize((entry.duration_seconds / 3600).floor(1), "hour") %></p>
+  <% end %>
+<% end %>

@@ -1,0 +1,6 @@
+<div>
+  <%= render "shared/card", class: local_assigns[:class] do %>
+    <%= yield %>
+  <% end %>
+  <div class="border-l-2 h-8 ml-[calc(2rem+1px)] border-white/20"></div>
+</div>
