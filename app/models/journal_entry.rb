@@ -35,8 +35,8 @@ class JournalEntry < ApplicationRecord
   validates :summary, presence: true, length: { maximum: 60 }
 
   after_commit :sync_project_github_journal, on: %i[create update destroy]
- 
-   private
+
+  private
 
   def content_min_chars_excluding_images
     body = content.to_s
