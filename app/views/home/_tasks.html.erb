@@ -14,7 +14,7 @@
       <div class="text-xl border-0 flex items-center space-x-4">
         <div class="border-2 size-4 <%= done ? 'bg-white' : '' %>"></div>
         <% if name == :join_slack %>
-          <% if done && false %>
+          <% if done %>
             <p class="line-through"><%= task[:msg] %></p>
           <% else %>
             <button type="button" 
