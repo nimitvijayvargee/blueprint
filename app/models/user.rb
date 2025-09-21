@@ -518,7 +518,8 @@ class User < ApplicationRecord
     end
   end
 
-  def check_github_repo(org = nil, repo_name)
+  def check_github_repo(org, repo_name, project_id: nil)
+    puts "Checking GitHub repo #{org}/#{repo_name} for user #{id} (#{github_username})"
     unless github_user?
       Rails.logger.tagged("GitHubFetch") do
         Rails.logger.info({
@@ -528,7 +529,6 @@ class User < ApplicationRecord
       end
       return false
     end
-    org ||= github_username
 
     response = fetch_github("/repos/#{org}/#{repo_name}")
 
@@ -540,10 +540,23 @@ class User < ApplicationRecord
 
     can_push = data["permissions"]["push"]
 
-    if can_push
-      { ok: true, can_push: can_push }
+    unless can_push
+      return { ok: false, error: "You do not have permission to write to this repo." }
+    end
+
+    normalized = Project.normalize_repo_link("#{org}/#{repo_name}", github_username)
+
+    # Ensure this repo isn't already linked to another project
+    in_use = if project_id.present?
+      Project.where(repo_link: normalized).where.not(id: project_id).exists?
     else
-      { ok: false, error: "You do not have permission to write to this repo." }
+      Project.where(repo_link: normalized).exists?
+    end
+
+    if in_use
+      { ok: false, error: "This repo is already linked to another project" }
+    else
+      { ok: true, can_push: can_push }
     end
   end
 

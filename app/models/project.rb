@@ -48,6 +48,14 @@ class Project < ApplicationRecord
   validates :description, presence: true
   has_one_attached :banner
 
+  # Order projects by most recent journal entry; fall back to project creation
+  scope :order_by_recent_journal, -> {
+    left_joins(:journal_entries)
+      .select("projects.*, COALESCE(MAX(journal_entries.created_at), projects.created_at) AS last_activity_at")
+      .group("projects.id")
+      .order(Arel.sql("last_activity_at DESC"))
+  }
+
   before_validation :normalize_repo_link
   after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
 
@@ -85,6 +93,21 @@ class Project < ApplicationRecord
     repo_name = repo_name.sub(/\.git\z/i, "")
 
     { org: org, repo_name: repo_name }
+  end
+
+  def self.normalize_repo_link(raw, username)
+    stripped = raw.to_s.strip
+    return if stripped.blank?
+
+    parsed = Project.parse_repo(stripped)
+    return unless parsed
+
+    org = parsed[:org] || username
+    repo = parsed[:repo_name]
+
+    return if org.blank? || repo.blank?
+
+    "https://github.com/#{org}/#{repo}"
   end
 
   def generate_timeline
@@ -154,18 +177,8 @@ class Project < ApplicationRecord
   private
 
   def normalize_repo_link
-    raw = self.repo_link.to_s.strip
-    return if raw.blank?
-
-    parsed = Project.parse_repo(raw)
-    return unless parsed
-
-    org = parsed[:org] || self.user&.github_username
-    repo = parsed[:repo_name]
-
-    return if org.blank? || repo.blank?
-
-    self.repo_link = "https://github.com/#{org}/#{repo}"
+    normalized = Project.normalize_repo_link(repo_link, user&.github_username)
+    self.repo_link = normalized if normalized.present?
   end
 
   def replace_local_images(content)

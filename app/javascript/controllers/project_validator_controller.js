@@ -7,7 +7,8 @@ export default class extends Controller {
   static targets = ["title", "description", "repo", "status", "submit"]
   static values = {
     debounce: { type: Number, default: 700 },
-    url: { type: String, default: "/projects/check_github_repo" }
+    url: { type: String, default: "/projects/check_github_repo" },
+    projectId: { type: Number, default: null },
   }
 
   connect() {
@@ -92,7 +93,7 @@ export default class extends Controller {
           "Accept": "application/json",
           ...csrfHeader(),
         },
-        body: JSON.stringify({ repo }),
+        body: JSON.stringify({ repo, project_id: this.projectIdValue }),
         signal: this._abort.signal,
       })
 

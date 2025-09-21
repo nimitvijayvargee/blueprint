@@ -2,7 +2,9 @@ class ProjectsController < ApplicationController
   allow_unauthenticated_access only: %i[explore show]
 
   def index
-    @projects = current_user.projects.includes(:banner_attachment)
+    @projects = current_user.projects
+      .order_by_recent_journal
+      .includes(:banner_attachment)
   end
 
   def explore; end
@@ -54,10 +56,10 @@ class ProjectsController < ApplicationController
       render json: { ok: false, error: "Invalid GitHub repo" }, status: :unprocessable_entity
       return
     end
-    org = parsed_repo[:org]
+    org = parsed_repo[:org] || current_user.github_username
     repo_name = parsed_repo[:repo_name]
 
-    render json: current_user.check_github_repo(org, repo_name)
+    render json: current_user.check_github_repo(org, repo_name, project_id: params[:project_id].presence || params[:id].presence)
   rescue StandardError => e
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
   end
