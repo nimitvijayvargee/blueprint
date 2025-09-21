@@ -34,7 +34,9 @@ class JournalEntry < ApplicationRecord
   validate :content_must_include_image
   validates :summary, presence: true, length: { maximum: 60 }
 
-  private
+  after_commit :sync_project_github_journal, on: %i[create update destroy]
+ 
+   private
 
   def content_min_chars_excluding_images
     body = content.to_s
@@ -51,5 +53,9 @@ class JournalEntry < ApplicationRecord
     if images.size < 1
       errors.add(:content, "must include at least one image")
     end
+  end
+
+  def sync_project_github_journal
+    project&.sync_github_jourunal!
   end
 end

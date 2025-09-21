@@ -49,6 +49,7 @@ class Project < ApplicationRecord
   has_one_attached :banner
 
   before_validation :normalize_repo_link
+  after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -172,8 +173,11 @@ class Project < ApplicationRecord
 
     host = ENV.fetch("APPLICATION_HOST")
 
-    # ![alt text](/user-attachments/...)
-    content.gsub!(/!\[.*?\]\((\/user-attachments\/.*?)(?=\s|$)/, "![](https://#{host}\\1)")
+    # ![alt text](/user-attachments/...) — preserve alt text and avoid double ")"
+    content.gsub!(
+      /!\[(.*?)\]\((\/user-attachments\/[\S^)]+)(\s+\"[^\"]*\")?\)/,
+      "![\\1](https://#{host}\\2\\3)"
+    )
 
     # src="/user-attachments/..."
     content.gsub!(/src=["'](\/user-attachments\/.*?)(?=["'])/, "src=\"https://#{host}\\1\"")
