@@ -118,12 +118,12 @@ class Project < ApplicationRecord
     journals = journal_entries.order(created_at: :asc)
 
     day_counts = journals.group_by { |e| e.created_at.to_date }.transform_values(&:size)
-    hour_counts = journals.group_by { |e| [e.created_at.to_date, e.created_at.hour] }.transform_values(&:size)
+    hour_counts = journals.group_by { |e| [ e.created_at.to_date, e.created_at.hour ] }.transform_values(&:size)
 
     journals.each do |entry|
       t = entry.created_at
       header_ts = if day_counts[t.to_date] && day_counts[t.to_date] > 1
-        if hour_counts[[t.to_date, t.hour]] && hour_counts[[t.to_date, t.hour]] > 1
+        if hour_counts[[ t.to_date, t.hour ]] && hour_counts[[ t.to_date, t.hour ]] > 1
           t.strftime("%-m/%-d/%Y %-I:%M %p")
         else
           t.strftime("%-m/%-d/%Y %-I %p")
@@ -140,6 +140,7 @@ class Project < ApplicationRecord
   end
 
   def sync_github_jourunal!
+    return unless user&.github_user? && repo_link.present?
     GithubJournalSyncJob.perform_later(id)
   end
 
