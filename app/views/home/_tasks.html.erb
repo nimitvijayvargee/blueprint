@@ -14,7 +14,7 @@
       <div class="text-xl border-0 flex items-center space-x-4">
         <div class="border-2 size-4 <%= done ? 'bg-white' : '' %>"></div>
         <% if name == :join_slack %>
-          <% if done %>
+          <% if done && false %>
             <p class="line-through"><%= task[:msg] %></p>
           <% else %>
             <button type="button" 
@@ -90,7 +90,7 @@
           <p>Head over to #slack-welcome-start and "Explore the Cave"</p>
         </div>
         <div class="bg-gray-500 max-w-xl">
-          <video src="<%= video_path('slack-onboarding.mp4') %>" alt="Slack onboarding video" autoplay loop class="object-fit"></video>
+          <video src="<%= video_path('slack-toriel.mp4') %>" alt="Slack onboarding video" autoplay loop class="object-fit"></video>
         </div>
         <%= render "shared/button", 
             text: "I'm done!",

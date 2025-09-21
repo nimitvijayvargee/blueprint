@@ -14,9 +14,7 @@ export default class extends Controller {
 
     sendInvite() {
         if (!this.hasButton1Target) return
-
-        this.dispatch(`modal:next-${this.targetIdValue}`, { target: window, prefix: false })
-
+        
         this.button1Target.innerText = "Sending..."
         this.button1Target.disabled = true
 
