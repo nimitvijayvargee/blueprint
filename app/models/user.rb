@@ -530,7 +530,7 @@ class User < ApplicationRecord
     end
     org ||= github_username
 
-    response = fetch_github("/repos/#{org}/#{repo_name}", :get)
+    response = fetch_github("/repos/#{org}/#{repo_name}")
 
     if response.status == 404 || response.status == 301
       return { ok: false, error: "This repo does not exist, or is private." }
@@ -547,7 +547,7 @@ class User < ApplicationRecord
     end
   end
 
-  def fetch_github(path, method = :get, check_token = true, get_all = false, params = {}, data = {}, headers = {})
+  def fetch_github(path, method: :get, check_token: true, get_all: false, params: {}, data: {}, headers: {})
     unless github_user?
       Rails.logger.tagged("GitHubFetch") do
         Rails.logger.info({
@@ -572,6 +572,15 @@ class User < ApplicationRecord
     when :post
       url = params.present? ? "#{base_url}?#{params.to_query}" : base_url
       Faraday.post(url, data.to_json, headers)
+    when :put
+      url = params.present? ? "#{base_url}?#{params.to_query}" : base_url
+      Faraday.put(url, data.to_json, headers)
+    when :patch
+      url = params.present? ? "#{base_url}?#{params.to_query}" : base_url
+      Faraday.patch(url, data.to_json, headers)
+    when :delete
+      url = params.present? ? "#{base_url}?#{params.to_query}" : base_url
+      Faraday.delete(url, nil, headers)
     else
       raise ArgumentError, "Unsupported HTTP method: #{method}"
     end

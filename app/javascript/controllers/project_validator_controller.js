@@ -107,10 +107,10 @@ export default class extends Controller {
       if (data.ok) {
         if (data.can_push) {
           this._repoState = { kind: "ok" }
-          this.setStatus("You have push access to this repository.", { success: true })
+          this.setStatus("You can write to this repository.", { success: true })
         } else {
           this._repoState = { kind: "no_push" }
-          this.setStatus("You do not have push access to this repository.", { danger: true })
+          this.setStatus("You do not have write access to this repository.", { danger: true })
         }
       } else {
         const msg = data.error || "Unable to verify repository."

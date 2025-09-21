@@ -109,19 +109,44 @@ class Project < ApplicationRecord
       ==================================================================
     -->
 
-    This is my journal of the design and building process of #{title}.#{'  '}
-    You can view this journal in more detail on Hack Club Blueprint [here](https://blueprint.hackclub.com/projects/#{id}).
+    This is my journal of the design and building process of **#{title}**.#{'  '}
+    You can view this journal in more detail on **Hack Club Blueprint** [here](https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}).
 
 
     EOS
 
     journals = journal_entries.order(created_at: :asc)
+
+    day_counts = journals.group_by { |e| e.created_at.to_date }.transform_values(&:size)
+    hour_counts = journals.group_by { |e| [e.created_at.to_date, e.created_at.hour] }.transform_values(&:size)
+
     journals.each do |entry|
-      contents += "## #{entry.created_at.strftime('%-m/%d/%Y')}#{entry.summary.present? ? " - #{entry.summary}" : ""}  \n\n"
-      contents += "#{entry.content}  \n\n"
+      t = entry.created_at
+      header_ts = if day_counts[t.to_date] && day_counts[t.to_date] > 1
+        if hour_counts[[t.to_date, t.hour]] && hour_counts[[t.to_date, t.hour]] > 1
+          t.strftime("%-m/%-d/%Y %-I:%M %p")
+        else
+          t.strftime("%-m/%-d/%Y %-I %p")
+        end
+      else
+        t.strftime("%-m/%-d/%Y")
+      end
+
+      contents += "## #{header_ts}#{entry.summary.present? ? " - #{entry.summary}" : ""}  \n\n"
+      contents += "#{replace_local_images(entry.content)}  \n\n"
     end
 
     contents
+  end
+
+  def sync_github_jourunal!
+    GithubJournalSyncJob.perform_later(id)
+  end
+
+  def parse_repo
+    return { org: nil, repo: nil } if repo_link.blank?
+
+    Project.parse_repo(repo_link)
   end
 
   private
@@ -139,5 +164,19 @@ class Project < ApplicationRecord
     return if org.blank? || repo.blank?
 
     self.repo_link = "https://github.com/#{org}/#{repo}"
+  end
+
+  def replace_local_images(content)
+    return content if content.blank?
+
+    host = ENV.fetch("APPLICATION_HOST")
+
+    # ![alt text](/user-attachments/...)
+    content.gsub!(/!\[.*?\]\((\/user-attachments\/.*?)(?=\s|$)/, "![](https://#{host}\\1)")
+
+    # src="/user-attachments/..."
+    content.gsub!(/src=["'](\/user-attachments\/.*?)(?=["'])/, "src=\"https://#{host}\\1\"")
+
+    content
   end
 end
