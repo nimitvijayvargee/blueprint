@@ -1,8 +1,8 @@
 <% tasks = current_user.tasks.task_requirements %>
 
 <%= render "shared/card" do %>
-  <div class="absolute size-32 bg-red-200/25 -right-1 -top-3 -rotate-5 flex items-center justify-center">
-    stickers soon
+  <div class="absolute size-32 -right-1 -top-8 -rotate-5 flex items-center justify-center bg-contain bg-center bg-no-repeat"
+  style="background-image: url('<%= asset_path('stickers.png') %>')">
   </div>
   <div class="">
     <h2 class="text-3xl">Your tasks</h2>
