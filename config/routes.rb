@@ -94,6 +94,9 @@ Rails.application.routes.draw do
       mount Flipper::UI.app(Flipper), at: "flipper"
 
       get "/" => "static_pages#index", as: :root
+
+      resources :users, only: [ :index, :show ]
+      resources :projects, only: [ :index, :show ]
     end
   end
 end
