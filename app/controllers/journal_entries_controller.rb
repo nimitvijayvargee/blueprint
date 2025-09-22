@@ -3,6 +3,8 @@ class JournalEntriesController < ApplicationController
   before_action :set_journal_entry, only: [ :update, :destroy ]
 
   def create
+    not_found and return unless @project.user == current_user
+
     @journal_entry = @project.journal_entries.build(journal_entry_params.merge(user: current_user))
 
     if @journal_entry.save
@@ -13,6 +15,8 @@ class JournalEntriesController < ApplicationController
   end
 
   def update
+    not_found and return unless @journal_entry.user == current_user
+
     if @journal_entry.update(journal_entry_params)
       redirect_to project_path(@project), notice: "Journal entry updated."
     else
@@ -21,6 +25,8 @@ class JournalEntriesController < ApplicationController
   end
 
   def destroy
+    not_found and return unless @journal_entry.user == current_user
+
     @journal_entry.destroy
     redirect_to project_path(@project), notice: "Journal entry deleted."
   end

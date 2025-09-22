@@ -9,7 +9,6 @@ export default class extends Controller {
     }
 
     connect() {
-        console.log(this.targetIdValue)
     }
 
     sendInvite() {
@@ -27,7 +26,6 @@ export default class extends Controller {
             },
             body: JSON.stringify({})
         }).then(response => {
-            console.log(response)
             if (response.ok) {
                 this.dispatch(`modal:next-${this.targetIdValue}`, { target: window, prefix: false })
             } else {

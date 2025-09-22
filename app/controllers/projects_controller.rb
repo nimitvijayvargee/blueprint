@@ -43,6 +43,14 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def destroy
+    @project = current_user.projects.find_by(id: params[:id])
+    not_found and return unless @project
+
+    @project.destroy
+    redirect_to projects_path, notice: "Project deleted."
+  end
+
   def check_github_repo
     unless current_user.github_user?
       render json: { ok: false, error: "GitHub account not linked (Check the tasks panel)" }, status: :unprocessable_entity
@@ -59,7 +67,16 @@ class ProjectsController < ApplicationController
     org = parsed_repo[:org] || current_user.github_username
     repo_name = parsed_repo[:repo_name]
 
-    render json: current_user.check_github_repo(org, repo_name, project_id: params[:project_id].presence || params[:id].presence)
+    project_param_id = params[:project_id].presence || params[:id].presence
+    if project_param_id.present?
+      project = current_user.projects.find_by(id: project_param_id)
+      unless project
+        render json: { ok: false, error: "Not authorized for this project" }, status: :forbidden
+        return
+      end
+    end
+
+    render json: current_user.check_github_repo(org, repo_name, project_id: project_param_id)
   rescue StandardError => e
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
   end

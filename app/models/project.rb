@@ -38,10 +38,14 @@ class Project < ApplicationRecord
   }
 
   enum :review_status, {
-    pending: "pending",
-    approved: "approved",
-    rejected: "rejected",
-    needs_revision: "needs_revision"
+    design_pending: "design_pending",
+    design_approved: "design_approved",
+    design_needs_revision: "design_needs_revision",
+    design_rejected: "design_rejected",
+    build_pending: "build_pending",
+    build_approved: "build_approved",
+    build_needs_revision: "build_needs_revision",
+    build_rejected: "build_rejected"
   }
 
   validates :title, presence: true

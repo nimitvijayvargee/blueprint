@@ -612,7 +612,14 @@ class User < ApplicationRecord
     if username.present?
       username
     elsif email.present?
-      email.split("@").first
+      local = email.split("@").first
+      if local.blank?
+        "User#{id}"
+      elsif local.length < 2
+        "*"
+      else
+        "#{local[0]}**#{local[-1]}"
+      end
     else
       "User#{id}"
     end

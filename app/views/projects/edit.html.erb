@@ -1,4 +1,5 @@
-<section class="flex flex-col items-center grow space-y-6">
+<section class="flex flex-col items-center grow">
+  <%= render "shared/button", text: "Back", url: project_path(@project), class: "mr-auto py-0.5 px-4 text-base"%>
   <div class="w-full max-w-3xl space-y-4 min-h-full flex flex-col m-8">
     <%= render "shared/card" do %>
       <h1 class="text-4xl">Edit project</h1>

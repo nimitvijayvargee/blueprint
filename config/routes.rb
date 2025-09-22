@@ -65,7 +65,7 @@ Rails.application.routes.draw do
 
   get "home" => "home#index", as: :home
 
-  resources :projects, only: [ :index, :new, :create, :show, :edit, :update ] do
+  resources :projects, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     resources :journal_entries, only: [ :create, :update, :destroy ]
     post :check_github_repo, on: :collection
   end

@@ -1,4 +1,6 @@
 class ShopItemsController < ApplicationController
+  before_action :ensure_admin!
+
   def new
     @shop_item = ShopItem.new
   end
@@ -14,6 +16,12 @@ class ShopItemsController < ApplicationController
   end
 
   private
+
+  def ensure_admin!
+    unless current_user&.admin?
+      redirect_to main_app.root_path, alert: "You are not authorized to access this page."
+    end
+  end
 
   def shop_item_params
     params.require(:shop_item).permit(

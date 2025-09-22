@@ -14,7 +14,6 @@ export default class extends Controller {
   static targets = ["charCount", "imageCount", "summaryCount", "textarea", "summary", "hours", "submit"];
 
   connect() {
-    console.log("Journal validator connected");
     this._onInput = this.onInput.bind(this);
 
     // Attach to content input (Stimulus target or Marksmith textarea)

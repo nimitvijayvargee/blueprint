@@ -1,5 +1,5 @@
 <%# Optional URL target (renders <a> when present, <button> when not) %>
-<% url = local_assigns[:url] || local_assigns[:href] %>
+<% url = local_assigns[:url] || local_assigns[:href] || local_assigns[:path] %>
 
 <%# Inputs and defaults %>
 <% text          = local_assigns[:text] %>

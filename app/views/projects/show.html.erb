@@ -8,9 +8,11 @@
       <div class="space-y-2">
         <div class="flex items-start">
           <p class="text-3xl grow"><%= @project.title %></p>
-          <div>
-            <% if current_user.present? && (current_user.admin? || current_user == @project.user) %>
+          <div class="space-x-2">
+            <% if current_user.present? && current_user == @project.user %>
+              <%= render "shared/button", text: "Ship it!", class: "py-1 px-6" %>
               <%= render "shared/button", text: "Edit", url: edit_project_path(@project), class: "py-1 px-6" %>
+              <%= render "shared/button", text: "Delete", class: "py-1 px-6", html_options: { data: { controller: "modal", action: "click->modal#show", modal_target_id_value: "delete-project" } } %>
             <% end %>
           </div>
         </div>
@@ -26,4 +28,28 @@
     <% end %>
     <%= render "timeline", project: @project %>
   </div>
+
+  <% if current_user.present? && current_user == @project.user %>
+    <div 
+    data-controller="modal"
+    data-action="modal:show-delete-project@window->modal#show modal:hide-delete-project@window->modal#hide modal:toggle-delete-project@window->modal#toggle modal:next-delete-project@window->modal#next"
+    class="hidden fixed inset-0 z-50">
+      <div class="fixed inset-0 flex items-center justify-center p-4" data-controller="tasks-slack" data-tasks-slack-target-id-value="slack-join">
+        <%= render "shared/card", html_options: { data: { modal_target: "panel" } }, class: "z-50 min-w-xl space-y-0" do %>
+          <div class="flex flex-col items-center space-y-8">
+            <p class="text-3xl">Delete this project?</p>
+            <div class="flex space-x-4 w-full justify-evenly">
+              <div class="w-full">
+                <%= render "shared/button", text: "Cancel", variant: :outline, class: "w-full", html_options: { data: { controller: "modal", action: "click->modal#hide", modal_target_id_value: "delete-project" } } %>
+              </div>
+              <div class="w-full">
+                <%= render "shared/button", text: "Delete", class: "w-full bg-bp-danger border-bp-danger hover:bg-bp-danger-darker hover:border-bp-danger-darker", url: project_path(@project), html_options: { method: :delete } %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <div data-modal-target="overlay" class="fixed inset-0 bg-black/50 z-40"></div>
+      </div>
+    </div>
+  <% end %>
 </section>
