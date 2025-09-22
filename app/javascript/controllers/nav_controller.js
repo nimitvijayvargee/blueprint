@@ -18,16 +18,34 @@ export default class extends Controller {
   update() {
     const currentPath = window.location.pathname
 
-    // Toggle top-level nav active state
+    // Toggle top-level nav active state (supports anchors or containers with data-nav-base or a child <a>)
     this.linkTargets.forEach((link) => {
       const match = link.dataset.navMatch || "exact"
+      const explicitBase = (link.dataset.navBase || link.dataset.linkBase || link.dataset.navPath || "").replace(/\/$/, "")
+
+      // Determine a pathname to compare against
+      let pathname = ""
+      if (explicitBase) {
+        pathname = explicitBase
+      } else if (link.pathname) {
+        pathname = link.pathname.replace(/\/$/, "")
+      } else {
+        const a = link.querySelector && link.querySelector('a[href]')
+        if (a) {
+          try {
+            pathname = new URL(a.getAttribute('href'), window.location.origin).pathname.replace(/\/$/, "")
+          } catch (_) {}
+        }
+      }
+
       let isActive = false
       if (match === "prefix") {
-        const base = link.pathname.replace(/\/$/, "")
-        isActive = currentPath === base || currentPath.startsWith(base + "/")
+        const base = pathname
+        isActive = base && (currentPath === base || currentPath.startsWith(base + "/"))
       } else {
-        isActive = link.pathname === currentPath
+        isActive = pathname && pathname === currentPath
       }
+
       this.toggleVariant(link, isActive)
       if (isActive) link.setAttribute("aria-current", "page")
       else link.removeAttribute("aria-current")
