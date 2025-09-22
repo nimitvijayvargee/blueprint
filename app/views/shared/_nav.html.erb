@@ -1,6 +1,6 @@
 <% nav_links = {
-    "Home" => user_logged_in? ? home_path : nil,
-    "My Projects" => user_logged_in? ? projects_path : nil,
+    "Home" => user_logged_in? ? home_path : login_path,
+    "My Projects" => user_logged_in? ? projects_path : login_path,
     "Explore" => explore_path,
     "Tool Bag" => toolbag_path,
     "Starter Projects" => starter_projects_path,
