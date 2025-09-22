@@ -26,5 +26,7 @@ module Blueprint
 
     MissionControl::Jobs.base_controller_class = "Admin::ApplicationController"
     config.mission_control.jobs.http_basic_auth_enabled = false
+
+    config.flipper_features = config_for(:flipper_features)
   end
 end
