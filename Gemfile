@@ -75,6 +75,9 @@ gem "sentry-rails"
 # PaperTrail for audit logging
 gem "paper_trail"
 
+# Pagination
+gem "pagy"
+
 # Flipper for feature flags
 gem "flipper"
 gem "flipper-active_record"

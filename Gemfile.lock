@@ -291,6 +291,7 @@ GEM
     nokogiri (1.18.9-x86_64-linux-musl)
       racc (~> 1.4)
     ostruct (0.6.3)
+    pagy (9.4.0)
     paper_trail (16.0.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -548,6 +549,7 @@ DEPENDENCIES
   kamal
   marksmith
   mission_control-jobs
+  pagy
   paper_trail
   pg (~> 1.6)
   propshaft

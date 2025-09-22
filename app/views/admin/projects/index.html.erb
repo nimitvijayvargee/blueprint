@@ -1,4 +1,56 @@
-<div>
-  <h1 class="font-bold text-4xl">Admin::Projects#index</h1>
-  <p>Find me in app/views/admin/projects/index.html.erb</p>
+<div class="mb-10">
+  <%= render "shared/button", text: "Back", url: admin_root_path, class: "py-0" %>
 </div>
+<section class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-4xl pb-2">All Projects</h1>
+    <%= form_with url: admin_projects_path, method: :get, local: true, class: "w-full max-w-2xl" do %>
+      <div class="flex items-center gap-3">
+        <input type="text" name="q" value="<%= h(@q) %>" placeholder="Search by ID, title, or author" class="input w-full rounded-none border-white bg-bp-darker text-white placeholder-white/60" />
+        <button type="submit" class="btn btn-primary rounded-none text-lg">Search</button>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="border-2 border-white rounded-none">
+    <!-- Header row -->
+    <div class="grid grid-cols-12 text-lg border-b-2 border-white p-3">
+      <div class="col-span-1">ID</div>
+      <div class="col-span-5">Title</div>
+      <div class="col-span-3">Author</div>
+      <div class="col-span-1">Status</div>
+      <div class="col-span-2">Actions</div>
+    </div>
+
+    <!-- Rows -->
+    <% if @projects.present? %>
+      <% @projects.each do |project| %>
+        <div class="grid grid-cols-12 text-lg border-b border-white/30 last:border-0 px-3">
+          <div class="col-span-1 flex items-center py-2"><%= project.id %></div>
+          <div class="col-span-5 flex items-center font-medium">
+            <%= link_to (project.title.presence || "(untitled)"), admin_project_path(project), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
+          </div>
+          <div class="col-span-3 flex items-center">
+            <% if project.user %>
+              <%= link_to project.user.display_name, admin_user_path(project.user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
+            <% else %>
+              –
+            <% end %>
+          </div>
+          <div class="col-span-1 flex items-center"></div>
+          <div class="col-span-2 flex items-center">
+            <div class="flex items-center gap-2">
+              <%= render "shared/button", text: "View", url: admin_project_path(project), class: "text-sm py-0 px-2" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="px-4 py-6 text-center text-white/70">No projects found.</div>
+    <% end %>
+  </div>
+
+  <div class="flex items-center justify-end text-lg">
+    <%= pagy_nav(@pagy) if @pagy.present? && @pagy.pages > 1 %>
+  </div>
+</section>
