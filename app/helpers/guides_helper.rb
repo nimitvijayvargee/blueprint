@@ -148,7 +148,8 @@ module GuidesHelper
         end
         title = meta[:title].presence || fallback_title
         desc  = meta[:description].presence
-        items << { title: title, path: url, description: desc, slug: slug, file: p }
+        prio  = meta[:priority]
+        items << { title: title, path: url, description: desc, slug: slug, file: p, priority: prio }
       end
       items
     end
@@ -163,7 +164,7 @@ module GuidesHelper
   def guides_menu_items
     guides_metadata
       .reject { |i| i[:slug].blank? }
-      .sort_by { |h| h[:title].downcase }
+      .sort_by { |h| [ h[:priority].nil? ? Float::INFINITY : h[:priority].to_i, h[:title].downcase ] }
       .map { |i| { title: i[:title], path: i[:path], description: i[:description] } }
   end
 
@@ -204,7 +205,7 @@ module GuidesHelper
   def parse_guide_metadata(path)
     key = [ "guide_md_meta", path.to_s, File.mtime(path).to_i ]
     GUIDES_HTML_CACHE.fetch(key) do
-      meta = { title: nil, description: nil }
+      meta = { title: nil, description: nil, priority: nil }
       in_table = false
       File.foreach(path) do |raw|
         line = raw.rstrip
@@ -232,8 +233,15 @@ module GuidesHelper
           if cells.length >= 2
             key = cells[0].to_s.downcase
             val = cells[1].to_s
-            if %w[title description].include?(key)
+            case key
+            when "title", "description"
               meta[key.to_sym] = val
+            when "priority"
+              begin
+                meta[:priority] = Integer(val)
+              rescue ArgumentError, TypeError
+                meta[:priority] = nil
+              end
             end
           end
         else
@@ -244,6 +252,6 @@ module GuidesHelper
       meta
     end
   rescue Errno::ENOENT
-    { title: nil, description: nil }
+    { title: nil, description: nil, priority: nil }
   end
 end
