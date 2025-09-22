@@ -1,12 +1,14 @@
-<div class="flex flex-col w-82 space-y-4 h-full">
-    <%= link_to project_path(project) do %>
-        <div class="h-28 bg-gray-200 bg-cover bg-center" style="background-image: url(<%= project.banner.attached? ? url_for(project.banner) : nil %>)">
-        </div>
-    <% end %>
-    <div class="flex flex-col space-y-2 grow">
-        <%= link_to project_path(project), class: "grow" do %>
-            <p class="text-2xl"><%= project.title %></p>
-        <% end %>
-        <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-base " %>
-    </div>
-</div>
+<% cache [project, project.banner&.blob] do %>
+  <div class="flex flex-col w-82 space-y-4 h-full">
+      <%= link_to project_path(project) do %>
+          <div class="h-28 bg-gray-200 bg-cover bg-center" style="background-image: url(<%= project.banner.attached? ? url_for(project.banner) : nil %>)">
+          </div>
+      <% end %>
+      <div class="flex flex-col space-y-2 grow">
+          <%= link_to project_path(project), class: "grow" do %>
+              <p class="text-2xl"><%= project.title %></p>
+          <% end %>
+          <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-base " %>
+      </div>
+  </div>
+<% end %>

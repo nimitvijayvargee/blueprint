@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    @projects = current_user.projects.includes(:banner_attachment)
+    @projects = current_user.projects.with_attached_banner
   end
 end
