@@ -126,6 +126,34 @@ class Project < ApplicationRecord
     timeline
   end
 
+  def bom_file_url
+    return nil if repo_link.blank?
+    parsed = parse_repo
+    return nil unless parsed && parsed[:org].present? && parsed[:repo_name].present?
+    "https://github.com/#{parsed[:org]}/#{parsed[:repo_name]}/blob/HEAD/bom.csv"
+  end
+
+  def bom_file_exists?
+    return false if repo_link.blank?
+    parsed = parse_repo
+    return false unless parsed && parsed[:org].present? && parsed[:repo_name].present?
+
+    path = "/repos/#{parsed[:org]}/#{parsed[:repo_name]}/contents/bom.csv"
+
+    response = if user&.github_user?
+      user.fetch_github(path, check_token: true)
+    else
+      Faraday.get("https://api.github.com#{path}", nil, {
+        "Accept" => "application/vnd.github+json",
+        "X-GitHub-Api-Version" => "2022-11-28"
+      })
+    end
+
+    response.status == 200
+  rescue StandardError
+    false
+  end
+
   def generate_journal
     contents =
     <<~EOS

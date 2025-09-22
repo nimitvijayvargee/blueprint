@@ -28,7 +28,7 @@
             <% if name == "Guides" %>
                 <div class="flex flex-col btn btn-nav text-base py-1.5!" data-nav-target="link" data-nav-match="prefix" data-nav-base="/guides">
                     <%= render "shared/button", url: path, text: name, variant: :none, class: "text-base py-0" %>
-                    <ul data-nav-target="submenu" data-submenu-base="/guides" class="text-sm flex-col space-y-1 hidden text-center">
+                    <ul data-nav-target="submenu" data-submenu-base="/guides" class="text-sm flex-col space-y-1 hidden text-center pb-3">
                         <% guides_menu_items.each do |item| %>
                           <li>
                             <a href="<%= item[:path] %>" data-nav-target="sublink" data-nav-match="prefix" title="<%= item[:description] %>"><%= item[:title] %></a>

@@ -14,6 +14,24 @@ class ProjectsController < ApplicationController
     not_found unless @project
   end
 
+  def ship
+    @project = current_user.projects.find_by(id: params[:id])
+    not_found unless @project
+
+    repo_linked = @project.repo_link.present?
+    desc_ok = @project.description.to_s.strip.length >= 50
+    journal_ok = @project.journal_entries.exists?
+
+    @checks = [
+      { msg: "GitHub repo linked", met: repo_linked },
+      { key: "bom", msg: "Bill of materials (bom.csv) present", met: nil },
+      { msg: "Description is at least 50 characters", met: desc_ok },
+      { msg: "At least one journal entry", met: journal_ok }
+    ]
+
+    @base_ok = repo_linked && desc_ok && journal_ok
+  end
+
   def new
     @project = current_user.projects.build
   end
@@ -81,6 +99,30 @@ class ProjectsController < ApplicationController
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
   end
 
+  def check_bom
+    unless current_user.present?
+      render json: { ok: false, error: "Not authenticated" }, status: :unauthorized
+      return
+    end
+
+    project_param_id = params[:project_id].presence || params[:id].presence
+    project = current_user.projects.find_by(id: project_param_id)
+    unless project
+      render json: { ok: false, error: "Not authorized for this project" }, status: :forbidden
+      return
+    end
+
+    unless project.repo_link.present?
+      render json: { ok: false, error: "No linked GitHub repo" }, status: :unprocessable_entity
+      return
+    end
+
+    exists = project.bom_file_exists?
+    render json: { ok: true, exists: exists, url: project.bom_file_url }
+  rescue StandardError => e
+    render json: { ok: false, error: e.message }, status: :unprocessable_entity
+  end
+
   private
 
   def project_params
@@ -91,7 +133,8 @@ class ProjectsController < ApplicationController
       :demo_link,
       :readme_link,
       :project_type,
-      :banner
+      :banner,
+      :is_shipped
     )
   end
 end

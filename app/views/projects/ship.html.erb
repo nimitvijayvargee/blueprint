@@ -1,0 +1,52 @@
+<section class="flex flex-col items-center grow space-y-6">
+  <%= render "shared/button", text: "Back", url: project_path(@project), class: "mr-auto py-0.5 px-4 text-base"%>
+  <div class="w-full max-w-3xl min-h-full flex flex-col m-8 space-y-8">
+    <%= render "shared/card", class: "flex flex-col space-y-6" do %>
+      <div class="space-y-2 -mt-4 -mx-6 p-6 pb-0">
+        <p class="text-3xl">Let's ship "<%= @project.title %>"</p>
+        <p class="text-lg text-bp-muted">Before you can ship, <%= @checks.count %> items need to be completed.</p>
+      </div>
+
+      <div class="space-y-8" 
+           data-controller="ship-bom" 
+           data-ship-bom-project-id-value="<%= @project.id %>"
+           data-ship-bom-base-ok-value="<%= @base_ok %>">
+        <div>
+          <ul class="space-y-2">
+            <% @checks.each do |c| %>
+              <% met = c[:met] %>
+              <% is_bom = c[:key] == "bom" %>
+              <li class="flex items-center space-x-4">
+                <%# Square checkbox, matching tasks style but with status colors %>
+                <% if met.nil? %>
+                  <% if is_bom %>
+                    <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box"></div>
+                  <% else %>
+                    <div class="border-2 size-4 border-bp-muted"></div>
+                  <% end %>
+                <% elsif met %>
+                  <div class="border-2 size-4 bg-bp-success border-bp-success" <%= is_bom ? 'data-ship-bom-target="box"' : '' %>></div>
+                <% else %>
+                  <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= is_bom ? 'data-ship-bom-target="box"' : '' %>></div>
+                <% end %>
+                <% if c[:url].present? %>
+                  <%= link_to c[:msg], c[:url], target: "_blank", rel: "noopener noreferrer", class: "underline underline-offset-2" %>
+                <% else %>
+                  <span><%= c[:msg] %></span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <%= link_to edit_project_path(@project, from_ship: true), class: "btn btn-outline" do %>
+            Edit project
+          <% end %>
+
+          <%= render "shared/button", text: "Ship it!", url: project_path(@project) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

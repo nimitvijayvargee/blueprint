@@ -10,7 +10,7 @@
           <p class="text-3xl grow"><%= @project.title %></p>
           <div class="space-x-2">
             <% if current_user.present? && current_user == @project.user %>
-              <%= render "shared/button", text: "Ship it!", class: "py-1 px-6" %>
+              <%= render "shared/button", text: "Ship it!", url: ship_project_path(@project), class: "py-1 px-6" %>
               <%= render "shared/button", text: "Edit", url: edit_project_path(@project), class: "py-1 px-6" %>
               <%= render "shared/button", text: "Delete", class: "py-1 px-6", html_options: { data: { controller: "modal", action: "click->modal#show", modal_target_id_value: "delete-project" } } %>
             <% end %>
