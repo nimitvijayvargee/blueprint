@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_20_233457) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_22_043712) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -106,6 +106,49 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_233457) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "shop_items", force: :cascade do |t|
+    t.boolean "enabled"
+    t.integer "ticket_cost"
+    t.integer "usd_cost"
+    t.string "name"
+    t.string "desc"
+    t.boolean "one_per_person"
+    t.integer "total_stock"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "shop_orders", force: :cascade do |t|
+    t.integer "state", default: 0, null: false
+    t.bigint "user_id", null: false
+    t.bigint "shop_item_id", null: false
+    t.integer "frozen_unit_ticket_cost"
+    t.integer "frozen_unit_usd_cost"
+    t.integer "quantity"
+    t.string "internal_notes"
+    t.datetime "approved_at"
+    t.bigint "approved_by_id"
+    t.datetime "fufilled_at"
+    t.bigint "fufilled_by_id"
+    t.integer "fufillment_usd_cost"
+    t.datetime "rejected_at"
+    t.bigint "rejected_by_id"
+    t.string "rejection_reason"
+    t.datetime "on_hold_at"
+    t.bigint "on_hold_by_id"
+    t.string "hold_reason"
+    t.jsonb "frozen_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_shop_orders_on_approved_by_id"
+    t.index ["fufilled_by_id"], name: "index_shop_orders_on_fufilled_by_id"
+    t.index ["on_hold_by_id"], name: "index_shop_orders_on_on_hold_by_id"
+    t.index ["rejected_by_id"], name: "index_shop_orders_on_rejected_by_id"
+    t.index ["shop_item_id"], name: "index_shop_orders_on_shop_item_id"
+    t.index ["user_id"], name: "index_shop_orders_on_user_id"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
@@ -279,6 +322,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_233457) do
   add_foreign_key "journal_entries", "projects"
   add_foreign_key "journal_entries", "users"
   add_foreign_key "projects", "users"
+  add_foreign_key "shop_orders", "shop_items"
+  add_foreign_key "shop_orders", "users"
+  add_foreign_key "shop_orders", "users", column: "approved_by_id"
+  add_foreign_key "shop_orders", "users", column: "fufilled_by_id"
+  add_foreign_key "shop_orders", "users", column: "on_hold_by_id"
+  add_foreign_key "shop_orders", "users", column: "rejected_by_id"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
