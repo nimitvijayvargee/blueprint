@@ -124,8 +124,8 @@ class User < ApplicationRecord
         }.to_json)
       end
 
-      unless existing_user.admin? || AllowedEmail.allowed?(email)
-        raise StandardError, "Access is limited to beta testers."
+      unless AllowedEmail.allowed?(email)
+        raise StandardError, "You do not have access."
       end
 
       # Merge Slack data into existing user
@@ -140,7 +140,7 @@ class User < ApplicationRecord
     end
 
     unless AllowedEmail.allowed?(email)
-      raise StandardError, "Access is limited to beta testers."
+      raise StandardError, "You do not have access."
     end
 
     User.create!(
@@ -160,7 +160,7 @@ class User < ApplicationRecord
       Rails.logger.warn("Slack user not found for email #{email}: #{e.message}")
 
       unless AllowedEmail.allowed?(email)
-        raise StandardError, "Access is limited to beta testers."
+        raise StandardError, "You do not have access."
       end
 
       user = User.find_or_create_by!(email: email) do |user|
@@ -186,7 +186,7 @@ class User < ApplicationRecord
     avatar = user_info.user.profile.image_192 || user_info.user.profile.image_512
 
     unless AllowedEmail.allowed?(email)
-      raise StandardError, "Access is limited to beta testers."
+      raise StandardError, "You do not have access."
     end
 
     Rails.logger.tagged("UserCreation") do
