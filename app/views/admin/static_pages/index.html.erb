@@ -1,11 +1,11 @@
 <section class="flex justify-center">
-  <div class="w-full max-w-6xl space-y-4">
+  <div class="w-full space-y-4">
     <div class="py-4 space-y-1">
       <h1 class="text-5xl">Admin dashboard</h1>
       <p class="text-xl">'ello there, <%= current_user.display_name %>!</p>
     </div>
-    <div class="space-y-6">
-      <div class="grid grid-cols-3 gap-6">
+    <div class="space-y-6 max-w-6xl">
+      <div class="grid grid-cols-3 gap-6 ">
         <%= render "shared/button", variant: :outline, text: "Projects (#{Project.count.to_i})", url: admin_projects_path %>
         <%= render "shared/button", variant: :outline, text: "Users (#{User.count.to_i})", url: admin_users_path %>
       </div>
