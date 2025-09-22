@@ -17,7 +17,7 @@
    }&.first %>
 
 <nav id="global-nav" data-controller="nav" data-turbo-permanent class="fixed left-0 top-0 bottom-0 overflow-hidden w-[15rem] bg-bp-darker flex flex-col py-8 px-6 print:hidden space-y-8 shadow-xl shadow-black/50">
-    <a class="text-center" href="<%= user_logged_in? ? home_path : root_path %>">
+    <a class="text-center" href="<%= user_logged_in? ? landing_path : root_path %>">
         <p class="text-4xl font-rcgl-full">Blueprint</p>
     </a>
     <div class="flex flex-col space-y-3 grow">

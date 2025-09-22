@@ -53,6 +53,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route for unauthenticated users
   root "landing#index"
+  get "landing" => "landing#authed", as: :landing
 
   # Authentication
   get "auth/login" => "auth#index", as: :login

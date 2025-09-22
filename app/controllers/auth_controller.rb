@@ -8,7 +8,7 @@ class AuthController < ApplicationController
   before_action :redirect_if_logged_in, only: %i[ index new create create_email ]
 
   def index
-    render "auth/index"
+    render "auth/index", layout: false
   end
 
   # Slack auth start
