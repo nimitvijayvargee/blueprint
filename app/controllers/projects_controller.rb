@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
 
   def check_github_repo
     unless current_user.github_user?
-      render json: { ok: false, error: "GitHub account not linked" }, status: :unprocessable_entity
+      render json: { ok: false, error: "GitHub account not linked (Check the tasks panel)" }, status: :unprocessable_entity
       return
     end
 

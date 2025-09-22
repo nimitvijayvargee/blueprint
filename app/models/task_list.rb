@@ -34,8 +34,8 @@ class TaskList < ApplicationRecord
         met: user.projects.any?,
         msg: "Start your first project"
       },
-      follow_project: {
-        met: user.follows.any?,
+      post_journal: {
+        met: user.journal_entries.any?,
         msg: "Post your first journal entry"
       }
     }
@@ -51,5 +51,9 @@ class TaskList < ApplicationRecord
 
   def task_completed?(task)
     task_requirements[task][:met]
+  end
+
+  def completed?
+    pending_tasks.empty?
   end
 end

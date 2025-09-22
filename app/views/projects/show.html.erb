@@ -2,7 +2,7 @@
 
 <section class="flex flex-col items-center grow space-y-6">
   <div class="w-full max-w-4xl min-h-full flex flex-col m-8 space-y-12">
-    <%= render "shared/card", class: "space-y-6" do %>
+    <%= render "shared/card", class: "flex flex-col space-y-6" do %>
       <div class="h-48 bg-gray-200 bg-cover bg-center -mt-6 -mx-8" style="background-image: url(<%= @project.banner.attached? ? url_for(@project.banner) : nil %>)">
       </div>
       <div class="space-y-2">
@@ -15,6 +15,10 @@
           </div>
         </div>
         <p class="text-xl"><%= @project.description.empty? ? "No description yet" : @project.description %></p>
+      </div>
+      <div class="flex space-x-6">
+        <%= render "shared/button", text: @project.repo_link.nil? ? "No Linked Repository" : "View Repository", variant: @project.repo_link.nil? ? :outline : :primary, url: @project.repo_link || "#", class: "w-full text-center #{ @project.repo_link.nil? ? 'pointer-events-none' : '' }", html_options: { target: "_blank", rel: "noopener noreferrer" } %>
+        <%= render "shared/button", text: @project.demo_link.nil? ? "No Demo Yet" : "View Demo", variant: @project.demo_link.nil? ? :outline : :primary, url: @project.demo_link || "#", class: "w-full text-center #{ @project.demo_link.nil? ? 'pointer-events-none border-dashed' : '' }", html_options: { target: "_blank", rel: "noopener noreferrer" } %>
       </div>
     <% end %>
     <% if current_user.present? && current_user == @project.user %>
