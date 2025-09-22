@@ -59,8 +59,8 @@ class User < ApplicationRecord
 
       user.refresh_profile!
 
-      unless user.admin? || AllowedEmail.allowed?(user.email)
-        raise StandardError, "Access is limited to beta testers."
+      unless AllowedEmail.allowed?(user.email)
+        raise StandardError, "You do not have access."
       end
 
       return user
@@ -142,7 +142,7 @@ class User < ApplicationRecord
     unless AllowedEmail.allowed?(email)
       raise StandardError, "Access is limited to beta testers."
     end
-    
+
     User.create!(
     slack_id: slack_id,
       username: username_from_slack,
@@ -162,7 +162,7 @@ class User < ApplicationRecord
       unless AllowedEmail.allowed?(email)
         raise StandardError, "Access is limited to beta testers."
       end
-      
+
       user = User.find_or_create_by!(email: email) do |user|
       user.is_banned = false
       user.role = :user
