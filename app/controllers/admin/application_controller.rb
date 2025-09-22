@@ -1,6 +1,7 @@
 class Admin::ApplicationController < ApplicationController
   layout "admin"
   before_action :require_admin!
+  before_action :set_paper_trail_whodunnit
 
   private
 

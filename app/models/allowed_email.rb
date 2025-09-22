@@ -14,6 +14,8 @@
 class AllowedEmail < ApplicationRecord
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
 
+  has_paper_trail
+
   before_validation do
     self.email = email.to_s.strip.downcase
   end
