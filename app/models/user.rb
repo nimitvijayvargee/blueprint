@@ -8,7 +8,7 @@
 #  github_access_token :string
 #  github_username     :string
 #  is_banned           :boolean          default(FALSE), not null
-#  is_mcg              :boolean          default(TRUE), not null
+#  is_mcg              :boolean          default(FALSE), not null
 #  role                :integer          default("user"), not null
 #  timezone            :string
 #  username            :string
@@ -58,6 +58,10 @@ class User < ApplicationRecord
       end
 
       user.refresh_profile!
+
+      unless user.admin? || AllowedEmail.allowed?(user.email)
+        raise StandardError, "Access is limited to beta testers."
+      end
 
       return user
     end
@@ -120,6 +124,10 @@ class User < ApplicationRecord
         }.to_json)
       end
 
+      unless existing_user.admin? || AllowedEmail.allowed?(email)
+        raise StandardError, "Access is limited to beta testers."
+      end
+
       # Merge Slack data into existing user
       existing_user.update!(
         slack_id: slack_id,
@@ -131,8 +139,12 @@ class User < ApplicationRecord
       return existing_user
     end
 
+    unless AllowedEmail.allowed?(email)
+      raise StandardError, "Access is limited to beta testers."
+    end
+    
     User.create!(
-      slack_id: slack_id,
+    slack_id: slack_id,
       username: username_from_slack,
       email: email,
       timezone: timezone,
@@ -146,9 +158,14 @@ class User < ApplicationRecord
       user_info = fetch_slack_user_info_from_email(email)
     rescue Slack::Web::Api::Errors::UsersNotFound => e
       Rails.logger.warn("Slack user not found for email #{email}: #{e.message}")
+
+      unless AllowedEmail.allowed?(email)
+        raise StandardError, "Access is limited to beta testers."
+      end
+      
       user = User.find_or_create_by!(email: email) do |user|
-        user.is_banned = false
-        user.role = :user
+      user.is_banned = false
+      user.role = :user
       end
       return user
     end
@@ -167,6 +184,10 @@ class User < ApplicationRecord
     username_from_slack = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
     timezone = user_info.user.tz
     avatar = user_info.user.profile.image_192 || user_info.user.profile.image_512
+
+    unless AllowedEmail.allowed?(email)
+      raise StandardError, "Access is limited to beta testers."
+    end
 
     Rails.logger.tagged("UserCreation") do
       Rails.logger.info({

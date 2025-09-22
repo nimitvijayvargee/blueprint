@@ -52,6 +52,21 @@ class AuthController < ApplicationController
     end
 
     if otp.present?
+      unless AllowedEmail.allowed?(email)
+        flash.now[:alert] = "You do not have access."
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: [
+              turbo_stream.replace(
+                "flash",
+                partial: "shared/notice"
+              )
+            ]
+          end
+        end
+        return
+      end
+
       if validate_otp(email, otp)
         user = User.find_or_create_from_email(email)
         session[:user_id] = user.id
@@ -69,6 +84,25 @@ class AuthController < ApplicationController
               )
             ]
           end
+        end
+      end
+      return
+    end
+
+    unless AllowedEmail.allowed?(email)
+      flash.now[:alert] = "You do not have access."
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace(
+              "flash",
+              partial: "shared/notice",
+            ),
+            turbo_stream.replace(
+              "login_form",
+              partial: "auth/email_form"
+            )
+          ]
         end
       end
       return

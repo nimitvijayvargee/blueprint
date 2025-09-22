@@ -1,0 +1,2 @@
+module Admin::AllowedEmailsHelper
+end

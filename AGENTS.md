@@ -12,4 +12,6 @@ When adding changes, use best rails & hotwire practices and patterns. Use partia
 
 When modifying code, ensure that you maintain existing functionality and do not introduce bugs. Ensure that your changes are well-integrated with the existing codebase and follow the project's coding standards and conventions.
 
+If asked to change the requirements or behavior of a feature, make sure previous implementations that you suggested are also updated to reflect the new requirements.
+
 Do not add comments unless they are absolutely necessary for clarity. Your code should describe what it does, not comments. If you do add comments, ensure they are clear, concise, and relevant to the code they accompany. Do not add huge blocks of comments.
