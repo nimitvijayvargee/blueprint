@@ -28,7 +28,6 @@
   <div 
   data-controller="modal"
   data-action="modal:show-delete-journal<%= entry.id %>@window->modal#show modal:hide-delete-journal<%= entry.id %>@window->modal#hide modal:toggle-delete-journal<%= entry.id %>@window->modal#toggle modal:next-delete-journal<%= entry.id %>@window->modal#next"
-  data-modal-starting-step-value="<%= (current_user.slack_user? && current_user.is_mcg?) ? 1 : 0 %>"
   class="hidden fixed inset-0 z-50">
     <div class="fixed inset-0 flex items-center justify-center p-4" data-controller="tasks-slack" data-tasks-slack-target-id-value="slack-join">
       <%= render "shared/card", html_options: { data: { modal_target: "panel" } }, class: "z-50 min-w-xl space-y-0" do %>
