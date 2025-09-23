@@ -60,7 +60,7 @@ gem "marksmith"
 gem "faraday", "~> 2.13"
 
 # Slack client
-gem "slack-ruby-client", "~> 2.7"
+gem "slack-ruby-client", "~> 3.0"
 
 # Inline SVG support
 gem "inline_svg"
