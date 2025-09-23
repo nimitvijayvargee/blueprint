@@ -1,7 +1,7 @@
 Rails.application.configure do
   ## Memoization ensures that only one adapter call is made per feature per request.
   ## For more info, see https://www.flippercloud.io/docs/optimization#memoization
-  # config.flipper.memoize = true
+  config.flipper.memoize = true
 
   ## Flipper preloads all features before each request, which is recommended if:
   ##   * you have a limited number of features (< 100?)
@@ -9,7 +9,7 @@ Rails.application.configure do
   ##   * you have limited gate data combined across all features (< 1k enabled gates, like individual actors, across all features)
   ##
   ## For more info, see https://www.flippercloud.io/docs/optimization#preloading
-  # config.flipper.preload = true
+  config.flipper.preload = true
 
   ## Warn or raise an error if an unknown feature is checked
   ## Can be set to `:warn`, `:raise`, or `false`
@@ -60,7 +60,7 @@ Flipper::UI.configure do |config|
       model = type.constantize rescue nil
       next unless model
       model.where(id: ids).find_each do |actor|
-        actor_names[actor.flipper_id] = actor.try(:display_name) || actor.try(:name) || actor.try(:email)
+        actor_names[actor.flipper_id] = actor.try(:display_name)
       end
     end
     actor_names.compact_blank

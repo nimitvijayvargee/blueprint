@@ -9,9 +9,7 @@
     </div>
   <% else %>
     <div class="flex space-x-6 overflow-x-auto mt-2 h-full">
-      <% @projects.each do |project| %>
-        <%= render "project", project: project %>
-      <% end %>
+      <%= render partial: "project", collection: @projects, as: :project %>
     </div>
   <% end %>
 <% end %>

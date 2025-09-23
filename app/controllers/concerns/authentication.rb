@@ -6,6 +6,7 @@ module Authentication
   included do
       before_action :set_current_user
       before_action :authenticate_user!
+      before_action :ensure_allowed_user!
       helper_method :current_user, :user_logged_in?
   end
 
@@ -20,6 +21,16 @@ module Authentication
   def authenticate_user!
     unless current_user
       redirect_to main_app.root_path, alert: "You need to be logged in to see this!"
+    end
+  end
+
+  def ensure_allowed_user!
+    return unless current_user
+    return if current_user.admin?
+
+    unless AllowedEmail.allowed?(current_user.email)
+      terminate_session
+      redirect_to main_app.login_path, alert: "You do not have access."
     end
   end
 

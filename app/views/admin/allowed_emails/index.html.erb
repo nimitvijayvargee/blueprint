@@ -1,0 +1,45 @@
+<section class="flex justify-center">
+  <div class="w-full space-y-4">
+    <div class="py-4 space-y-1">
+      <h1 class="text-4xl">Allowed emails</h1>
+      <p class="text-bp-muted">Only users on this list can sign up and access the platform.</p>
+    </div>
+
+    <div class="space-y-4">
+      <%= render "form" %>
+
+      <%= form_with url: admin_allowed_emails_path, method: :get, class: "flex space-x-2" do |f| %>
+        <input type="text" name="q" value="<%= @q %>" placeholder="Search email" class="w-full p-2 border rounded" />
+        <%= render "shared/button", variant: :outline, text: "Search", url: "#", class: "!py-2" %>
+      <% end %>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-left">Email</th>
+              <th class="px-4 py-2 text-left">Added</th>
+              <th class="px-4 py-2"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @allowed_emails.each do |e| %>
+              <tr>
+                <td class="px-4 py-2"><%= e.email %></td>
+                <% user_id = e.versions.last&.whodunnit %>
+                <td class="px-4 py-2 text-bp-muted"><%= time_ago_in_words(e.created_at) %> ago by <%= user_id ? User.find(user_id)&.display_name : "Unknown" %></td>
+                <td class="px-4 py-2 text-right">
+                  <%= button_to "Remove", admin_allowed_email_path(e), method: :delete, class: "btn btn-danger btn-sm" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <%= pagy_nav(@pagy) if @pagy.present? && @pagy.pages > 1 %>
+      </div>
+    </div>
+  </div>
+</section>

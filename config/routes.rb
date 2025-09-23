@@ -102,6 +102,7 @@ Rails.application.routes.draw do
 
       resources :users, only: [ :index, :show ]
       resources :projects, only: [ :index, :show ]
+      resources :allowed_emails, only: [ :index, :create, :destroy ]
     end
   end
 end

@@ -99,7 +99,12 @@ export default class extends Controller {
 
       if (!res.ok) {
         this._repoState = { kind: "error" }
-        this.setStatus("Error checking repository.", { danger: true })
+        let message = "Error checking repository."
+        try {
+          const data = await res.json()
+          message = data.error || message
+        } catch {}
+        this.setStatus(message, { danger: true })
         this.validate()
         return
       }
