@@ -1,9 +1,6 @@
 # Blueprint
 
-Blueprint is a starting point for Hack Club programs written in Rails. It is heavily inspired by, with code used from, previous Hack Club programs such as the Summer of Making, HCB, or Submit. This template contains:
-
-- User authentication via Slack OAuth
-- WIP
+Hey! Welcome to the codebase for Hack Club Blueprint. Blueprint is a YSWS program to build hardware. You can find more details on [blueprint.hackclub.com](https://blueprint.hackclub.com?utm_source=github&utm_medium=readme).
 
 ## Local Development Setup
 
@@ -13,7 +10,11 @@ Blueprint is a starting point for Hack Club programs written in Rails. It is hea
 - Bundler (`gem install bundler`)
 - Docker (for running Postgres)
 
-### 2. Start Postgres with Docker
+### 2. Set up environment variables
+
+- Copy `.env.development.example` to `.env` and fill in the required values.
+
+### 3. Start Postgres with Docker
 
 You can spin up a local Postgres instance using Docker:
 
@@ -21,36 +22,26 @@ You can spin up a local Postgres instance using Docker:
 docker run -d \
   --name blueprint-postgres \
   -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_PASSWORD=[REDACTED:password] \
   -e POSTGRES_DB=blueprint_development \
   -p 5432:5432 \
   postgres:15
 ```
 
-Update your `.env` file with these credentials:
-
-```
-DATABASE_URL=postgresql://your_db_user:your_db_password@localhost:5432/blueprint_development
-```
-
-### 3. Install dependencies
+### 4. Install dependencies
 
 ```sh
 bundle install
 ```
 
-### 4. Setup the database
+### 5. Setup the database
 
 ```sh
 bin/rails db:setup
 ```
 
-### 5. Start the Rails server
+### 6. Start the Rails server
 
 ```sh
 bin/dev
 ```
-
----
-
-See `.env.development.example` for required environment variables.
