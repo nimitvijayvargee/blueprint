@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.2"
+gem "rails", "~> 8.0.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
@@ -60,7 +60,7 @@ gem "marksmith"
 gem "faraday", "~> 2.13"
 
 # Slack client
-gem "slack-ruby-client", "~> 2.7"
+gem "slack-ruby-client", "~> 3.0"
 
 # Inline SVG support
 gem "inline_svg"

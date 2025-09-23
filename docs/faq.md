@@ -8,16 +8,13 @@
 Currently, the end-date of Blueprint is December 1st
 
 ## How can I earn tickets?
-Project grants are awarded on quality rather than hours spent. However, if you track your time building your project, you will be awarded with tickets which can be redeemed at the [tool bag](/tool-bag). If your project doesn't have a lot of in-person build time, you will have fewer tickets awarded. One way to get more tickets for example is to get PCB + Components and hand-solder rather than just getting PCBA. 
+Project grants are awarded on quality rather than hours spent. However, if you track your time building your project, you will be awarded with tickets which can be redeemed at the [toolbag](/tool-bag). If your project doesn't have a lot of in-person build time, you will have fewer tickets awarded. One way to get more tickets for example is to get PCB + Components and hand-solder rather than just getting PCBA. 
 
 ## How many projects can I make?
 As many as you like! We just ask that you only do one of each starter project
 
 ## Does Blueprint allow group projects?
-Yes! Here is how it works: 
-- Each person must journal their own work
-- The grant is **per project** and not per person
-- Tickets are only awarded per each persons build time
+Yes! However, only one person can submit the project and access the journal.
 
 ## Can I submit an existing project or one that I previously started?
 If it's already finished, unfortunately not, sorry! Start a new project
@@ -29,7 +26,7 @@ If you're almost done designing, unfortunately not
 No! Double-dipping is not allowed. If you have coding time for your project, you can journal it, get tickets, and get prizes from the tool bag.
 
 ## How much money can I spend on my project
-You can spend up to the budget based on your quality tier which is outlined in (custom projects)[custom-projects]. If you need over this amount, you can use your own money. [Also see this about Hack Club and cost.](/guides/the-talk)
+You can spend up to the budget based on your quality tier which is outlined in (custom projects)[/guides/custom-projects]. If you need over this amount, you can use your own money. [Also see this about Hack Club and cost.](/guides/the-talk)
 
 ## How will I get my 3D printed parts?
 Through **printing legion!** It's an international network of Hack Clubbers 3D printing for each other, sponsored by Polymaker (website coming soon - hang tight!)
