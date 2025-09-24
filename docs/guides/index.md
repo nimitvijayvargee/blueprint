@@ -1,10 +1,10 @@
-| title | Starter Projects |
+| title | Guides |
 | --- | --- |
-| description | Kick off with these starter projects for Blueprint. |
+| description | Kick off with these guides for Blueprint. |
 
-# Starter Projects
+# Guides
 
-Kick off with these starter projects.
+Kick off with these guides.
 
 - [Hacker Key](/guides/hacker-key)
 - [Midi](/guides/midi)
