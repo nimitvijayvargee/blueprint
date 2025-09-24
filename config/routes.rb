@@ -83,13 +83,13 @@ Rails.application.routes.draw do
     post :mcg_check, on: :collection
   end
 
-  # Guides -> docs/guides
-  get "guides", to: "guides#guides", as: :guides
-  get "guides/*slug", to: "guides#guides"
+  # Docs -> docs/docs (formerly guides)
+  get "docs", to: "guides#docs", as: :docs
+  get "docs/*slug", to: "guides#docs"
 
-  # Starter Projects -> docs/guides/starter-projects
-  get "starter-projects", to: "guides#starter_projects", as: :starter_projects
-  get "starter-projects/*slug", to: "guides#starter_projects",
+  # Guides -> docs/guides (formerly starter-projects)
+  get "guides", to: "guides#guides", as: :guides
+  get "guides/*slug", to: "guides#guides",
       constraints: { slug: /[a-z0-9\/_\-]+/ }
   get "faq", to: "guides#faq", as: :faq
 

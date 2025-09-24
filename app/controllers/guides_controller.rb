@@ -1,13 +1,13 @@
 class GuidesController < ApplicationController
-  allow_unauthenticated_access only: %i[ show guides starter_projects faq ]
+  allow_unauthenticated_access only: %i[ show docs guides faq ]
   skip_before_action :set_current_user, if: :turbo_frame_request?
+
+  def docs
+    render_from_base Rails.root.join("docs", "docs"), params[:slug]
+  end
 
   def guides
     render_from_base Rails.root.join("docs", "guides"), params[:slug]
-  end
-
-  def starter_projects
-    render_from_base Rails.root.join("docs", "starter-projects"), params[:slug]
   end
 
   def faq
@@ -39,20 +39,20 @@ class GuidesController < ApplicationController
     index_title = "Blueprint"
 
     case
-    when base.to_s.end_with?("guides")
+    when base.to_s.end_with?("docs/docs")
+      url_prefix = "/docs"
+      suffix = "Blueprint Docs"
+      index_title = "Docs - Blueprint"
+      current_url = slug.blank? ? url_prefix : "#{url_prefix}/#{slug}"
+      item = helpers.docs_meta_for_url(current_url) rescue nil
+      meta[:title] = item[:title] if item
+      meta[:description] = item[:description] if item
+    when base.to_s.end_with?("docs/guides")
       url_prefix = "/guides"
       suffix = "Blueprint Guides"
       index_title = "Guides - Blueprint"
       current_url = slug.blank? ? url_prefix : "#{url_prefix}/#{slug}"
       item = helpers.guide_meta_for_url(current_url) rescue nil
-      meta[:title] = item[:title] if item
-      meta[:description] = item[:description] if item
-    when base.to_s.end_with?("starter-projects")
-      url_prefix = "/starter-projects"
-      suffix = "Blueprint Starter Projects"
-      index_title = "Starter Projects - Blueprint"
-      current_url = slug.blank? ? url_prefix : "#{url_prefix}/#{slug}"
-      item = helpers.starter_project_meta_for_url(current_url) rescue nil
       meta[:title] = item[:title] if item
       meta[:description] = item[:description] if item
     else

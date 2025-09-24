@@ -155,7 +155,24 @@ module GuidesHelper
     end
   end
 
-  # Guides-specific convenience wrappers (used by nav)
+  # Docs-specific convenience wrappers (formerly guides)
+  def docs_section_metadata
+    base = Rails.root.join("docs", "docs")
+    docs_metadata(base: base, url_prefix: "/docs", default_index_title: "Docs")
+  end
+
+  def docs_menu_items
+    docs_section_metadata
+      .reject { |i| i[:slug].blank? }
+      .sort_by { |h| [ h[:priority].nil? ? Float::INFINITY : h[:priority].to_i, h[:title].downcase ] }
+      .map { |i| { title: i[:title], path: i[:path], description: i[:description] } }
+  end
+
+  def docs_meta_for_url(url)
+    docs_section_metadata.find { |i| i[:path] == url }
+  end
+
+  # Guides-specific convenience wrappers (formerly starter projects)
   def guides_metadata
     base = Rails.root.join("docs", "guides")
     docs_metadata(base: base, url_prefix: "/guides", default_index_title: "Guides")
@@ -170,16 +187,6 @@ module GuidesHelper
 
   def guide_meta_for_url(url)
     guides_metadata.find { |i| i[:path] == url }
-  end
-
-  # Starter projects convenience wrappers (for future use)
-  def starter_projects_metadata
-    base = Rails.root.join("docs", "starter-projects")
-    docs_metadata(base: base, url_prefix: "/starter-projects", default_index_title: "Starter Projects")
-  end
-
-  def starter_project_meta_for_url(url)
-    starter_projects_metadata.find { |i| i[:path] == url }
   end
 
   private
