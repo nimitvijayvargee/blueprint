@@ -29,7 +29,7 @@ module GuidesHelper
       return false if href.start_with?("#")
       return true  if href.start_with?("./", "../")
       if href.start_with?("/")
-        return href.start_with?("/guides", "/starter-projects", "/hardware-guides")
+        return href.start_with?("/docs", "/guides", "/hardware-guides")
       end
       # No scheme or root slash: treat as relative within guides
       return false if href =~ /\A[a-z][a-z0-9+.-]*:/i

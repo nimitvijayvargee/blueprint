@@ -6,6 +6,6 @@
 
 Kick off with these starter projects.
 
-- [Hacker Key](/starter-projects/hacker-key)
-- [Midi](/starter-projects/midi)
-- [Split Keyboard](/starter-projects/split-keyboard)
+- [Hacker Key](/guides/hacker-key)
+- [Midi](/guides/midi)
+- [Split Keyboard](/guides/split-keyboard)
