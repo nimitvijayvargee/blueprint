@@ -24,7 +24,12 @@
         <p class="text-xl wrap-break-word"><%= @project.description.empty? ? "No description yet" : @project.description %></p>
       </div>
       <div class="flex flex-col space-y-1">
-        <p>Created by <%= render "shared/user_inline", user: @project.user %></p>
+        <div class="flex items-center space-x-4">
+          <p>Created by <%= render "shared/user_inline", user: @project.user %></p>
+          <% if @project.tier %>
+            <p class="bg-bp-dark px-3 rounded-full">Tier <%= @project.tier %></p>
+          <% end %>
+        </div>
         <div class="flex items-center space-x-4">
           <div class="flex items-center space-x-2">
             <%= inline_svg "icons/micro-eye.svg", class: "size-4" %><p class="">WIP views</p>
