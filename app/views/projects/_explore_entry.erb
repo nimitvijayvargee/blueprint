@@ -2,7 +2,7 @@
 
 <%= render "shared/card" do %>
  <div class="flex space-x-4">
-    <p class="grow"><%= render "shared/user_inline", user: project.user %> published an update to <%= project.title %> <%= time_ago_in_words(entry.created_at) %> ago</p>
+    <p class="grow"><%= render "shared/user_inline", user: project.user %> published an update to <a href="<%= project_path(project) %>" class="underline"><%= project.title %></a> <%= time_ago_in_words(entry.created_at) %> ago</p>
   </div>
   <div class="markdown timeline-journal">
     <h1><%= entry.summary %></h1>
