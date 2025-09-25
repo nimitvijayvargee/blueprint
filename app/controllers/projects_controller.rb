@@ -55,7 +55,13 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.find_by(id: params[:id])
     not_found and return unless @project
 
+    has_ship = params.dig(:project, :ship).present?
+    params[:project].delete(:ship) if has_ship
+
     if @project.update(project_params)
+      if has_ship
+        @project.ship_design
+      end
       redirect_to project_path(@project), notice: "Project updated."
     else
       render :edit, status: :unprocessable_entity
@@ -159,8 +165,8 @@ class ProjectsController < ApplicationController
       :readme_link,
       :project_type,
       :banner,
-      :is_shipped,
-      :tier
+      :tier,
+      :ship
     )
   end
 end

@@ -41,6 +41,8 @@
         </div>
 
         <%= form_with model: @project, class: "space-y-10" do |f| %>
+          <%= f.hidden_field :ship, value: true %>
+          
           <div class="space-y-2">
             <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
             <div class="select w-full text-left">

@@ -7,7 +7,6 @@
 #  description            :text
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
-#  is_shipped             :boolean          default(FALSE)
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string

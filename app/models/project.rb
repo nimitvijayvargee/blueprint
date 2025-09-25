@@ -7,7 +7,6 @@
 #  description            :text
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
-#  is_shipped             :boolean          default(FALSE)
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string
@@ -247,6 +246,10 @@ class Project < ApplicationRecord
 
   def self.tier_options
       [ [ "Select a tier...", "" ] ] + Project.tiers.map { |key, value| [ "Tier #{key}", value ] }
+  end
+
+  def ship_design
+    Rails.logger.info("[Project##{id}] ship_design invoked by user=#{user_id}")
   end
 
   private

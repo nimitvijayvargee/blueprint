@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_25_152000) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_25_154000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -105,7 +105,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_152000) do
     t.string "repo_link"
     t.string "project_type"
     t.string "review_status"
-    t.boolean "is_shipped", default: false
     t.boolean "is_deleted", default: false
     t.integer "views_count", default: 0, null: false
     t.string "hackatime_project_keys", default: [], array: true
