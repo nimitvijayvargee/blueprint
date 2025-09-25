@@ -39,7 +39,7 @@
         <%= render "shared/button", text: @project.demo_link.nil? ? "No Demo Yet" : "View Demo", variant: @project.demo_link.nil? ? :outline : :primary, url: @project.demo_link || "#", class: "w-full text-center #{ @project.demo_link.nil? ? 'pointer-events-none border-dashed' : '' }", html_options: { target: "_blank", rel: "noopener noreferrer" } %>
       </div>
     <% end %>
-    <% if current_user.present? && current_user == @project.user && @project.review_status == "design_pending" %>
+    <% if current_user.present? && current_user == @project.user %>
       <%= render "journal_form", project: @project %>
     <% end %>
     <%= render "timeline", project: @project %>
