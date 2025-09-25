@@ -255,7 +255,7 @@ class Project < ApplicationRecord
   end
 
   def self.tier_options
-      [ [ "Select a tier...", "" ] ] + Project.tiers.map { |key, value| [ "Tier #{key}", value ] }
+      Project.tiers.map { |key, value| [ "Tier #{key}", value ] }
   end
 
   def ship_design
