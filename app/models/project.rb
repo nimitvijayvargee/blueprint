@@ -12,6 +12,7 @@
 #  readme_link            :string
 #  repo_link              :string
 #  review_status          :string
+#  tier                   :integer
 #  title                  :string
 #  views_count            :integer          default(0), not null
 #  created_at             :datetime         not null
@@ -29,6 +30,7 @@
 class Project < ApplicationRecord
   belongs_to :user
   has_many :journal_entries
+  has_many :timeline_items, dependent: :destroy
   has_many :follows, dependent: :destroy
   has_many :followers, through: :follows, source: :user
 
@@ -48,9 +50,18 @@ class Project < ApplicationRecord
     build_rejected: "build_rejected"
   }
 
+  enum :tier, {
+    "1" => 1,
+    "2" => 2,
+    "3" => 3,
+    "4" => 4
+  }, prefix: true
+
   validates :title, presence: true
   validates :description, presence: true
   has_one_attached :banner
+
+  has_paper_trail
 
   # Order projects by most recent journal entry; fall back to project creation
   scope :order_by_recent_journal, -> {
@@ -154,6 +165,34 @@ class Project < ApplicationRecord
     false
   end
 
+  def readme_file_url
+    return nil if repo_link.blank?
+    parsed = parse_repo
+    return nil unless parsed && parsed[:org].present? && parsed[:repo_name].present?
+    "https://github.com/#{parsed[:org]}/#{parsed[:repo_name]}/blob/HEAD/README.md"
+  end
+
+  def readme_file_exists?
+    return false if repo_link.blank?
+    parsed = parse_repo
+    return false unless parsed && parsed[:org].present? && parsed[:repo_name].present?
+
+    path = "/repos/#{parsed[:org]}/#{parsed[:repo_name]}/contents/README.md"
+
+    response = if user&.github_user?
+      user.fetch_github(path, check_token: true)
+    else
+      Faraday.get("https://api.github.com#{path}", nil, {
+        "Accept" => "application/vnd.github+json",
+        "X-GitHub-Api-Version" => "2022-11-28"
+      })
+    end
+
+    response.status == 200
+  rescue StandardError
+    false
+  end
+
   def generate_journal
     contents =
     <<~EOS
@@ -204,6 +243,10 @@ class Project < ApplicationRecord
     return { org: nil, repo: nil } if repo_link.blank?
 
     Project.parse_repo(repo_link)
+  end
+
+  def self.tier_options
+      [ [ "Select a tier...", "" ] ] + Project.tiers.map { |key, value| [ "Tier #{key}", value ] }
   end
 
   private

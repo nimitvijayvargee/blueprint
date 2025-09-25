@@ -71,8 +71,10 @@ Rails.application.routes.draw do
       get :ship
     end
     resources :journal_entries, only: [ :create, :update, :destroy ]
+
     post :check_github_repo, on: :collection
     post :check_bom, on: :collection
+    post :check_readme, on: :collection
   end
   get "explore" => "projects#explore", as: :explore
 

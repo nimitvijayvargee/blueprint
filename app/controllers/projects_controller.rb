@@ -25,6 +25,7 @@ class ProjectsController < ApplicationController
     @checks = [
       { msg: "GitHub repo linked", met: repo_linked },
       { key: "bom", msg: "Bill of materials (bom.csv) present", met: nil },
+      { key: "readme", msg: "README.md present", met: nil },
       { msg: "Description is at least 50 characters", met: desc_ok },
       { msg: "At least one journal entry", met: journal_ok }
     ]
@@ -123,6 +124,30 @@ class ProjectsController < ApplicationController
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
   end
 
+  def check_readme
+    unless current_user.present?
+      render json: { ok: false, error: "Not authenticated" }, status: :unauthorized
+      return
+    end
+
+    project_param_id = params[:project_id].presence || params[:id].presence
+    project = current_user.projects.find_by(id: project_param_id)
+    unless project
+      render json: { ok: false, error: "Not authorized for this project" }, status: :forbidden
+      return
+    end
+
+    unless project.repo_link.present?
+      render json: { ok: false, error: "No linked GitHub repo" }, status: :unprocessable_entity
+      return
+    end
+
+    exists = project.readme_file_exists?
+    render json: { ok: true, exists: exists, url: project.readme_file_url }
+  rescue StandardError => e
+    render json: { ok: false, error: e.message }, status: :unprocessable_entity
+  end
+
   private
 
   def project_params
@@ -134,7 +159,8 @@ class ProjectsController < ApplicationController
       :readme_link,
       :project_type,
       :banner,
-      :is_shipped
+      :is_shipped,
+      :tier
     )
   end
 end

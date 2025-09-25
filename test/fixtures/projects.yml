@@ -14,6 +14,7 @@
 #  readme_link            :string
 #  repo_link              :string
 #  review_status          :string
+#  tier                   :integer
 #  title                  :string
 #  views_count            :integer          default(0), not null
 #  created_at             :datetime         not null
