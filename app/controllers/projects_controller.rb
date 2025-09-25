@@ -7,7 +7,9 @@ class ProjectsController < ApplicationController
       .includes(:banner_attachment)
   end
 
-  def explore; end
+  def explore
+    @journal_entries = JournalEntry.includes(project: :user).order(created_at: :desc).limit(20)
+  end
 
   def show
     @project = Project.find_by(id: params[:id])
