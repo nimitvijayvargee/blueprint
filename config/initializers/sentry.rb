@@ -10,6 +10,7 @@ Sentry.init do |config|
 
   config.enable_logs = true
   config.enabled_patches = [ :logger ]
+  config.logger.level = Logger::WARN
 
   config.rails.structured_logging.enabled = true
   config.rails.structured_logging.subscribers = {
