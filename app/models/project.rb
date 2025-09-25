@@ -61,6 +61,7 @@ class Project < ApplicationRecord
   has_one_attached :banner
 
   has_paper_trail
+  include PaperTrailHelper
 
   # Order projects by most recent journal entry; fall back to project creation
   scope :order_by_recent_journal, -> {
@@ -131,6 +132,16 @@ class Project < ApplicationRecord
 
     journal_entries.order(created_at: :asc).each do |entry|
       timeline << { type: :journal, date: entry.created_at, entry: entry }
+    end
+
+
+    ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
+    user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
+    users = User.where(id: user_ids).index_by { |u| u.id.to_s }
+
+    ship_design_events.each do |event|
+      user = users[event[:whodunnit].to_s]
+      timeline << { type: :ship_design, date: event[:timestamp], user: user }
     end
 
     timeline
@@ -249,7 +260,23 @@ class Project < ApplicationRecord
   end
 
   def ship_design
-    Rails.logger.info("[Project##{id}] ship_design invoked by user=#{user_id}")
+    unless review_status.nil?
+      throw "Project is already shipped!"
+    end
+
+    update!(review_status: :design_pending)
+  end
+
+  def under_review?
+    review_status == "design_pending" || review_status == "build_pending"
+  end
+
+  def rejected?
+    review_status == "design_rejected" || review_status == "build_rejected"
+  end
+
+  def can_edit?
+    !under_review? && !rejected?
   end
 
   private

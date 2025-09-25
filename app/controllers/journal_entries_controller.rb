@@ -14,18 +14,9 @@ class JournalEntriesController < ApplicationController
     end
   end
 
-  def update
-    not_found and return unless @journal_entry.user == current_user
-
-    if @journal_entry.update(journal_entry_params)
-      redirect_to project_path(@project), notice: "Journal entry updated."
-    else
-      redirect_to project_path(@project), alert: "Could not update journal entry."
-    end
-  end
-
   def destroy
     not_found and return unless @journal_entry.user == current_user
+    not_found and return unless @project.can_edit?
 
     @journal_entry.destroy
     redirect_to project_path(@project), notice: "Journal entry deleted."

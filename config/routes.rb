@@ -70,7 +70,7 @@ Rails.application.routes.draw do
     member do
       get :ship
     end
-    resources :journal_entries, only: [ :create, :update, :destroy ]
+    resources :journal_entries, only: [ :create, :destroy ]
 
     post :check_github_repo, on: :collection
     post :check_bom, on: :collection

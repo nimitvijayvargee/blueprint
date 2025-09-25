@@ -2,12 +2,20 @@
   <%= render "timeline_event_basic", icon: "icons/create.svg", show_line: false do %>
     <p><%= render "shared/user_inline", user: project.user %> started <%= project.title %> <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
   <% end %>
+<% elsif event[:type] == :ship_design %>
+  <%= render "timeline_event_basic", icon: "icons/ship.svg" do %>
+    <% if event[:user] %>
+      <p><%= render "shared/user_inline", user: event[:user] %> submitted <%= project.title %> for review <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+    <% else %>
+    <p><%= project.title %> was submitted for review <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+    <% end %>
+  <% end %>
 <% elsif event[:type] == :journal %>
   <% entry = event[:entry] %>
   <%= render "timeline_event_card", class: "flex flex-col space-y-2" do %>
     <div class="flex space-x-4">
       <p class="grow"><%= render "shared/user_inline", user: project.user %> added to the journal <%= time_ago_in_words(event[:date]) %> ago</p>
-      <% if current_user.present? && current_user == project.user %>
+      <% if current_user.present? && current_user == project.user && @project.can_edit? %>
         <div class="flex space-x-2">
           <button type="button" 
             data-controller="modal"

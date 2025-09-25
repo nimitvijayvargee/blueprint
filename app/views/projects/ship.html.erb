@@ -1,5 +1,4 @@
 <section class="flex flex-col items-center grow space-y-6">
-  <%= render "shared/button", text: "Back", url: project_path(@project), class: "mr-auto py-0.5 px-4 text-base"%>
   <div class="w-full max-w-3xl min-h-full flex flex-col m-8 space-y-8">
     <%= render "shared/card", class: "flex flex-col space-y-6" do %>
       <div class="space-y-2 -mt-4 -mx-6 p-6 pb-0">
@@ -51,8 +50,8 @@
           </div>
 
           <div class="flex items-center justify-between">
-            <%= link_to edit_project_path(@project, from_ship: true), class: "btn btn-outline" do %>
-              Edit project
+            <%= link_to project_path(@project), class: "btn btn-outline" do %>
+              Not yet
             <% end %>
 
             <%= f.submit "Ship it!", data: { ship_bom_target: "submit" }, class: "btn btn-primary" %>

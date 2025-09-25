@@ -49,11 +49,13 @@ class ProjectsController < ApplicationController
   def edit
     @project = current_user.projects.find_by(id: params[:id])
     not_found unless @project
+    not_found unless @project.can_edit?
   end
 
   def update
     @project = current_user.projects.find_by(id: params[:id])
     not_found and return unless @project
+    not_found and return unless @project.can_edit?
 
     has_ship = params.dig(:project, :ship).present?
     params[:project].delete(:ship) if has_ship
@@ -71,6 +73,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project = current_user.projects.find_by(id: params[:id])
     not_found and return unless @project
+    not_found and return unless @project.can_edit?
 
     @project.destroy
     redirect_to projects_path, notice: "Project deleted."
