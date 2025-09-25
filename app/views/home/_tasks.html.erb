@@ -56,7 +56,7 @@
     <% end %>
     <div class="mb-1 space-y-1">
       <p class="">Click on a task to begin!</p>
-      <%= render "shared/button", text: "Claim Stickers", class: "w-full", html_options: { disabled: !current_user.tasks.completed? } %>
+      <%= render "shared/button", text: "Claim Stickers", class: "w-full", url: "https://forms.hackclub.com/t/6MhoMy5dY7us?ID=#{current_user.id}", html_options: { disabled: !current_user.tasks.completed? } %>
     </div>
   </div>
 <% end %>
