@@ -134,7 +134,6 @@ class Project < ApplicationRecord
       timeline << { type: :journal, date: entry.created_at, entry: entry }
     end
 
-
     ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
     user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
     users = User.where(id: user_ids).index_by { |u| u.id.to_s }
@@ -144,7 +143,7 @@ class Project < ApplicationRecord
       timeline << { type: :ship_design, date: event[:timestamp], user: user }
     end
 
-    timeline
+    timeline.sort_by { |e| e[:date] }
   end
 
   def bom_file_url
