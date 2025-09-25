@@ -18,4 +18,4 @@ time.sleep(10)
 
 `print("Hello, world!")`
 
-[Back to Starter Projects](/starter-projects)
+[Back to Guides](/guides)

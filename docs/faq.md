@@ -26,7 +26,7 @@ If you're almost done designing, unfortunately not
 No! Double-dipping is not allowed. If you have coding time for your project, you can journal it, get tickets, and get prizes from the tool bag.
 
 ## How much money can I spend on my project
-You can spend up to the budget based on your quality tier which is outlined in (custom projects)[/guides/custom-projects]. If you need over this amount, you can use your own money. [Also see this about Hack Club and cost.](/guides/the-talk)
+You can spend up to the budget based on your quality tier which is outlined in (custom projects)[/guides/custom-projects]. If you need over this amount, you can use your own money. [Also see this about Hack Club and cost.](/docs/the-talk)
 
 ## How will I get my 3D printed parts?
 Through **printing legion!** It's an international network of Hack Clubbers 3D printing for each other, sponsored by Polymaker (website coming soon - hang tight!)
@@ -35,7 +35,7 @@ Through **printing legion!** It's an international network of Hack Clubbers 3D p
 It's hard to say without seeing your project, but generally speaking, as long as you follow the [guidelines](/guides/custom-projects) on the submitting page for your project then you'll more likely than not get approved.
 
 ## What's the minimum complexity for a custom project?
-The minimum complexity for a project depends on tiers. Check out [custom projects](/guides/custom-projects) for more information on that. Additionally, every project **must** be [shipped](/guides/shipping).
+The minimum complexity for a project depends on tiers. Check out [custom projects](/guides/custom-projects) for more information on that. Additionally, every project **must** be [shipped](/docs/shipping).
 
 ## What if my project does not reach the quality requirement for my tier, can I pay for the difference myself?
 Yes!

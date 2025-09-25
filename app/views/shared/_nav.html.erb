@@ -3,8 +3,8 @@
     "My Projects" => user_logged_in? ? projects_path : login_path,
     "Explore" => explore_path,
     "Tool Bag" => toolbag_path,
-    "Starter Projects" => starter_projects_path,
     "Guides" => guides_path,
+    "Docs" => docs_path,
     "FAQ" => faq_path,
     "Admin" => current_user&.admin? ? admin_root_path : nil
 } %>
@@ -23,9 +23,20 @@
     <div class="flex flex-col space-y-3 grow">
         <% nav_links.each do |name, path| %>
             <% next if path.nil? %>
-            <% match = ["Starter Projects", "Guides"].include?(name) ? "prefix" : "exact" %>
+            <% match = ["Guides", "Docs"].include?(name) ? "prefix" : "exact" %>
 
-            <% if name == "Guides" %>
+            <% if name == "Docs" %>
+                <div class="flex flex-col btn btn-nav text-base py-1.5!" data-nav-target="link" data-nav-match="prefix" data-nav-base="/docs">
+                    <%= render "shared/button", url: path, text: name, variant: :none, class: "text-base py-0" %>
+                    <ul data-nav-target="submenu" data-submenu-base="/docs" class="text-sm flex-col space-y-1 hidden text-center pb-3">
+                        <% docs_menu_items.each do |item| %>
+                          <li>
+                            <a href="<%= item[:path] %>" data-nav-target="sublink" data-nav-match="prefix" title="<%= item[:description] %>"><%= item[:title] %></a>
+                          </li>
+                        <% end %>
+                    </ul>
+                </div>
+            <% elsif name == "Guides" %>
                 <div class="flex flex-col btn btn-nav text-base py-1.5!" data-nav-target="link" data-nav-match="prefix" data-nav-base="/guides">
                     <%= render "shared/button", url: path, text: name, variant: :none, class: "text-base py-0" %>
                     <ul data-nav-target="submenu" data-submenu-base="/guides" class="text-sm flex-col space-y-1 hidden text-center pb-3">
