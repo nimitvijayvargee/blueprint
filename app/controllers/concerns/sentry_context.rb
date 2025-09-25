@@ -17,9 +17,6 @@ module SentryContext
         email: current_user.email,
         username: (current_user.respond_to?(:display_name) ? current_user.display_name : nil)
       )
-    else
-      # Clear user to avoid leaking across requests in reused threads
-      Sentry.set_user(nil)
     end
 
     # Basic request-scoped metadata
