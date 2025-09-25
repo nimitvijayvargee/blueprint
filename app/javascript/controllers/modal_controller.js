@@ -142,13 +142,13 @@ export default class extends Controller {
   _lockScroll() {
     if (this._scrollLocked) return
     this._scrollLocked = true
-    this._prevBodyOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
+    // this._prevBodyOverflow = document.body.style.overflow
+    // document.body.style.overflow = "hidden"
   }
 
   _unlockScroll() {
     if (!this._scrollLocked) return
-    document.body.style.overflow = this._prevBodyOverflow || ""
+    // document.body.style.overflow = this._prevBodyOverflow || ""
     this._scrollLocked = false
   }
 
