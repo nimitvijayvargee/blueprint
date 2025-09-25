@@ -1,6 +1,6 @@
 class JournalEntriesController < ApplicationController
   before_action :set_project
-  before_action :set_journal_entry, only: [ :update, :destroy ]
+  before_action :set_journal_entry, only: [ :destroy ]
 
   def create
     not_found and return unless @project.user == current_user
