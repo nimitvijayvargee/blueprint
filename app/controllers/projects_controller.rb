@@ -35,6 +35,22 @@ class ProjectsController < ApplicationController
     @base_ok = repo_linked && desc_ok && journal_ok
   end
 
+  def follow
+    @project = Project.where.not(user_id: current_user.id).find_by(id: params[:id])
+    not_found unless @project
+
+    current_user.follow_project!(@project)
+    redirect_to project_path(@project), notice: "Followed #{@project.title}."
+  end
+
+  def unfollow
+    @project = Project.where.not(user_id: current_user.id).find_by(id: params[:id])
+    not_found unless @project
+
+    current_user.unfollow_project!(@project)
+    redirect_to project_path(@project), notice: "Unfollowed #{@project.title}."
+  end
+
   def new
     @project = current_user.projects.build
   end

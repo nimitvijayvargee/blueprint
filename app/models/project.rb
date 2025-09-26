@@ -278,6 +278,10 @@ class Project < ApplicationRecord
     !under_review? && !rejected?
   end
 
+  def followed_by?(user)
+    user.followed_projects.include?(self)
+  end
+
   private
 
   def normalize_repo_link

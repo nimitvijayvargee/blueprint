@@ -69,6 +69,8 @@ Rails.application.routes.draw do
   resources :projects, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     member do
       get :ship
+      post :follow
+      post :unfollow
     end
     resources :journal_entries, only: [ :create, :destroy ]
 

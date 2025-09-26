@@ -650,6 +650,14 @@ class User < ApplicationRecord
     0
   end
 
+  def follow_project!(project)
+    followed_projects << project unless following?(project)
+  end
+
+  def unfollow_project!(project)
+    followed_projects.destroy(project)
+  end
+
   def avatar_url
     avatar || "https://hc-cdn.hel1.your-objectstorage.com/s/v3/c283ae01214b9052480f1e216e43dbe09a424048_image.png"
   end
