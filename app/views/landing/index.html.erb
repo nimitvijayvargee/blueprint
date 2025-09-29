@@ -31,35 +31,171 @@
     </svg>
     <%= render "shared/notice" %>
     <main>
-      <div class="fixed top-8 left-0">
+      <div class="fixed top-8 left-0 z-50">
         <a href="https://hackclub.com?utm_source=blueprint" target="_blank">
           <%= inline_svg 'hackclub-logo.svg', class: 'h-16' %>
         </a>
       </div>
-      <div class="fixed top-8 right-8">
+      <div class="fixed top-8 right-8 z-50">
         <% if current_user.present? %>
           <%= render "shared/button", url: home_path, text: "Go home", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-xl" %>
         <% else %>
           <%= render "shared/button", url: login_path, text: "Log in!", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-xl" %>
         <% end %>
       </div>
-      <div class="min-h-screen h-full flex flex-col items-center justify-center px-8 text-center bg-cover bg-center bg-no-repeat space-y-32 bg-gradient-to-b from-[#1c4a86] to-transparent from-30%">
-        <!-- style="background-image: url('<%= asset_path('landing-bg.png') %>');" -->
-        <div class="space-y-2">
-          <div class="relative flex flex-col items-center">
-            <h1 class="text-[10rem]/40 font-rcgl-full">Blueprint</h1>
-            <p class="text-4xl rotate-5 ml-auto bg-bp-dark p-1 -mt-7 -mr-8">...then build</p>
+      <div class="min-h-[200vh] h-full px-8 text-center relative"
+           style="background-image: url('<%= asset_path('bg-nolines.png') %>'); 
+                  background-size: 100vw auto; 
+                  background-position: top center; 
+                  background-repeat: no-repeat;
+                  background-attachment: scroll;"">
+                  
+                  <!-- Grid fade overlay -->
+        <div class="absolute left-0 w-full h-[800px] pointer-events-none z-30"
+             style="top: calc(100vw - 800px);
+                    background: linear-gradient(transparent, rgba(14, 48, 91, 0.95)),
+                    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+                    background-size: 100% 100%, 50px 50px, 50px 50px;
+                    background-position: 0 0, 0 0, 0 0;"></div>
+        
+        <!-- Hero Content - Centered on Screen -->
+        <div class="min-h-screen flex flex-col items-center justify-center space-y-32">
+          <div class="space-y-2">
+            <div class="relative flex flex-col items-center">
+              <h1 class="text-[10rem]/40 font-rcgl-full">Blueprint</h1>
+              <p class="text-4xl rotate-5 ml-auto bg-bp-dark p-1 -mt-7 -mr-8">...then build</p>
+            </div>
+            <div class="flex flex-col -ml-12">
+              <h2 class="text-3xl text-center mr-52">Design a hardware project,</h2>
+              <p class="text-xl text-right"> and we'll pay for hardware to build it!<sup>*</sup></p>
+            </div>
           </div>
-          <div class="flex flex-col -ml-12">
-            <h2 class="text-3xl text-center mr-52">Design a hardware project,</h2>
-            <p class="text-xl text-right"> and we'll pay for hardware to build it!<sup>*</sup></p>
+          <div class="flex flex-col items-center text-2xl space-y-2">
+            <p class="uppercase text-3xl">Get free stickers</p>
+            <div class="flex" data-controller="email-redirect" data-email-redirect-login-url-value="<%= login_path %>">
+              <input type="email" data-email-redirect-target="input" class="text-left py-1.5 px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com">
+              <button type="button" data-action="click->email-redirect#go" class="text-bp-dark bg-white w-full px-6 hover:bg-gray-200 border-2 border-l-0 border-white hover:border-gray-200">Join</button>
+            </div>
           </div>
         </div>
-        <div class="flex flex-col items-center text-2xl space-y-2">
-          <p class="uppercase text-3xl">Get free stickers</p>
-          <div class="flex" data-controller="email-redirect" data-email-redirect-login-url-value="<%= login_path %>">
-            <input type="email" data-email-redirect-target="input" class="text-left py-1.5 px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com">
-            <button type="button" data-action="click->email-redirect#go" class="text-bp-dark bg-white w-full px-6 hover:bg-gray-200 border-2 border-l-0 border-white hover:border-gray-200">Join</button>
+        
+        <!-- Projects Carousel in Lower Header -->
+        <div class="w-full py-24 pb-96">
+          <div class="flex flex-col items-center px-8 mb-12">
+            <h2 class="text-5xl text-center font-bold mb-4">Featured Projects</h2>
+            <p class="text-xl text-center text-white/80">See what other makers are building</p>
+          </div>
+          
+          <!-- Carousel Container -->
+          <div class="w-full relative z-20">
+            <div class="relative overflow-hidden h-[400px]">
+                <!-- Carousel Track -->
+                <div id="project-carousel" class="flex">
+                  
+                  <!-- Project Card 1 -->
+                  <a href="https://github.com/alexm-dev" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🎵</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">MIDI Controller</h3>
+                    <p class="text-sm text-white/80 mb-3">A custom MIDI controller with rotary encoders and RGB keys for music production</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Alex M.</span>
+                      <span class="text-xs text-white/60">2 days ago</span>
+                    </div>
+                  </a>
+
+                  <!-- Project Card 2 -->
+                  <a href="https://github.com/sarahkodes" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🔑</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Security Key</h3>
+                    <p class="text-sm text-white/80 mb-3">Hardware authentication device with fingerprint sensor and NFC capabilities</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Sarah K.</span>
+                      <span class="text-xs text-white/60">1 week ago</span>
+                    </div>
+                  </a>
+
+                  <!-- Project Card 3 -->
+                  <a href="https://github.com/jordanleaf" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🌱</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Smart Garden</h3>
+                    <p class="text-sm text-white/80 mb-3">IoT garden monitoring system with automated watering and light control</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Jordan L.</span>
+                      <span class="text-xs text-white/60">3 days ago</span>
+                    </div>
+                  </a>
+
+                  <!-- Project Card 4 -->
+                  <a href="https://github.com/mayarobotics" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🤖</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Robot Arm</h3>
+                    <p class="text-sm text-white/80 mb-3">6-DOF robotic arm with camera vision and precision control for pick-and-place tasks</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Maya P.</span>
+                      <span class="text-xs text-white/60">5 days ago</span>
+                    </div>
+                  </a>
+
+                  <!-- Duplicate cards -->
+                  <a href="https://github.com/alexm-dev" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🎵</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">MIDI Controller</h3>
+                    <p class="text-sm text-white/80 mb-3">A custom MIDI controller with rotary encoders and RGB keys for music production</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Alex M.</span>
+                      <span class="text-xs text-white/60">2 days ago</span>
+                    </div>
+                  </a>
+
+                  <a href="https://github.com/sarahkodes" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🔑</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Security Key</h3>
+                    <p class="text-sm text-white/80 mb-3">Hardware authentication device with fingerprint sensor and NFC capabilities</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Sarah K.</span>
+                      <span class="text-xs text-white/60">1 week ago</span>
+                    </div>
+                  </a>
+
+                  <a href="https://github.com/jordanleaf" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🌱</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Smart Garden</h3>
+                    <p class="text-sm text-white/80 mb-3">IoT garden monitoring system with automated watering and light control</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Jordan L.</span>
+                      <span class="text-xs text-white/60">3 days ago</span>
+                    </div>
+                  </a>
+
+                  <a href="https://github.com/mayarobotics" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
+                      <div class="text-4xl">🤖</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Robot Arm</h3>
+                    <p class="text-sm text-white/80 mb-3">6-DOF robotic arm with camera vision and precision control for pick-and-place tasks</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs bg-bp-dark px-2 py-1">by Maya P.</span>
+                      <span class="text-xs text-white/60">5 days ago</span>
+                    </div>
+                  </a>
+
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -74,6 +210,17 @@
           </div>
         </div>
       </section>
+    </div>
+    
+    <!-- Spacing before divider -->
+    <div class="py-12"></div>
+    
+    <!-- Full-Width Divider Image -->
+    <div class="w-full -mx-8 py-16 pt-24">
+      <%= image_tag "divider2.png", class: "w-full h-auto" %>
+    </div>
+    
+    <div class="w-full flex flex-col items-center px-8">
       
       <!-- FAQ Section -->
       <section class="py-24 w-full max-w-6xl">
@@ -120,5 +267,74 @@
         </div>
       </section>
     </div>
+
+    <!-- Carousel JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.getElementById('project-carousel');
+        if (!carousel) return;
+        
+        // Individual card wrapping variables
+        let scrollSpeed = 0.5; // Pixels per frame
+        let isAutoScrolling = true;
+        
+        const cardWidth = 320; // 320px (w-80 + margin)
+        const cards = Array.from(carousel.children);
+        
+        // Set up carousel container and individual card positioning
+        carousel.style.position = 'relative';
+        carousel.style.height = '400px'; // Match h-[400px]
+        
+        cards.forEach((card, index) => {
+          card.style.position = 'absolute';
+          card.style.left = `${index * cardWidth}px`;
+          card.style.top = '0';
+        });
+        
+        // Individual card animation function
+        function animateCards() {
+          if (isAutoScrolling) {
+            const containerWidth = carousel.parentElement.offsetWidth;
+            
+            cards.forEach((card) => {
+              const currentLeft = parseFloat(card.style.left) || 0;
+              const newLeft = currentLeft - scrollSpeed;
+              
+              // If card moved completely off left edge, wrap to just off the right edge
+              if (newLeft <= -cardWidth) {
+                // Calculate the rightmost card position to maintain tight spacing
+                const allPositions = cards.map(c => parseFloat(c.style.left) || 0);
+                const rightmostPosition = Math.max(...allPositions);
+                
+                // Position new card immediately after the rightmost card
+                card.style.left = `${rightmostPosition + cardWidth}px`;
+              } else {
+                card.style.left = `${newLeft}px`;
+              }
+            });
+          }
+          
+          requestAnimationFrame(animateCards);
+        }
+        
+        // Hover controls
+        carousel.addEventListener('mouseenter', () => {
+          isAutoScrolling = false;
+        });
+        
+        carousel.addEventListener('mouseleave', () => {
+          isAutoScrolling = true;
+        });
+        
+        // Touch pause
+        carousel.addEventListener('touchstart', () => {
+          isAutoScrolling = false;
+          setTimeout(() => isAutoScrolling = true, 3000);
+        });
+        
+        // Initialize
+        animateCards();
+      });
+    </script>
   </body>
 </html>

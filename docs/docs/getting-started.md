@@ -1,6 +1,3 @@
-| title | Getting Started |
-| --- | --- |
-| description | Intro to the guides and how to navigate them. |
 
 # Getting Started
 
