@@ -8,7 +8,7 @@
 Currently, the end-date of Blueprint is December 1st
 
 ## How can I earn tickets?
-Project grants are awarded on quality rather than hours spent. However, if you track your time building your project, you will be awarded with tickets which can be redeemed at the [toolbag](/tool-bag). If your project doesn't have a lot of in-person build time, you will have fewer tickets awarded. One way to get more tickets for example is to get PCB + Components and hand-solder rather than just getting PCBA. 
+Project grants are awarded on quality rather than hours spent. However, if you track your time building your project, you will be awarded with tickets which can be redeemed at the [toolbag](/toolbag). If your project doesn't have a lot of in-person build time, you will have fewer tickets awarded. One way to get more tickets for example is to get PCB + Components and hand-solder rather than just getting PCBA. 
 
 ## How many projects can I make?
 As many as you like! We just ask that you only do one of each starter project

@@ -2,10 +2,12 @@
 | --- | --- |
 | description | Kick off with these guides for Blueprint. |
 
-# Guides
+<h1 style="font-size: 2.5rem; line-height: 1.6;">Guides</h1>
 
-Kick off with these guides.
+<p style="font-size: 1.25rem; line-height: 1.6;">Kick off with these guides.</p>
 
-- [Hacker Key](/guides/hacker-key)
-- [Midi](/guides/midi)
-- [Split Keyboard](/guides/split-keyboard)
+<ul style="font-size: 1.25rem; line-height: 1.6;">
+<li><a href="/guides/hacker-key">Hacker Key</a></li>
+<li><a href="/guides/midi">Midi</a></li>
+<li><a href="/guides/split-keyboard">Split Keyboard</a></li>
+</ul>
