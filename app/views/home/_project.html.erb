@@ -9,6 +9,7 @@
               <p class="text-2xl"><%= project.title %></p>
           <% end %>
           <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-base " %>
+          <%= render "shared/button", url: ship_project_path(project), variant: :inset, text: "Ship", class: "text-base " %>
       </div>
   </div>
 <% end %>

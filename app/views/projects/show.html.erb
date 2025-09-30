@@ -21,7 +21,7 @@
                 <% end %>
               <% else %>
                 <% following = @project.followed_by?(current_user) %>
-                <%= render "shared/button", text: following ? "Unfollow" : "Follow", url: following ? unfollow_project_path(@project) : follow_project_path(@project), class: "py-1 px-6", html_options: { method: :post } %>
+                <%= render "shared/button", text: following ? "Unfollow" : "Follow", url: following ? unfollow_project_path(@project) : follow_project_path(@project), class: "py-1 px-6 cursor-pointer", html_options: { method: :post } %>
               <% end %>
             <% end %>
           </div>

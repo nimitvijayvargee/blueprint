@@ -44,10 +44,12 @@
           
           <div class="space-y-2">
             <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
-            <div class="select w-full text-left">
-              <%= f.select :tier, Project.tier_options, {}, { required: true, data: { ship_bom_target: "select" } } %>
+            <div class="select w-full text-left text-white bg-bp-dark">
+              <%= f.select :tier, Project.tier_options, { include_blank: false, selected: "tier_1" }, { data: { ship_bom_target: "select" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
             </div>
           </div>
+          <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>
+
 
           <div class="flex items-center justify-between">
             <%= link_to project_path(@project), class: "btn btn-outline" do %>
