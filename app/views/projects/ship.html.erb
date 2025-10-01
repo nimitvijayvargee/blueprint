@@ -30,7 +30,9 @@
                   <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
                 <% end %>
                 <% if c[:url].present? %>
-                  <%= link_to c[:msg], c[:url], target: "_blank", rel: "noopener noreferrer", class: "underline underline-offset-2" %>
+                  <% is_external = c[:url].start_with?('http') %>
+                  <%= link_to c[:msg], c[:url], class: "underline underline-offset-2", 
+                      **( is_external ? { target: "_blank", rel: "noopener noreferrer" } : {} ) %>
                 <% else %>
                   <span><%= c[:msg] %></span>
                 <% end %>
@@ -45,7 +47,7 @@
           <div class="space-y-2">
             <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
             <div class="select w-full text-left text-white bg-bp-dark">
-              <%= f.select :tier, Project.tier_options, { include_blank: false, selected: "tier_1" }, { data: { ship_bom_target: "select" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+              <%= f.select :tier, Project.tier_options, { include_blank: false, selected: 4 }, { data: { ship_bom_target: "select" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
             </div>
           </div>
           <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>

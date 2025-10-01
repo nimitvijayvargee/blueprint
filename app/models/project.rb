@@ -255,7 +255,8 @@ class Project < ApplicationRecord
   end
 
   def self.tier_options
-      Project.tiers.map { |key, value| [ "Tier #{key}", value ] }
+      tier_amounts = { 1 => "$400 max", 2 => "$200 max", 3 => "$100 max", 4 => "$50 max" }
+      Project.tiers.map { |key, value| [ "Tier #{key} (#{tier_amounts[key.to_i]})", value ] }
   end
 
   def ship_design

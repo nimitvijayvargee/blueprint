@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
       { msg: "GitHub repo linked", met: repo_linked },
       { key: "bom", msg: "Bill of materials (bom.csv) present", met: nil },
       { key: "readme", msg: "README.md present", met: nil },
-      { msg: "Description is at least 50 characters", met: desc_ok },
+      { msg: "Description is at least 50 characters", met: desc_ok, url: edit_project_path(@project) },
       { msg: "At least one journal entry", met: journal_ok }
     ]
 
