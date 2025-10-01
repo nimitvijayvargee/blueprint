@@ -31,12 +31,12 @@
     </svg>
     <%= render "shared/notice" %>
     <main>
-      <div class="fixed top-8 left-0 z-50">
+      <div class="fixed top-8 left-0 z-[100]">
         <a href="https://hackclub.com?utm_source=blueprint" target="_blank">
           <%= inline_svg 'hackclub-logo.svg', class: 'h-16' %>
         </a>
       </div>
-      <div class="fixed top-8 right-8 z-50">
+      <div class="fixed top-8 right-8 z-[100]">
         <% if current_user.present? %>
           <%= render "shared/button", url: home_path, text: "Go home", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-xl" %>
         <% else %>
@@ -44,7 +44,7 @@
         <% end %>
       </div>
       <div class="min-h-[200vh] h-full px-8 text-center relative"
-           style="background-image: url('<%= asset_path('bg-nolines.png') %>'); 
+           style="background-image: url('<%= asset_path('bg-combined-new.png') %>'); 
                   background-size: 100vw auto; 
                   background-position: top center; 
                   background-repeat: no-repeat;
@@ -80,15 +80,58 @@
           </div>
         </div>
         
+        <!-- Four Box Flow -->
+        <div class="w-full max-w-6xl mx-auto py-24">
+          <div class="flex items-center justify-center px-8">
+            <div class="flex flex-col py-6 px-8 border-2 bg-bp-dark border-white/25 flex-1 max-w-xs">
+              <h3 class="text-xl font-bold mb-2">Design</h3>
+              <p class="text-sm text-white/80">Create your hardware project in CAD</p>
+            </div>
+            
+            <div class="flex items-center justify-center px-4">
+              <svg class="w-12 h-6" viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12H47M47 12L37 2M47 12L37 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            
+            <div class="flex flex-col py-6 px-8 border-2 bg-bp-dark border-white/25 flex-1 max-w-xs">
+              <h3 class="text-xl font-bold mb-2">Submit</h3>
+              <p class="text-sm text-white/80">Share your design for review</p>
+            </div>
+            
+            <div class="flex items-center justify-center px-4">
+              <svg class="w-12 h-6" viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12H47M47 12L37 2M47 12L37 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            
+            <div class="flex flex-col py-6 px-8 border-2 bg-bp-dark border-white/25 flex-1 max-w-xs">
+              <h3 class="text-xl font-bold mb-2">Build</h3>
+              <p class="text-sm text-white/80">Get funding and build your project</p>
+            </div>
+            
+            <div class="flex items-center justify-center px-4">
+              <svg class="w-12 h-6" viewBox="0 0 48 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12H47M47 12L37 2M47 12L37 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            
+            <div class="flex flex-col py-6 px-8 border-2 bg-bp-dark border-white/25 flex-1 max-w-xs">
+              <h3 class="text-xl font-bold mb-2">Share</h3>
+              <p class="text-sm text-white/80">Show off what you've made</p>
+            </div>
+          </div>
+        </div>
+        
         <!-- Projects Carousel in Lower Header -->
-        <div class="w-full py-24 pb-96">
+        <div class="w-full py-96 pb-96">
           <div class="flex flex-col items-center px-8 mb-12">
             <h2 class="text-5xl text-center font-bold mb-4">Featured Projects</h2>
             <p class="text-xl text-center text-white/80">See what other makers are building</p>
           </div>
           
           <!-- Carousel Container -->
-          <div class="w-full relative z-20">
+          <div class="w-full relative">
             <div class="relative overflow-hidden h-[400px]">
                 <!-- Carousel Track -->
                 <div id="project-carousel" class="flex">
@@ -274,8 +317,8 @@
                   </a>
 
                   <a href="https://github.com/Aahil78/CyberTrust" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
-                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
-                      <div class="text-4xl">🔐</div>
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center overflow-hidden">
+                      <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/83cea4e7008db1f618e6f33b12a19d25924259c9_image.png" alt="CyberTrust" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-xl font-bold mb-2">CyberTrust</h3>
                     <p class="text-sm text-white/80 mb-3">RP2350A-based USB security key with user presence button and neopixel</p>
@@ -285,8 +328,8 @@
                   </a>
 
                   <a href="https://github.com/Arrow-07/NexoBT" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
-                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
-                      <div class="text-4xl">🎵</div>
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center overflow-hidden">
+                      <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/83cea4e7008db1f618e6f33b12a19d25924259c9_image.png" alt="Nexo-BT" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-xl font-bold mb-2">Nexo-BT</h3>
                     <p class="text-sm text-white/80 mb-3">Wireless music receiver with balanced XLR outputs using ESP32 and PCM5102APWR DAC</p>
@@ -296,8 +339,8 @@
                   </a>
 
                   <a href="https://github.com/CJBrandi/KeyDeck/" target="_blank" class="flex-none w-80 mx-4 bg-hatch border-2 border-white/25 p-6 hover:border-white/50 transition-colors cursor-pointer block">
-                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center">
-                      <div class="text-4xl">⌨️</div>
+                    <div class="w-full h-48 bg-bp-darker mb-4 flex items-center justify-center overflow-hidden">
+                      <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/83cea4e7008db1f618e6f33b12a19d25924259c9_image.png" alt="KeyDeck" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-xl font-bold mb-2">KeyDeck</h3>
                     <p class="text-sm text-white/80 mb-3">Simple macropad with 2 status LEDs, each button runs a different shortcut</p>
@@ -309,9 +352,9 @@
                 </div>
             </div>
           </div>
-        </div>
       </div>
-    </main>
+    </div>
+    
     <div class="w-full flex flex-col items-center px-8">
       <section class="py-24 w-full max-w-6xl hidden">
         <div class="flex flex-col items-center px-8">
@@ -333,6 +376,18 @@
     </div>
     
     <div class="w-full flex flex-col items-center px-8">
+      
+      <!-- What is Hack Club Section -->
+      <section class="py-24 w-full max-w-6xl">
+        <div class="flex flex-col items-center px-8">
+          <h2 class="text-4xl text-center font-bold mb-8">What is Hack Club?</h2>
+          <div class="flex flex-col py-10 px-16 border-2 bg-hatch border-white/25 max-w-4xl">
+            <p class="text-xl text-center leading-relaxed">
+              Hack Club is a global network of high school hackers and makers. We're a nonprofit that supports students who want to build cool things with code and hardware. Blueprint is one of our programs where we fund your hardware projects and help you learn by building.
+            </p>
+          </div>
+        </div>
+      </section>
       
       <!-- FAQ Section -->
       <section class="py-24 w-full max-w-6xl">
@@ -375,6 +430,17 @@
             <a href="/faq" class="text-bp-warning hover:text-white underline text-lg">
               View Full FAQ →
             </a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Get Started Section -->
+      <section class="py-24 w-full max-w-6xl">
+        <div class="flex flex-col items-center text-2xl space-y-2">
+          <p class="uppercase text-3xl">Get Started</p>
+          <div class="flex" data-controller="email-redirect" data-email-redirect-login-url-value="<%= login_path %>">
+            <input type="email" data-email-redirect-target="input" class="text-left py-1.5 px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com">
+            <button type="button" data-action="click->email-redirect#go" class="text-bp-dark bg-white w-full px-6 hover:bg-gray-200 border-2 border-l-0 border-white hover:border-gray-200">Join</button>
           </div>
         </div>
       </section>

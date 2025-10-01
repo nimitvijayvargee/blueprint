@@ -9,6 +9,7 @@
 #  github_username     :string
 #  is_banned           :boolean          default(FALSE), not null
 #  is_mcg              :boolean          default(TRUE), not null
+#  last_active         :datetime
 #  role                :integer          default("user"), not null
 #  timezone            :string
 #  username            :string
