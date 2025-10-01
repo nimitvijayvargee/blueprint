@@ -144,5 +144,6 @@ export default class extends Controller {
   toggleStateClass(el, ok) {
     if (!el) return;
     el.classList.toggle("text-bp-success", ok);
+    el.classList.toggle("text-bp-danger", !ok);
   }
 }
