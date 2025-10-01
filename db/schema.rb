@@ -373,7 +373,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_024747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", null: false
-    t.boolean "is_mcg", default: false, null: false
+    t.boolean "is_mcg", default: true, null: false
     t.string "github_access_token"
     t.string "github_username"
   end
