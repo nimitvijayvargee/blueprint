@@ -11,3 +11,6 @@
 <li><a href="/guides/midi">Midi</a></li>
 <li><a href="/guides/split-keyboard">Split Keyboard</a></li>
 </ul>
+
+#### Note about projects made with the community provided guides:
+You **can not** simply just submit a copy of the tutorials above. You need to do something to make it your own. This means something different for each project. Maybe add custom keys, neopixel LED's, make a custom MIDI.

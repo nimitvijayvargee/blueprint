@@ -28,7 +28,7 @@ How does it work?
 Here is how it works:
 There are four tiers that a project can follow and they are as follows:
 
-#### Tier 4 “Nice project”: up to $50 and a limit of 400 tickets
+#### Tier 4: up to $50 and a limit of 400 tickets
 
 - A basic project that doesn’t require much time. This is a project that is cool but not very unique. Examples include:
   - A drone (it doesn’t have many custom parts)
@@ -36,21 +36,21 @@ There are four tiers that a project can follow and they are as follows:
   - A custom LED lamp
   - A custom keyboard/macropad
 
-#### Tier 3 “Oh that’s cool”: up to $100 and a limit of 625 tickets
+#### Tier 3: up to $100 and a limit of 625 tickets
 
 - An intermediate custom project that has a bit more of that “flare”. Typically, this would include multiple components such as a case and PCB. This is something that your friends would say “oh that’s cool”. Examples include:
   - A full **split** keyboard
-  - A MIDI keyboard
+  - A MIDI
   - A custom game console
 
-#### Tier 2 ”Hey guys check this out”: up to $200 and a limit of 1250 tickets
+#### Tier 2: up to $200 and a limit of 1250 tickets
 
 - A fairly advanced project that you are very proud of. This is something that your friends would tell **Their** friends about. Examples include:
   - A Fairy weight battle Bot
   - A custom robot arm
   - A custom devboard
 
-#### Tier 1 ”No way you made that”: up to $400 and up to 2500 tickets
+#### Tier 1: up to $400 and up to 2500 tickets
 
 - A super advanced project that would be the cornerstone of your portfolio. This is the type of project that people don’t believe you made.
   - A 3d Printer
