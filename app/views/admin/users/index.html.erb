@@ -3,18 +3,18 @@
 </div>
 <section class="space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-4xl pb-2">All Users</h1>
+    <h1 class="pb-2 text-4xl">All Users</h1>
     <%= form_with url: admin_users_path, method: :get, local: true, class: "w-full max-w-2xl" do %>
       <div class="flex items-center gap-3">
-        <input type="text" name="q" value="<%= h(@q) %>" placeholder="Search by ID, name, email, or Slack ID" class="input w-full rounded-none border-white bg-bp-darker text-white placeholder-white/60" />
-        <button type="submit" class="btn btn-primary rounded-none text-lg">Search</button>
+        <input type="text" name="q" value="<%= h(@q) %>" placeholder="Search by ID, name, email, or Slack ID" class="w-full text-white border-white rounded-none input bg-bp-darker placeholder-white/60" />
+        <button type="submit" class="text-lg rounded-none btn btn-primary">Search</button>
       </div>
     <% end %>
   </div>
 
   <div class="border-2 border-white rounded-none">
     <!-- Header row -->
-    <div class="grid grid-cols-12 text-lg border-b-2 border-white p-3">
+    <div class="grid grid-cols-12 p-3 text-lg border-b-2 border-white">
       <div class="col-span-1">ID</div>
       <div class="col-span-3">Name</div>
       <div class="col-span-4">Email</div>
@@ -26,21 +26,21 @@
     <!-- Rows -->
     <% if @users.present? %>
       <% @users.each do |user| %>
-        <div class="grid grid-cols-12 text-lg border-b border-white/30 last:border-0 px-3">
-          <div class="col-span-1 flex items-center py-2"><%= user.id %></div>
-          <div class="col-span-3 flex items-center font-medium">
+        <div class="grid grid-cols-12 px-3 text-lg border-b border-white/30 last:border-0">
+          <div class="flex items-center col-span-1 py-2"><%= user.id %></div>
+          <div class="flex items-center col-span-3 font-medium">
             <%= link_to user.display_name, admin_user_path(user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
           </div>
-          <div class="col-span-4 flex items-center">
+          <div class="flex items-center col-span-4">
             <% if user.email.present? %>
               <a href="mailto:<%= h user.email %>" class="underline decoration-white/30 underline-offset-2 hover:decoration-white"><%= user.email %></a>
             <% else %>
               –
             <% end %>
           </div>
-          <div class="col-span-1 flex items-center"><%= user.is_mcg ? "Yes" : "No" %></div>
-          <div class="col-span-2 flex items-center"><%= user.slack_id.presence || "–" %></div>
-          <div class="col-span-1 flex items-center">
+          <div class="flex items-center col-span-1"><%= user.is_mcg ? "Yes" : "No" %></div>
+          <div class="flex items-center col-span-2"><%= user.slack_id.presence || "–" %></div>
+          <div class="flex items-center col-span-1">
             <div class="flex items-center gap-2">
               <%= render "shared/button", text: "View", url: admin_user_path(user), class: "text-sm py-0 px-2" %>
             </div>
@@ -53,6 +53,6 @@
   </div>
 
   <div class="flex items-center justify-end text-lg">
-    <%= pagy_nav(@pagy) if @pagy.present? && @pagy.pages > 1 %>
+    <%== pagy_nav(@pagy) if @pagy.present? && @pagy.pages > 1 %>
   </div>
 </section>
