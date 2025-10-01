@@ -8,6 +8,8 @@ class JournalEntriesController < ApplicationController
     @journal_entry = @project.journal_entries.build(journal_entry_params.merge(user: current_user))
 
     if @journal_entry.save
+      ahoy.track("journal_entry_create", project_id: @project.id, user_id: current_user.id)
+
       redirect_to project_path(@project), notice: "Journal entry created."
     else
       redirect_to project_path(@project), alert: "Could not create journal entry."

@@ -18,6 +18,8 @@ class AuthController < ApplicationController
       return
     end
 
+    ahoy.track "slack_login_start"
+
     state = SecureRandom.hex(24)
     session[:state] = state
 
@@ -68,6 +70,8 @@ class AuthController < ApplicationController
       end
 
       if validate_otp(email, otp)
+        ahoy.track "email_login"
+
         user = User.find_or_create_from_email(email)
         session[:user_id] = user.id
         Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
@@ -109,6 +113,8 @@ class AuthController < ApplicationController
     end
 
     if send_otp(email)
+      ahoy.track "email_login_start"
+
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
@@ -139,6 +145,8 @@ class AuthController < ApplicationController
 
   # Slack auth callback
   def create
+    ahoy.track "slack_login"
+
     if params[:state] != session[:state]
       Rails.logger.tagged("Authentication") do
         Rails.logger.error({

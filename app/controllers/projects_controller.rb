@@ -60,6 +60,7 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
     if @project.save
+      ahoy.track("project_create", project_id: @project.id, user_id: current_user.id)
       redirect_to projects_path, notice: "Project created."
     else
       render :new, status: :unprocessable_entity
@@ -82,6 +83,8 @@ class ProjectsController < ApplicationController
 
     if @project.update(project_params)
       if has_ship
+        ahoy.track("project_ship", project_id: @project.id, user_id: current_user.id)
+
         @project.ship_design
       end
       redirect_to project_path(@project), notice: "Project updated."
