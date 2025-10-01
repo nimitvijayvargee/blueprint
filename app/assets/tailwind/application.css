@@ -114,6 +114,10 @@
   .pagy.nav {
     @apply space-x-2;
   }
+
+  .pagy.nav .current {
+    @apply underline;
+  }
 }
 
 /* Remove rendered rich text (ActionText) styles */
