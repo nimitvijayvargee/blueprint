@@ -24,8 +24,8 @@
         <%= render "admin/pill", type: :boolean, value: @user.is_banned, invert: true do %>
           <p>Banned:</p>
         <% end %>
-        <%= render "admin/pill", type: :boolean, value: @user.admin? do %>
-          <p>Admin:</p>
+        <%= render "admin/pill", type: @user.admin? ? :warning : :none, value: @user.admin? ? "Admin" : "User" do %>
+          <p>Role:</p>
         <% end %>
         <%= render "admin/pill", type: :boolean, value: @user.is_mcg?, invert: true do %>
           <p>MCG:</p>
@@ -37,6 +37,17 @@
         <p>Total hours: <%= @user.journal_entries.sum(:duration_seconds) / 3600 %> (<%= @user.journal_entries.joins(:project).where.not(projects: { review_status: nil }).sum(:duration_seconds) / 3600 %> shipped)</p>
         <p>Following: <%= @user.followed_projects.count %></p>
       </div>
+    <% end %>
+    <%= render "shared/card", class: "space-y-2 col-span-2" do %>
+      <p class="text-2xl">Projects</p>
+      <details>
+        <summary>Show projects</summary>
+        <ul class="list-disc list-inside">
+          <% @user.projects.each do |project| %>
+            <li><%= link_to project.title, admin_project_path(project), class: "underline" %> - <%= project.review_status || "unreviewed" %></li>
+          <% end %>
+        </ul>
+      </details>
     <% end %>
     <%= render "shared/card", class: "space-y-2 col-span-2" do %>
       <p class="text-2xl">Audit log</p>
