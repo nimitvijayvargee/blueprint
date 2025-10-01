@@ -1,32 +1,38 @@
+<% announcements = [
+  {
+    title: "Blueprint Has Launched!",
+    date: "October 1, 2024",
+    content: "Welcome to Blueprint, a hardware YSWS.",
+    cta: { text: "Learn More →", url: "/docs" },
+    level: :warning
+  }
+]%>
+
 <%= render "shared/card" do %>
   <div class="">
     <h2 class="text-3xl">Announcements</h2>
   </div>
-  
-  <div class="bg-bp-warning text-bp-dark p-6 mb-4 border-2 border-bp-warning">
-    <div class="flex items-center justify-center mb-3">
-      <div class="text-center">
-        <div class="text-sm font-semibold text-bp-darker mb-1">October 2, 2024</div>
-        <div class="text-2xl font-bold">Blueprint Has Launched!</div>
+
+  <% if announcements.any? %>
+    <% announcements.each do |announcement| %>
+      <div class="p-4 bg-bp-<%= announcement[:level] || "dark" %> <%= announcement[:level] ? "text-bp-dark" : "inset-shadow-sm inset-shadow-black/25" %>">
+        <div class="flex items-center justify-center">
+          <div class="text-center">
+            <div class="text-sm font-semibold mb-1"><%= announcement[:date] %></div>
+            <div class="text-2xl font-bold"><%= announcement[:title] %></div>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="text-lg mb-3"><%= announcement[:content] %></p>
+          <% if announcement[:cta] %>
+            <%= render "shared/button", text: announcement[:cta][:text], url: announcement[:cta][:url], class: announcement[:level] ? "bg-bp-dark text-white border-0 hover:bg-bp-lighter" : "" %>
+          <% end %>
+        </div>
       </div>
+    <% end %>
+  <% else %>
+    <div class="flex items-center justify-center grow text-center">
+      <p>It's pretty quiet in here...<br>Check back later!</p>
     </div>
-    <div class="text-center">
-      <p class="text-lg mb-3">
-        Welcome to Blueprint. Hackclub's flagship hardware YSWS.
-      </p>
-      <p class="mb-4">
-        Click below to learn more about how Blueprint works.
-      </p>
-      <div class="flex justify-center">
-        <a href="/docs" 
-           class="inline-flex items-center gap-2 bg-bp-dark text-white px-6 py-3 rounded-lg hover:bg-bp-darker transition-colors font-bold">
-          Learn More →
-        </a>
-      </div>
-    </div>
-  </div>
-  
-  <div class="flex items-center justify-center grow text-center">
-    <p>More announcements coming soon...<br>Check back later!</p>
-  </div>
+  <% end %>
 <%end %>

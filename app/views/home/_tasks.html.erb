@@ -1,6 +1,6 @@
 <% tasks = current_user.tasks.task_requirements %>
 
-<%= render "shared/card" do %>
+<%= render "shared/card", class: "flex flex-col" do %>
   <div class="absolute size-32 -right-1 -top-8 -rotate-5 flex items-center justify-center bg-contain bg-center bg-no-repeat"
   style="background-image: url('<%= asset_path('stickers.png') %>')">
   </div>
@@ -8,52 +8,54 @@
     <h2 class="text-3xl">Your tasks</h2>
     <p>Get stickers when you finish!</p>
   </div>
-  <div class="space-y-4">
-    <% tasks.each do |name, task| %>
-      <% done = task[:met] %>
-      <div class="text-xl border-0 flex items-center space-x-4">
-        <div class="border-2 size-4 <%= done ? 'bg-white' : '' %>"></div>
-        <% if name == :join_slack %>
-          <% if done %>
-            <p class="line-through"><%= task[:msg] %></p>
+  <div class="space-y-4 grow flex flex-col">
+    <div class="grow space-y-4">
+      <% tasks.each do |name, task| %>
+        <% done = task[:met] %>
+        <div class="text-xl border-0 flex items-center space-x-4">
+          <div class="border-2 size-4 <%= done ? 'bg-white' : '' %>"></div>
+          <% if name == :join_slack %>
+            <% if done %>
+              <p class="line-through"><%= task[:msg] %></p>
+            <% else %>
+              <button type="button"
+              data-controller="modal"
+              data-modal-target-id-value="slack-join"
+              data-action="click->modal#show"
+              class="underline underline-offset-2"><%= task[:msg] %></button>
+            <% end %>
+          <% elsif name == :link_github %>
+            <% if done %>
+              <p class="line-through"><%= task[:msg] %></p>
+            <% else %>
+              <button type="button"
+              data-controller="modal"
+              data-modal-target-id-value="github-link"
+              data-action="click->modal#show"
+              class="underline underline-offset-2"><%= task[:msg] %></button>
+            <% end %>
+          <% elsif name == :create_project %>
+            <% if done %>
+              <p class="line-through"><%= task[:msg] %></p>
+            <% else %>
+              <%= link_to task[:msg], new_project_path, class: "underline underline-offset-2" %>
+            <% end %>
+          <% elsif name == :post_journal %>
+            <% if done %>
+              <p class="line-through"><%= task[:msg] %></p>
+            <% else %>
+              <%= link_to task[:msg], projects_path, class: "underline underline-offset-2" %>
+            <% end %>
           <% else %>
-            <button type="button" 
-            data-controller="modal"
-            data-modal-target-id-value="slack-join"
-            data-action="click->modal#show"
-            class="underline underline-offset-2"><%= task[:msg] %></button>
+            <% if done %>
+              <p class="line-through"><%= task[:msg] %></p>
+            <% else %>
+              <p><%= task[:msg] %></p>
+            <% end %>
           <% end %>
-        <% elsif name == :link_github %>
-          <% if done %>
-            <p class="line-through"><%= task[:msg] %></p>
-          <% else %>
-            <button type="button" 
-            data-controller="modal"
-            data-modal-target-id-value="github-link"
-            data-action="click->modal#show"
-            class="underline underline-offset-2"><%= task[:msg] %></button>
-          <% end %>
-        <% elsif name == :create_project %>
-          <% if done %>
-            <p class="line-through"><%= task[:msg] %></p>
-          <% else %>
-            <%= link_to task[:msg], new_project_path, class: "underline underline-offset-2" %>
-          <% end %>
-        <% elsif name == :post_journal %>
-          <% if done %>
-            <p class="line-through"><%= task[:msg] %></p>
-          <% else %>
-            <%= link_to task[:msg], projects_path, class: "underline underline-offset-2" %>
-          <% end %>
-        <% else %>
-          <% if done %>
-            <p class="line-through"><%= task[:msg] %></p>
-          <% else %>
-            <p><%= task[:msg] %></p>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
+        </div>
+      <% end %>
+    </div>
     <div class="mb-1 space-y-1">
       <p class="">Click on a task to begin!</p>
       <%= render "shared/button", text: "Claim Stickers", class: "w-full", url: "https://forms.hackclub.com/t/6MhoMy5dY7us?ID=#{current_user.id}", html_options: { disabled: !current_user.tasks.completed? } %>
