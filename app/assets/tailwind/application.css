@@ -111,7 +111,9 @@
     @apply appearance-none outline-0 w-full py-2 px-6 pr-12;
   }
 
-  /* ActionText / Trix editor */
+  .pagy.nav {
+    @apply space-x-2;
+  }
 }
 
 /* Remove rendered rich text (ActionText) styles */
