@@ -1,9 +1,9 @@
 <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
-<section class="flex flex-col items-center grow space-y-6">
-  <div class="w-full max-w-4xl min-h-full flex flex-col m-8 space-y-12">
+<section class="flex flex-col items-center space-y-6 grow">
+  <div class="flex flex-col w-full max-w-4xl min-h-full m-8 space-y-12">
     <%= render "shared/card", class: "flex flex-col space-y-6" do %>
-      <div class="h-48 bg-gray-200 bg-cover bg-center -mt-6 -mx-8" style="background-image: url(<%= @project.banner.attached? ? url_for(@project.banner) : nil %>)">
+      <div class="h-48 -mx-8 -mt-6 bg-gray-200 bg-center bg-cover" style="background-image: url(<%= @project.banner.attached? ? url_for(@project.banner) : nil %>)">
       </div>
       <div class="space-y-2">
         <div class="flex items-start">
@@ -32,15 +32,15 @@
         <div class="flex items-center space-x-4">
           <p>Created by <%= render "shared/user_inline", user: @project.user %></p>
           <% if @project.tier %>
-            <p class="bg-bp-dark px-3 rounded-full">Tier <%= @project.tier %></p>
+            <p class="px-3 rounded-full bg-bp-dark">Tier <%= @project.tier %></p>
           <% end %>
         </div>
         <div class="flex items-center space-x-4">
           <div class="flex items-center space-x-2">
-            <%= inline_svg "icons/micro-eye.svg", class: "size-4" %><p class="">WIP views</p>
+            <%= inline_svg "icons/micro-eye.svg", class: "size-4" %><p class=""><%= pluralize(@project.view_count, "view") %></p>
           </div>
           <div class="flex items-center space-x-2">
-            <%= inline_svg "icons/micro-users.svg", class: "size-4" %><p class=""><%= pluralize(@project.followers.count, "follower") %></p>
+            <%= inline_svg "icons/micro-users.svg", class: "size-4" %><p class=""><%= pluralize(@project.follow_count, "follower") %></p>
           </div>
         </div>
       </div>
@@ -59,12 +59,12 @@
     <div 
     data-controller="modal"
     data-action="modal:show-delete-project@window->modal#show modal:hide-delete-project@window->modal#hide modal:toggle-delete-project@window->modal#toggle modal:next-delete-project@window->modal#next"
-    class="hidden fixed inset-0 z-50">
+    class="fixed inset-0 z-50 hidden">
       <div class="fixed inset-0 flex items-center justify-center p-4" data-controller="tasks-slack" data-tasks-slack-target-id-value="slack-join">
         <%= render "shared/card", html_options: { data: { modal_target: "panel" } }, class: "z-50 min-w-xl space-y-0" do %>
           <div class="flex flex-col items-center space-y-8">
             <p class="text-3xl">Delete this project?</p>
-            <div class="flex space-x-4 w-full justify-evenly">
+            <div class="flex w-full space-x-4 justify-evenly">
               <div class="w-full">
                 <%= render "shared/button", text: "Cancel", variant: :outline, class: "w-full", html_options: { data: { controller: "modal", action: "click->modal#hide", modal_target_id_value: "delete-project" } } %>
               </div>
@@ -74,7 +74,7 @@
             </div>
           </div>
         <% end %>
-        <div data-modal-target="overlay" class="fixed inset-0 bg-black/50 z-40"></div>
+        <div data-modal-target="overlay" class="fixed inset-0 z-40 bg-black/50"></div>
       </div>
     </div>
   <% end %>

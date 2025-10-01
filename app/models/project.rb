@@ -283,6 +283,16 @@ class Project < ApplicationRecord
     user.followed_projects.include?(self)
   end
 
+  def follow_count
+    followers.count
+  end
+
+  def view_count
+    Ahoy::Event.where(name: "project_view")
+      .where("properties @> ?", { project_id: id }.to_json)
+      .count("DISTINCT ((properties->>'user_id')::bigint)") - 1
+  end
+
   private
 
   def normalize_repo_link
