@@ -1,7 +1,6 @@
-| title | The Talk |
-| --- | --- |
+| title       | About cost                            |
+| ----------- | ------------------------------------- |
 | description | A quick not about Hack Club and cost. |
-
 
 # The Relationship Between Hack Club and Cost
 
@@ -11,7 +10,7 @@ However,
 
 # We do not have infinite money!
 
-Every dollar we spend, we need to fundraise ourselves. We would like to make it last to create as many cool projects as possible. 
+Every dollar we spend, we need to fundraise ourselves. We would like to make it last to create as many cool projects as possible.
 
 That said, please always do what you can to select the cheaper option while making a project. This could include the following
 
