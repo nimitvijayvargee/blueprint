@@ -18,7 +18,7 @@
         <ul class="list-disc list-inside indent-4">
           <% version.object_changes.each do |name, value| %>
             <% next if name == "updated_at" %>
-            <li><%= name %>: <%= value[0] %> → <%= value[1] %></li>
+            <li><%= name %>: <%= truncate(value[0].to_s, length: 50) %> → <%= truncate(value[1].to_s, length: 50) %></li>
           <% end %>
         </ul>
       <% end %>
