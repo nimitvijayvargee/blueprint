@@ -101,6 +101,7 @@ Rails.application.routes.draw do
     constraints AdminConstraint do
       mount MissionControl::Jobs::Engine, at: "jobs"
       mount Flipper::UI.app(Flipper), at: "flipper"
+      mount Blazer::Engine, at: "blazer"
 
       get "/" => "static_pages#index", as: :root
 
