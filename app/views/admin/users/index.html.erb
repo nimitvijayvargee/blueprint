@@ -14,9 +14,9 @@
     <!-- Header row -->
     <div class="grid grid-cols-12 p-3 text-lg border-b-2 border-white">
       <div class="col-span-1">ID</div>
-      <div class="col-span-3">Name</div>
+      <div class="col-span-2">Name</div>
       <div class="col-span-4">Email</div>
-      <div class="col-span-1">MCG</div>
+      <div class="col-span-2">Last active</div>
       <div class="col-span-2">Slack ID</div>
       <div class="col-span1">Actions</div>
     </div>
@@ -26,7 +26,7 @@
       <% @users.each do |user| %>
         <div class="grid grid-cols-12 px-3 text-lg border-b border-white/30 last:border-0">
           <div class="flex items-center col-span-1 py-2"><%= user.id %></div>
-          <div class="flex items-center col-span-3 font-medium">
+          <div class="flex items-center col-span-2 font-medium">
             <%= link_to user.display_name, admin_user_path(user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
           </div>
           <div class="flex items-center col-span-4">
@@ -36,7 +36,7 @@
               –
             <% end %>
           </div>
-          <div class="flex items-center col-span-1"><%= user.is_mcg ? "Yes" : "No" %></div>
+          <div class="flex items-center col-span-2"><%= user.last_active ? time_ago_in_words(user.last_active) : "Never" %></div>
           <div class="flex items-center col-span-2"><%= user.slack_id.presence || "–" %></div>
           <div class="flex items-center col-span-1">
             <div class="flex items-center gap-2">
