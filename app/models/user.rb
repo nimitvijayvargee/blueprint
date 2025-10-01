@@ -629,7 +629,7 @@ class User < ApplicationRecord
     response
   end
 
-  def display_name(censor: true)
+  def display_name
     if username.present?
       username
     elsif email.present?
@@ -639,7 +639,7 @@ class User < ApplicationRecord
       elsif local.length < 2
         "*"
       else
-        censor ? "#{local[0]}**#{local[-1]}" : local
+        "#{local[0]}**#{local[-1]}"
       end
     else
       "User#{id}"

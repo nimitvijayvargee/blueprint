@@ -29,7 +29,7 @@
         <div class="grid grid-cols-12 px-3 text-lg border-b border-white/30 last:border-0">
           <div class="flex items-center col-span-1 py-2"><%= user.id %></div>
           <div class="flex items-center col-span-3 font-medium">
-            <%= link_to user.display_name(censor: false), admin_user_path(user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
+            <%= link_to user.display_name, admin_user_path(user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
           </div>
           <div class="flex items-center col-span-4">
             <% if user.email.present? %>
