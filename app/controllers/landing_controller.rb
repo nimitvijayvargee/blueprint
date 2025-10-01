@@ -5,6 +5,8 @@ class LandingController < ApplicationController
     if user_logged_in?
       redirect_to home_path
     else
+      ahoy.track "landing_visit"
+
       render layout: false
     end
     # This will render app/views/landing/index.html.erb without layout

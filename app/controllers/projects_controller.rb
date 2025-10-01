@@ -13,12 +13,14 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find_by(id: params[:id])
-    not_found unless @project
+    not_found and return unless @project
+
+    ahoy.track("project_view", project_id: @project.id, user_id: current_user.id)
   end
 
   def ship
     @project = current_user.projects.find_by(id: params[:id])
-    not_found unless @project
+    not_found and return unless @project
 
     repo_linked = @project.repo_link.present?
     desc_ok = @project.description.to_s.strip.length >= 50
