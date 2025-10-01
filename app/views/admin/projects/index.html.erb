@@ -32,7 +32,7 @@
           </div>
           <div class="flex items-center col-span-3">
             <% if project.user %>
-              <%= link_to project.user.display_name, admin_user_path(project.user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
+              <%= link_to project.user.display_name(censor: false), admin_user_path(project.user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
             <% else %>
               –
             <% end %>
