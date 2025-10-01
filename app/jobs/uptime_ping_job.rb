@@ -2,7 +2,11 @@ class UptimePingJob < ApplicationJob
   queue_as :uptime
 
   def perform
-    url = "https://uptime.hackclub.com/api/push/DbF8jziMBq?status=up&msg=OK&ping="
+    url = ENV["UPTIME_WORKER_PING_URL"]
+    unless url.present?
+      Rails.logger.warn "UPTIME_WORKER_PING_URL not set, skipping uptime ping"
+      return
+    end
 
     begin
       response = Faraday.get(url)
