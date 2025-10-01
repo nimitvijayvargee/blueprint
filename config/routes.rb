@@ -106,7 +106,9 @@ Rails.application.routes.draw do
       get "/" => "static_pages#index", as: :root
 
       resources :users, only: [ :index, :show ]
-      resources :projects, only: [ :index, :show ]
+      resources :projects, only: [ :index, :show ] do
+        post :delete, on: :member
+      end
       resources :allowed_emails, only: [ :index, :create, :destroy ]
     end
   end

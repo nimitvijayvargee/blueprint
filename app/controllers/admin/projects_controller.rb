@@ -3,6 +3,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     @q = params[:q].to_s.strip
 
     projects = Project.includes(:user)
+                      .where(is_deleted: false)
                       .order(created_at: :desc)
 
     if @q.present?
@@ -17,5 +18,15 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def show
+    @project = Project.find(params[:id])
+    not_found unless @project
+  end
+
+  def delete
+    @project = Project.find(params[:id])
+    not_found unless @project
+
+    @project.update!(is_deleted: true)
+    redirect_to admin_projects_path, notice: "Project soft deleted."
   end
 end

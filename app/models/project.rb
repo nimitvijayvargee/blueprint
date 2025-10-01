@@ -283,7 +283,7 @@ class Project < ApplicationRecord
     user.followed_projects.include?(self)
   end
 
-  def follow_count
+  def follower_count
     followers.count
   end
 

@@ -1,8 +1,9 @@
 <% user = local_assigns[:user] %>
+<% admin_view = local_assigns[:admin_view] || false%>
 <% avatar_classes = tw("inline-block size-7 rounded-sm align-middle", local_assigns[:avatar_classes]) %>
 
 <% if user %>
-  <a href="<%= user_path(user) %>">
+  <a href="<%= admin_view ? admin_user_path(user) : user_path(user) %>">
     <img src="<%= user.avatar_url %>" alt="<%= user.display_name %>" class="<%= avatar_classes %>" />
     <span class="underline"><%= user.display_name %><%= user.admin? ? "⚡" : "" %></span>
   </a>

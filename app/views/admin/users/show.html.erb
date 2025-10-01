@@ -21,13 +21,13 @@
     <%= render "shared/card", class: "space-y-2" do %>
       <p class="text-2xl">User stats</p>
       <div>
-        <%= render "admin/pill", type: :boolean, value: @user.is_banned, invert: true do %>
+        <%= render "admin/pill", type: :boolean, value: @user.is_banned do %>
           <p>Banned:</p>
         <% end %>
         <%= render "admin/pill", type: @user.admin? ? :warning : :none, value: @user.admin? ? "Admin" : "User" do %>
           <p>Role:</p>
         <% end %>
-        <%= render "admin/pill", type: :boolean, value: @user.is_mcg?, invert: true do %>
+        <%= render "admin/pill", type: :boolean, value: @user.is_mcg? do %>
           <p>MCG:</p>
         <% end %>
       </div>
@@ -44,7 +44,7 @@
         <summary>Show projects</summary>
         <ul class="list-disc list-inside">
           <% @user.projects.each do |project| %>
-            <li><%= link_to project.title, admin_project_path(project), class: "underline" %> - <%= project.review_status || "unreviewed" %></li>
+            <li><%= link_to project.title, admin_project_path(project), class: "underline" %> - <%= project.review_status || "not_submitted" %> - <% pluralize(project.journal_entries.sum(:duration_seconds) / 3600, "hour") %></li>
           <% end %>
         </ul>
       </details>
