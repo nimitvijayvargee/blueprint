@@ -28,6 +28,8 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :is_banned, inclusion: { in: [ true, false ] }
 
+  has_paper_trail
+
   def self.exchange_slack_token(code, redirect_uri)
     response = Faraday.post("https://slack.com/api/oauth.v2.access",
                             {

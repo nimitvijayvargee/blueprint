@@ -1,0 +1,27 @@
+<% type = local_assigns[:type] %>
+<% value = local_assigns[:value] %>
+<% invert = local_assigns[:invert] || false %>
+
+<% base_class = "block px-3 leading-5 rounded-full text-bp-dark" %>
+
+<div class="flex items-center space-x-2">
+  <%= yield %>
+  <% case type %>
+    <% when :boolean %>
+      <% if value.nil? %>
+        <p class="<%= base_class %> bg-gray-200">Unknown</p>
+      <% elsif invert ? !value : value %>
+        <p class="<%= base_class %> bg-bp-success"><%= invert ? 'No' : 'Yes' %></p>
+      <% else %>
+        <p class="<%= base_class %> bg-bp-danger"><%= invert ? 'Yes' : 'No' %></p>
+      <% end %>
+    <% when :success %>
+      <p class="<%= base_class %> bg-bp-success"><%= value %></p>
+    <% when :warning %>
+      <p class="<%= base_class %> bg-bp-warning"><%= value %></p>
+    <% when :danger %>
+      <p class="<%= base_class %> bg-bp-danger"><%= value %></p>
+    <% else %>
+      <p class="<%= base_class %> bg-gray-200"><%= value %></p>
+  <% end %>
+</div>

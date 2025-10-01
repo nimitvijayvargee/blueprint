@@ -1,0 +1,28 @@
+<% object = local_assigns[:object] %>
+
+<%# preload whodunit ids %>
+<% 
+  user_ids = object.versions.map(&:whodunnit).compact.uniq
+  users = User.where(id: user_ids).index_by { |u| u.id.to_s }
+%>
+
+<% if object.versions.empty? %>
+  <p>No audit log entries</p>
+<% else %>
+  <ul class="list-disc list-inside">
+    <% object.versions.reverse_each do |version| %>
+      <% user = users[version.whodunnit] %>
+      <% action = version.event == "create" ? "created" : "updated" %>
+      <li><%= render "shared/user_inline", user: user %> <%= action %> this <span title="<%= version.created_at %>"><%= time_ago_in_words(version.created_at) %> ago</span></li>
+      <% if version.event == "update" %>
+        <ul class="list-disc list-inside indent-4">
+          <% version.object_changes.each do |name, value| %>
+            <% next if name == "updated_at" %>
+            <li><%= name %>: <%= value[0] %> → <%= value[1] %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+

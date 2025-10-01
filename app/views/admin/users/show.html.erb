@@ -1,4 +1,46 @@
-<div>
-  <h1 class="font-bold text-4xl">Admin::Users#show</h1>
-  <p>Find me in app/views/admin/users/show.html.erb</p>
-</div>
+<section class="space-y-6">
+  <%= render "shared/button", text: "Back", url: admin_users_path, class: "py-0" %>
+  <div class="flex items-center justify-between">
+    <h1 class="pb-2 text-4xl">User #<%= @user.id %>, <%= render "shared/user_inline", avatar_classes: "size-10 -mt-2", user: @user %></h1>
+  </div>
+  <div class="grid grid-cols-2 gap-8">
+    <%= render "shared/card", class: "space-y-2" do %>
+      <p class="text-2xl">User information</p>
+      <div>
+        <p>ID: <%= @user.id %></p>
+        <p>Username: <%= @user.username %> (<%= @user.display_name %>)</p>
+        <p>Email: <a class="underline" href="mailto:<%= @user.email %>"><%= @user.email %></a></p>
+        <p>Slack ID: <%= @user.slack_id %></p>
+        <p>GitHub username: <a class="underline" href="https://github.com/<%= @user.github_username %>"><%= @user.github_username %></a></p>
+        <p>Joined: <%= @user.created_at %></p>
+        <p>Last active: <%= @user.last_active || "Never" %></p>
+        <p>Updated: <%= @user.updated_at %></p>
+      </div>
+      
+    <% end%>
+    <%= render "shared/card", class: "space-y-2" do %>
+      <p class="text-2xl">User stats</p>
+      <div>
+        <%= render "admin/pill", type: :boolean, value: @user.is_banned, invert: true do %>
+          <p>Banned:</p>
+        <% end %>
+        <%= render "admin/pill", type: :boolean, value: @user.admin? do %>
+          <p>Admin:</p>
+        <% end %>
+        <%= render "admin/pill", type: :boolean, value: @user.is_mcg?, invert: true do %>
+          <p>MCG:</p>
+        <% end %>
+      </div>
+      <div>
+        <p>Projects: <%= @user.projects.count %> (<%= @user.projects.where.not(review_status: nil).count %> shipped)</p>
+        <p>Journal entries: <%= @user.journal_entries.count %></p>
+        <p>Total hours: <%= @user.journal_entries.sum(:duration_seconds) / 3600 %> (<%= @user.journal_entries.joins(:project).where.not(projects: { review_status: nil }).sum(:duration_seconds) / 3600 %> shipped)</p>
+        <p>Following: <%= @user.followed_projects.count %></p>
+      </div>
+    <% end %>
+    <%= render "shared/card", class: "space-y-2 col-span-2" do %>
+      <p class="text-2xl">Audit log</p>
+      <%= render "admin/audit_log", object: @user %>
+    <% end %>
+  </div>
+</section>

@@ -16,5 +16,7 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def show
+    @user = User.find(params[:id])
+    not_found unless @user
   end
 end

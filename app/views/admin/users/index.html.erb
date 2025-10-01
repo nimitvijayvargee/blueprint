@@ -1,7 +1,5 @@
-<div class="mb-10">
-  <%= render "shared/button", text: "Back", url: admin_root_path, class: "py-0" %>
-</div>
 <section class="space-y-6">
+  <%= render "shared/button", text: "Back", url: admin_root_path, class: "py-0" %>
   <div class="flex items-center justify-between">
     <h1 class="pb-2 text-4xl">All Users</h1>
     <%= form_with url: admin_users_path, method: :get, local: true, class: "w-full max-w-2xl" do %>

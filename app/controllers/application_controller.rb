@@ -6,8 +6,17 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_paper_trail_whodunnit
+  before_action :update_last_active
 
   def not_found
     raise ActionController::RoutingError.new("Not Found")
+  end
+
+  private
+
+  def update_last_active
+    return unless current_user
+
+    current_user.update_column(:last_active, Time.current)
   end
 end

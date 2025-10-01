@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_01_142440) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_01_194454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -419,6 +419,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_142440) do
     t.boolean "is_mcg", default: true, null: false
     t.string "github_access_token"
     t.string "github_username"
+    t.datetime "last_active"
   end
 
   create_table "versions", force: :cascade do |t|
