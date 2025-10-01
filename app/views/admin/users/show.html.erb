@@ -8,7 +8,7 @@
       <p class="text-2xl">User information</p>
       <div>
         <p>ID: <%= @user.id %></p>
-        <p>Username: <%= @user.username %> (<%= @user.display_name %>)</p>
+        <p>Username: <%= @user.username || "-" %> (<%= @user.display_name %>)</p>
         <p>Email: <a class="underline" href="mailto:<%= @user.email %>"><%= @user.email %></a></p>
         <p>Slack ID: <%= @user.slack_id %></p>
         <p>GitHub username: <a class="underline" href="https://github.com/<%= @user.github_username %>"><%= @user.github_username %></a></p>
