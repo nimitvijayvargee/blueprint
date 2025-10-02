@@ -8,11 +8,14 @@
     <div class="max-w-6xl space-y-6">
       <div class="space-y-6">
         <p class="text-4xl">Tasks</p>
+        <div class="grid grid-cols-3 gap-6">
+          
+        </div>
         <p class="text-4xl">Dashboards</p>
-        <div class="grid grid-cols-3 gap-6 ">
+        <div class="grid grid-cols-3 gap-6">
           <%= render "shared/button", variant: :outline, text: "Projects (#{Project.count.to_i})", url: admin_projects_path %>
           <%= render "shared/button", variant: :outline, text: "Users (#{User.count.to_i})", url: admin_users_path %>
-          <%= render "shared/button", variant: :outline, text: "Allowed Emails (#{AllowedEmail.count.to_i})", url: admin_allowed_emails_path %>
+          <%# render "shared/button", variant: :outline, text: "Allowed Emails (#{AllowedEmail.count.to_i})", url: admin_allowed_emails_path %>
           <%= render "shared/button", variant: :outline, text: "Flipper", url: "/admin/flipper" %>
           <%= render "shared/button", variant: :outline, text: "Jobs", url: "/admin/jobs" %>
           <%= render "shared/button", variant: :outline, text: "Blazer", url: "/admin/blazer" %>
