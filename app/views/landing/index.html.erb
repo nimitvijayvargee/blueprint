@@ -33,14 +33,14 @@
     <main data-controller="landing">
       <div class="fixed top-8 left-0 z-[100]">
         <a href="https://hackclub.com?utm_source=blueprint" target="_blank">
-          <%= inline_svg 'hackclub-logo.svg', class: 'h-16' %>
+          <%= inline_svg 'hackclub-logo.svg', class: 'h-10 md:h-16' %>
         </a>
       </div>
-      <div class="fixed top-8 right-8 z-[100]">
+      <div class="fixed top-4 md:top-8 right-4 md:right-8 z-[100]">
         <% if current_user.present? %>
-          <%= render "shared/button", url: home_path, text: "Go home", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-xl" %>
+          <%= render "shared/button", url: home_path, text: "Go home", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-base md:text-xl" %>
         <% else %>
-          <%= render "shared/button", url: login_path, text: "Log in!", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-xl" %>
+          <%= render "shared/button", url: login_path, text: "Log in!", variant: :outline, class: "bg-bp-dark border-2 px-4 py-2 text-base md:text-xl" %>
         <% end %>
       </div>
 
@@ -63,46 +63,46 @@
         <img src="<%= image_path('hero.png') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
         
         <!-- Hero title -->
-        <div class="absolute top-0 left-0 right-0 flex flex-col items-center justify-center min-h-screen space-y-32" data-landing-target="heroContent">
+        <div class="absolute top-0 left-0 right-0 flex flex-col items-center justify-center min-h-screen space-y-20" data-landing-target="heroContent">
           <div class="space-y-2">
             <div class="relative flex flex-col items-center">
-              <h1 class="text-[10rem]/40 font-rcgl-full">Blueprint</h1>
-              <p class="p-1 ml-auto -mr-8 text-4xl rotate-5 bg-bp-dark -mt-7">...then build</p>
+              <h1 class="text-7xl md:text-[10rem]/40 font-rcgl-full">Blueprint</h1>
+              <p class="p-0.5 md:p-1 ml-auto text-base -mr-3 md:-mr-8 md:text-4xl rotate-5 bg-bp-dark -mt-3 md:-mt-7">...then build</p>
             </div>
-            <div class="flex flex-col -ml-12">
-              <h2 class="text-3xl text-center mr-52">Design a hardware project,</h2>
-              <p class="text-xl text-right"> and we'll pay for hardware to build it!<sup>*</sup></p>
+            <div class="flex flex-col md:-ml-12">
+              <h2 class="text-xl text-center md:text-3xl md:mr-52">Design a hardware project,</h2>
+              <p class="text-sm text-center md:text-xl md:text-right"> and we'll pay for hardware to build it!<sup>*</sup></p>
             </div>
           </div>
-          <div class="flex flex-col items-center px-12 py-8 space-y-2 text-2xl border-2 bg-bp-dark">
-            <p class="text-3xl uppercase">Get free stickers</p>
+          <div class="flex flex-col items-center px-4 py-4 space-y-2 text-sm border-2 md:px-12 md:py-8 md:text-2xl bg-bp-dark">
+            <p class="text-lg uppercase md:text-3xl">Get free stickers</p>
             <div class="flex" data-controller="email-redirect" data-email-redirect-login-url-value="<%= login_path %>">
-              <input type="email" data-email-redirect-target="input" class="text-left py-1.5 px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com" data-action="keydown->email-redirect#checkEnter" />
+              <input type="email" data-email-redirect-target="input" class="text-left md:py-1.5 py-1 px-2 md:px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com" data-action="keydown->email-redirect#checkEnter" />
               <button type="button" data-action="click->email-redirect#go" class="w-full px-6 bg-white border-2 border-l-0 border-white text-bp-dark hover:bg-gray-200 hover:border-gray-200">Join</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="pb-12 space-y-18">
-        <p class="text-5xl text-center">How does this work?</p>
-        <div class="flex justify-center px-8 text-center">
-          <div class="grid max-w-6xl grid-cols-4 gap-12">
-            <div class="flex flex-col p-8 space-y-4 border-2 bg-bp-dark">
-              <p class="text-2xl font-bold">Design</p>
-              <p class="flex items-center justify-center grow">Create your hardware designs in CAD</p>
+      <div class="pb-12 mx-4 space-y-18">
+        <p class="text-3xl text-center md:text-5xl">How does this work?</p>
+        <div class="flex justify-center px-4 text-center">
+          <div class="grid max-w-6xl grid-cols-2 gap-6 md:gap-12 md:grid-cols-4">
+            <div class="flex flex-col p-4 space-y-4 border-2 md:p-8 bg-bp-dark">
+              <p class="text-lg font-bold md:text-2xl">Design</p>
+              <p class="flex items-center justify-center text-sm grow md:text-base">Create your hardware designs in CAD</p>
             </div>
-            <div class="flex flex-col p-8 space-y-4 border-2 bg-bp-dark">
-              <p class="text-2xl font-bold">Submit</p>
-              <p class="flex items-center justify-center grow">We'll review your design and get back to you</p>
+            <div class="flex flex-col p-4 space-y-4 border-2 md:p-8 bg-bp-dark">
+              <p class="text-lg font-bold md:text-2xl">Submit</p>
+              <p class="flex items-center justify-center text-sm grow md:text-base">We'll review your design and get back to you</p>
             </div>
-            <div class="flex flex-col p-8 space-y-4 border-2 bg-bp-dark">
-              <p class="text-2xl font-bold">Build</p>
-              <p class="flex items-center justify-center grow">Get funding to make your project real</p>
+            <div class="flex flex-col p-4 space-y-4 border-2 md:p-8 bg-bp-dark">
+              <p class="text-lg font-bold md:text-2xl">Build</p>
+              <p class="flex items-center justify-center text-sm grow md:text-base">Get funding to make your project real</p>
             </div>
-            <div class="flex flex-col p-8 space-y-4 border-2 bg-bp-dark">
-              <p class="text-2xl font-bold">Share</p>
-              <p class="flex items-center justify-center grow">Ship your creation to get tools for your next project</p>
+            <div class="flex flex-col p-4 space-y-4 border-2 md:p-8 bg-bp-dark">
+              <p class="text-lg font-bold md:text-2xl">Share</p>
+              <p class="flex items-center justify-center text-sm grow md:text-base">Ship your creation to get tools for your next project</p>
             </div>
           </div>
         </div>
@@ -210,15 +210,15 @@
       ] %>
 
       <div class="space-y-12">
-        <p class="text-3xl text-center">Here's what others are working on</p>
+        <p class="text-xl text-center md:text-3xl">Here's what others are working on</p>
         <div class="overflow-hidden">
-          <div class="flex space-x-8 space-y-8 carousel h-84">
+          <div class="flex h-64 space-x-8 space-y-8 carousel md:h-84">
             <% featured_projects.shuffle.each do |project| %>
-              <a href="<%= project[:url] %>" target="_blank" rel="noopener noreferrer" class="flex flex-col h-full w-72 shrink-0 bg-bp-darker" data-carousel-target="item">
-                <div class="h-40 bg-gray-200 bg-center bg-no-repeat bg-cover" style="background-image: url(<%= project[:image] %>)"></div>
-                <div class="flex flex-col p-4 space-y-2 grow">
-                  <p class="text-xl font-bold"><%= project[:title] %> <span class="text-xs">by <%= project[:author] %></span></p>
-                  <p><%= project[:description] %></p>
+              <a href="<%= project[:url] %>" target="_blank" rel="noopener noreferrer" class="flex flex-col w-40 h-full md:w-72 shrink-0 bg-bp-darker" data-carousel-target="item">
+                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url(<%= project[:image] %>)"></div>
+                <div class="flex flex-col p-2 space-y-2 md:p-4 grow">
+                  <p class="text-base font-bold md:text-xl"><%= project[:title] %> <span class="text-xs">by <%= project[:author] %></span></p>
+                  <p class="text-xs md:text-base"><%= project[:description] %></p>
                 </div>
               </a>
             <% end %>
@@ -234,54 +234,57 @@
     <div class="flex flex-col items-center w-full px-8">
       
       <!-- What is Hack Club Section -->
-      <section class="w-full max-w-6xl py-24">
-        <div class="flex flex-col items-center px-8">
-          <h2 class="mb-8 text-4xl font-bold text-center">What is Hack Club?</h2>
-          <div class="flex flex-col max-w-4xl px-16 py-10 border-2 bg-hatch border-white/25">
-            <p class="text-xl leading-relaxed text-center">
+      <section class="w-full max-w-6xl md:py-24">
+        <div class="flex flex-col items-center px-0 md:px-8">
+          <h2 class="mb-8 text-3xl font-bold text-center md:text-4xl">What is Hack Club?</h2>
+          <div class="flex flex-col max-w-4xl px-4 py-5 border-2 md:px-16 md:py-10 bg-hatch border-white/25">
+            <p class="text-base leading-relaxed text-center md:text-xl">
               Hack Club is a global network of high school hackers and makers. We're a nonprofit that supports students who want to build cool things with code and hardware. Blueprint is one of our programs where we fund your hardware projects and help you learn by building.
             </p>
           </div>
         </div>
       </section>
+
+      <% faq = [
+        {
+          question: "When does this program end?",
+          answer: "Currently, the end-date of Blueprint is December 1st"
+        },
+        {
+          question: "How many projects can I make?",
+          answer: "As many as you like! We just ask that you only do one of each starter project"
+        },
+        {
+          question: "Who can apply?",
+          answer: "Any student currently enrolled in high school!"
+        },
+        {
+          question: "Can I double dip with Summer of Making or any other Hack Club program?",
+          answer: "No! Double-dipping is not allowed. If you have coding time for your project, you can journal it, get tickets, and get prizes from the tool bag."
+        },
+        {
+          question: "Do I need prior experience?",
+          answer: "Not at all! We welcome beginners and provide resources to help you learn and build your project successfully."
+        },
+        {
+          question: "If I need more money, can I pay myself?",
+          answer: "Yes!"
+        }
+      ] %>
       
       <!-- FAQ Section -->
-      <section class="w-full max-w-6xl py-24">
-        <div class="flex flex-col items-center px-8">
-          <h2 class="text-4xl font-bold text-center">FAQ</h2>
-          <div class="h-6"></div>
-          <div class="grid w-full grid-cols-3 gap-8">
-            <div class="flex flex-col px-8 py-6 border-2 bg-hatch border-white/25">
-              <h3 class="mb-3 text-xl font-bold">When does this program end?</h3>
-              <p class="text-base">Currently, the end-date of Blueprint is December 1st</p>
-            </div>
-            
-            <div class="flex flex-col px-8 py-6 border-2 bg-hatch border-white/25">
-              <h3 class="mb-3 text-xl font-bold">How many projects can I make?</h3>
-              <p class="text-base">As many as you like! We just ask that you only do one of each starter project</p>
-            </div>
-            
-            <div class="flex flex-col px-8 py-6 border-2 bg-hatch border-white/25">
-              <h3 class="mb-3 text-xl font-bold">Who can apply?</h3>
-              <p class="text-base">Any student currently enrolled in high school!</p>
-            </div>
-            
-            <div class="flex flex-col px-8 py-6 border-2 bg-hatch border-white/25">
-              <h3 class="mb-3 text-xl font-bold">Can I double dip with Summer of Making or any other Hack Club program?</h3>
-              <p class="text-base">No! Double-dipping is not allowed. If you have coding time for your project, you can journal it, get tickets, and get prizes from the tool bag.</p>
-            </div>
-            
-            <div class="flex flex-col px-8 py-6 border-2 bg-hatch border-white/25">
-              <h3 class="mb-3 text-xl font-bold">Do I need prior experience?</h3>
-              <p class="text-base">Not at all! We welcome beginners and provide resources to help you learn and build your project successfully.</p>
-            </div>
-            
-            <div class="flex flex-col px-8 py-6 border-2 bg-hatch border-white/25">
-              <h3 class="mb-3 text-xl font-bold">If I need more money, can I pay myself?</h3>
-              <p class="text-base">Yes!</p>
-            </div>
+      <section class="w-full max-w-6xl py-8 md:py-12">
+        <div class="flex flex-col items-center space-y-8 md:px-8">
+          <h2 class="text-3xl font-bold text-center md:text-4xl">FAQ</h2>
+          <div class="grid w-full grid-cols-1 gap-4 md:gap-8 md:grid-cols-3">
+            <% faq.each do |item| %>
+              <div class="flex flex-col px-4 py-3 border-2 md:px-8 md:py-6 bg-hatch border-white/25">
+                <h3 class="mb-3 text-sm font-bold md:text-xl"><%= item[:question] %></h3>
+                <p class="text-xs md:text-base"><%= item[:answer] %></p>
+              </div>
+            <% end %>
           </div>
-          <div class="pt-16 text-center">
+          <div class="text-center">
             <div class="h-6"></div>
             <a href="/faq" class="text-lg underline text-bp-warning hover:text-white">
               View Full FAQ →
@@ -291,84 +294,18 @@
       </section>
       
       <!-- Get Started Section -->
-      <section class="w-full max-w-6xl py-24">
-        <div class="flex flex-col items-center space-y-2 text-2xl">
-          <p class="text-3xl uppercase">Get Started</p>
+      <section class="w-full max-w-6xl py-12 pb-24">
+        <div class="flex flex-col items-center space-y-2 text-sm md:text-2xl">
+          <p class="text-lg uppercase md:text-3xl">Get Started</p>
           <div class="flex" data-controller="email-redirect" data-email-redirect-login-url-value="<%= login_path %>">
-            <input type="email" data-email-redirect-target="input" class="text-left py-1.5 px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com">
+            <input type="email" data-email-redirect-target="input" class="text-left md:py-1.5 py-1 px-2 md:px-4 appearance-none outline-0 border-2 border-r-0" placeholder="orpheus@hackclub.com" data-action="keydown->email-redirect#checkEnter" />
             <button type="button" data-action="click->email-redirect#go" class="w-full px-6 bg-white border-2 border-l-0 border-white text-bp-dark hover:bg-gray-200 hover:border-gray-200">Join</button>
           </div>
         </div>
       </section>
+      <footer class="py-8 mx-4">
+        <p class="text-white/75">A project by <a href="https://hackclub.com?utm_source=blueprint" class="underline" target="_blank">Hack Club</a> for teenagers, by teenagers</p>
+      </footer>
     </div>
-
-    <!-- Carousel JavaScript -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const carousel = document.getElementById('project-carousel');
-        if (!carousel) return;
-        
-        // Individual card wrapping variables
-        let scrollSpeed = 0.5; // Pixels per frame
-        let isAutoScrolling = true;
-        
-        const cardWidth = 320; // 320px (w-80 + margin)
-        const cards = Array.from(carousel.children);
-        
-        // Set up carousel container and individual card positioning
-        carousel.style.position = 'relative';
-        carousel.style.height = '400px'; // Match h-[400px]
-        
-        cards.forEach((card, index) => {
-          card.style.position = 'absolute';
-          card.style.left = `${index * cardWidth}px`;
-          card.style.top = '0';
-        });
-        
-        // Individual card animation function
-        function animateCards() {
-          if (isAutoScrolling) {
-            const containerWidth = carousel.parentElement.offsetWidth;
-            
-            cards.forEach((card) => {
-              const currentLeft = parseFloat(card.style.left) || 0;
-              const newLeft = currentLeft - scrollSpeed;
-              
-              // If card moved completely off left edge, wrap to just off the right edge
-              if (newLeft <= -cardWidth) {
-                // Calculate the rightmost card position to maintain tight spacing
-                const allPositions = cards.map(c => parseFloat(c.style.left) || 0);
-                const rightmostPosition = Math.max(...allPositions);
-                
-                // Position new card immediately after the rightmost card
-                card.style.left = `${rightmostPosition + cardWidth}px`;
-              } else {
-                card.style.left = `${newLeft}px`;
-              }
-            });
-          }
-          
-          requestAnimationFrame(animateCards);
-        }
-        
-        // Hover controls
-        carousel.addEventListener('mouseenter', () => {
-          isAutoScrolling = false;
-        });
-        
-        carousel.addEventListener('mouseleave', () => {
-          isAutoScrolling = true;
-        });
-        
-        // Touch pause
-        carousel.addEventListener('touchstart', () => {
-          isAutoScrolling = false;
-          setTimeout(() => isAutoScrolling = true, 3000);
-        });
-        
-        // Initialize
-        animateCards();
-      });
-    </script>
   </body>
 </html>
