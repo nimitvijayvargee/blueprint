@@ -110,7 +110,7 @@ export default class extends Controller {
     const hoursValue = this.hasHoursTarget ? Number(hoursRaw) : NaN;
     const decimalsOk = !hoursRaw.includes(".") || ((hoursRaw.split(".")[1] || "").length <= 1);
     const okHours = this.hasHoursTarget
-      ? Number.isFinite(hoursValue) && hoursValue > 0 && decimalsOk
+      ? Number.isFinite(hoursValue) && hoursValue > 0 && hoursValue < 1000 && decimalsOk
       : true;
 
     // Summary validation (required, <= 60 chars)
