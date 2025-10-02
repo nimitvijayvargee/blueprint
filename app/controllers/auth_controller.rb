@@ -1,6 +1,7 @@
 class AuthController < ApplicationController
-  allow_unauthenticated_access only: %i[ index new create create_email ]
+  allow_unauthenticated_access only: %i[ index new create create_email track ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to slack_login_url, alert: "Try again later." }
+  skip_forgery_protection only: %i[ track ]
 
   layout false
 
@@ -240,6 +241,18 @@ class AuthController < ApplicationController
   def destroy
     terminate_session
     redirect_to root_path, notice: "Signed out successfully. Cya!"
+  end
+
+  # POST /auth/track
+  def track
+    email = params[:email]
+
+    if email.present?
+      EmailTrack.create(email: email)
+      head :ok
+    else
+      head :bad_request
+    end
   end
 
   private

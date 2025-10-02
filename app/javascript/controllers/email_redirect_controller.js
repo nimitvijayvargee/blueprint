@@ -11,12 +11,29 @@ export default class extends Controller {
     if (email.length > 0) {
       url.searchParams.set("email", email)
     }
-    window.location.assign(url.toString())
+    this.track(email).then(() => {
+      window.location.assign(url.toString())
+    })
   }
   
   checkEnter(event) {
     if (event.key === "Enter") {
       this.go()
+    }
+  }
+
+  async track(email) {
+    // post to auth track with email in body
+    try {
+      await fetch("/auth/track", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+    } catch (e) {
+      console.error(e)
     }
   }
 }

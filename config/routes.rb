@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   get "auth/github/callback" => "auth#create_github", as: :github_callback
   post "auth/email" => "auth#create_email", as: :login_email
   delete "auth/logout" => "auth#destroy", as: :logout
+  post "auth/track" => "auth#track", as: :auth_track
 
   get "home" => "home#index", as: :home
 
