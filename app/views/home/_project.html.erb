@@ -8,7 +8,7 @@
           <%= link_to project_path(project), class: "grow" do %>
               <p class="text-2xl"><%= project.title %></p>
           <% end %>
-          <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-base bg-bp-success text-bp-dark hover:bg-bp-success/80" %>
+          <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-base bg-bp-warning text-bp-dark hover:bg-bp-warning/80" %>
           <%= render "shared/button", url: ship_project_path(project), variant: :inset, text: "Ship", class: "text-base " %>
       </div>
   </div>
