@@ -18,8 +18,9 @@
         <ul class="list-disc list-inside indent-4">
           <% version.object_changes.present? && version.object_changes.each do |name, value| %>
             <% next if name == "updated_at" %>
-            <% before = value[0].nil? ? "nil" : value[0].to_s %>
-            <% after = value[1].nil? ? "nil" : value[1].to_s %>
+            <% censor = name.include?("secret") || name.include?("token") || name.include?("key") %>
+            <% before = value[0].nil? ? "nil" : (censor ? "[HIDDEN]" : value[0].to_s) %>
+            <% after = value[1].nil? ? "nil" : (censor ? "[HIDDEN]" : value[1].to_s) %>
             <li><%= name %>: <%= truncate(before, length: 50) %> → <%= truncate(after, length: 50) %></li>
           <% end %>
         </ul>
