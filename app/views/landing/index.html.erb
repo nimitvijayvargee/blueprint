@@ -279,7 +279,7 @@
           <div class="grid w-full grid-cols-1 gap-4 md:gap-8 md:grid-cols-3">
             <% faq.each do |item| %>
               <div class="flex flex-col px-4 py-3 border-2 md:px-8 md:py-6 bg-hatch border-white/25">
-                <h3 class="mb-3 text-sm font-bold md:text-xl"><%= item[:question] %></h3>
+                <h3 class="mb-3 text-sm font-bold md:text-xl text-bp-success"><%= item[:question] %></h3>
                 <p class="text-xs md:text-base"><%= item[:answer] %></p>
               </div>
             <% end %>
