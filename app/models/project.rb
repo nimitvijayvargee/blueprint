@@ -28,7 +28,7 @@
 #
 class Project < ApplicationRecord
   belongs_to :user
-  has_many :journal_entries
+  has_many :journal_entries, dependent: :destroy
   has_many :timeline_items, dependent: :destroy
   has_many :follows, dependent: :destroy
   has_many :followers, through: :follows, source: :user

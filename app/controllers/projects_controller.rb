@@ -2,24 +2,24 @@ class ProjectsController < ApplicationController
   allow_unauthenticated_access only: %i[explore show]
 
   def index
-    @projects = current_user.projects
+    @projects = current_user.projects.where(is_deleted: false)
       .order_by_recent_journal
       .includes(:banner_attachment)
   end
 
   def explore
-    @journal_entries = JournalEntry.includes(project: :user).order(created_at: :desc).limit(20)
+    @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
   end
 
   def show
-    @project = Project.find_by(id: params[:id])
+    @project = Project.find_by(id: params[:id], is_deleted: false)
     not_found and return unless @project
 
     ahoy.track("project_view", project_id: @project.id, user_id: current_user&.id)
   end
 
   def ship
-    @project = current_user.projects.find_by(id: params[:id])
+    @project = current_user.projects.find_by(id: params[:id], is_deleted: false)
     not_found and return unless @project
 
     repo_linked = @project.repo_link.present?
@@ -38,7 +38,7 @@ class ProjectsController < ApplicationController
   end
 
   def follow
-    @project = Project.where.not(user_id: current_user.id).find_by(id: params[:id])
+    @project = Project.where.not(user_id: current_user.id).find_by(id: params[:id], is_deleted: false)
     not_found unless @project
 
     current_user.follow_project!(@project)
@@ -46,7 +46,7 @@ class ProjectsController < ApplicationController
   end
 
   def unfollow
-    @project = Project.where.not(user_id: current_user.id).find_by(id: params[:id])
+    @project = Project.where.not(user_id: current_user.id).find_by(id: params[:id], is_deleted: false)
     not_found unless @project
 
     current_user.unfollow_project!(@project)
@@ -68,13 +68,13 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = current_user.projects.find_by(id: params[:id])
+    @project = current_user.projects.find_by(id: params[:id], is_deleted: false)
     not_found unless @project
     not_found unless @project.can_edit?
   end
 
   def update
-    @project = current_user.projects.find_by(id: params[:id])
+    @project = current_user.projects.find_by(id: params[:id], is_deleted: false)
     not_found and return unless @project
     not_found and return unless @project.can_edit?
 
@@ -94,11 +94,11 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project = current_user.projects.find_by(id: params[:id])
+    @project = current_user.projects.find_by(id: params[:id], is_deleted: false)
     not_found and return unless @project
     not_found and return unless @project.can_edit?
 
-    @project.destroy
+    @project.update!(is_deleted: true)
     redirect_to projects_path, notice: "Project deleted."
   end
 
