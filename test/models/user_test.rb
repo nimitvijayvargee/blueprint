@@ -8,10 +8,10 @@
 #  github_access_token :string
 #  github_username     :string
 #  is_banned           :boolean          default(FALSE), not null
-#  is_mcg              :boolean          default(TRUE), not null
+#  is_mcg              :boolean          default(FALSE), not null
 #  last_active         :datetime
 #  role                :integer          default("user"), not null
-#  timezone            :string
+#  timezone_raw        :string
 #  username            :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

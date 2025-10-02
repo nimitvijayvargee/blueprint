@@ -23,4 +23,25 @@ class UsersController < ApplicationController
   rescue StandardError => e
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
   end
+
+  def update_timezone
+    unless current_user
+      render json: { ok: false, error: "Not authenticated" }, status: :unauthorized
+      return
+    end
+
+    timezone = params[:timezone]
+    if timezone.blank?
+      render json: { ok: false, error: "Timezone parameter is required" }, status: :bad_request
+      return
+    end
+
+    if current_user.update_timezone(timezone)
+      render json: { ok: true, status: "updated", timezone: current_user.timezone_raw }
+    else
+      render json: { ok: false, error: current_user.errors.full_messages.join(", ") }, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    render json: { ok: false, error: e.message }, status: :internal_server_error
+  end
 end

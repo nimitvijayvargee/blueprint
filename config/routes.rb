@@ -86,6 +86,7 @@ Rails.application.routes.draw do
   resources :users, only: [ :show ] do
     post :invite_to_slack, on: :collection
     post :mcg_check, on: :collection
+    post :update_timezone, on: :collection
   end
 
   # Docs -> docs/docs (formerly guides)

@@ -8,10 +8,10 @@
 #  github_access_token :string
 #  github_username     :string
 #  is_banned           :boolean          default(FALSE), not null
-#  is_mcg              :boolean          default(TRUE), not null
+#  is_mcg              :boolean          default(FALSE), not null
 #  last_active         :datetime
 #  role                :integer          default("user"), not null
-#  timezone            :string
+#  timezone_raw        :string
 #  username            :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -136,7 +136,7 @@ class User < ApplicationRecord
       existing_user.update!(
         slack_id: slack_id,
         username: username_from_slack.presence || existing_user.display_name,
-        timezone: timezone.presence || existing_user.timezone,
+        timezone_raw: timezone.presence || existing_user.timezone_raw,
         avatar: avatar.presence || existing_user.avatar
       )
 
@@ -151,7 +151,7 @@ class User < ApplicationRecord
     slack_id: slack_id,
       username: username_from_slack,
       email: email,
-      timezone: timezone,
+      timezone_raw: timezone,
       avatar: avatar,
       is_banned: false
     )
@@ -234,7 +234,7 @@ class User < ApplicationRecord
       existing_user.update!(
         slack_id: slack_id,
         username: username_from_slack.presence || existing_user.username,
-        timezone: timezone.presence || existing_user.timezone,
+        timezone_raw: timezone.presence || existing_user.timezone_raw,
         avatar: avatar.presence || existing_user.avatar
       )
 
@@ -245,7 +245,7 @@ class User < ApplicationRecord
       slack_id: slack_id,
       username: username_from_slack,
       email: email,
-      timezone: timezone,
+      timezone_raw: timezone,
       avatar: avatar,
       is_banned: false
     )
@@ -664,5 +664,29 @@ class User < ApplicationRecord
 
   def avatar_url
     avatar || "https://hc-cdn.hel1.your-objectstorage.com/s/v3/c283ae01214b9052480f1e216e43dbe09a424048_image.png"
+  end
+
+  def update_timezone(new_timezone)
+    return false if new_timezone.blank?
+
+    # Validate that the timezone is a valid timezone using ActiveSupport::TimeZone
+    begin
+      ActiveSupport::TimeZone.new(new_timezone)
+      self.timezone_raw = new_timezone
+      save
+    rescue ArgumentError
+      errors.add(:timezone_raw, "is not a valid timezone")
+      false
+    end
+  end
+
+  def timezone
+    @timezone ||= timezone_raw ? ActiveSupport::TimeZone.new(timezone_raw) : nil
+  end
+
+  # Clear cached timezone when raw timezone changes
+  def timezone_raw=(value)
+    @timezone = nil
+    super(value)
   end
 end
