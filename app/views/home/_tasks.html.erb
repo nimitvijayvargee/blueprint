@@ -1,18 +1,18 @@
 <% tasks = current_user.tasks.task_requirements %>
 
 <%= render "shared/card", class: "flex flex-col" do %>
-  <div class="absolute size-32 -right-1 -top-8 -rotate-5 flex items-center justify-center bg-contain bg-center bg-no-repeat"
+  <div class="absolute flex items-center justify-center bg-center bg-no-repeat bg-contain size-32 -right-1 -top-8 -rotate-5"
   style="background-image: url('<%= asset_path('stickers.png') %>')">
   </div>
   <div class="">
     <h2 class="text-3xl">Your tasks</h2>
     <p>Get stickers when you finish!</p>
   </div>
-  <div class="space-y-4 grow flex flex-col">
-    <div class="grow space-y-4">
+  <div class="flex flex-col space-y-4 grow">
+    <div class="space-y-4 grow">
       <% tasks.each do |name, task| %>
         <% done = task[:met] %>
-        <div class="text-xl border-0 flex items-center space-x-4">
+        <div class="flex items-center space-x-4 text-xl border-0">
           <div class="border-2 size-4 <%= done ? 'bg-white' : '' %>"></div>
           <% if name == :join_slack %>
             <% if done %>
@@ -67,7 +67,7 @@
   data-controller="modal"
   data-action="modal:show-slack-join@window->modal#show modal:hide-slack-join@window->modal#hide modal:toggle-slack-join@window->modal#toggle modal:next-slack-join@window->modal#next"
   data-modal-starting-step-value="<%= (current_user.slack_user? && current_user.is_mcg?) ? 1 : 0 %>"
-  class="hidden fixed inset-0 z-50">
+  class="fixed inset-0 z-50 hidden">
   <div class="fixed inset-0 flex items-center justify-center p-4" data-controller="tasks-slack" data-tasks-slack-target-id-value="slack-join">
     <%= render "shared/card", html_options: { data: { modal_target: "panel" } }, class: "z-50 min-w-xl space-y-0" do %>
       <div data-modal-target="step" class="space-y-6">
@@ -75,8 +75,8 @@
           <p class="text-3xl">Join the Hack Club Slack</p>
           <p>Slack is where Hack Club communicates!</p>
         </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= video_tag asset_path('slack-intro.mp4'), autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
+        <div class="max-w-xl bg-gray-500">
+          <%= video_tag "https://hc-cdn.hel1.your-objectstorage.com/s/v3/db8b7c6bb2a50670b538179d0259bbe1534eff83_slack-intro.mp4", autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
         </div>
         <%= render "shared/button", 
             text: "Join the Slack!",
@@ -88,10 +88,10 @@
           <p class="text-3xl">Check your inbox!</p>
           <p>Slack has sent you an invite. (Check your spam folder)</p>
         </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= video_tag asset_path('slack-onboarding.mp4'), autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
+        <div class="max-w-xl bg-gray-500">
+          <%= video_tag "https://hc-cdn.hel1.your-objectstorage.com/s/v3/efdff6de4069213f6f35339981764014162c1735_slack-onboarding.mp4", autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
         </div>
-        <div class="bg-gray-500 max-w-xl">
+        <div class="max-w-xl bg-gray-500">
           <%= render "shared/button", 
             text: "I'm in!",
             class: "w-full", html_options: { data: { action: "click->modal#next" } } 
@@ -103,8 +103,8 @@
           <p class="text-3xl">Verify your Slack account</p>
           <p>Head over to #slack-welcome-start and "Explore the Cave"</p>
         </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= video_tag asset_path('slack-toriel.mp4'), autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
+        <div class="max-w-xl bg-gray-500">
+          <%= video_tag "https://hc-cdn.hel1.your-objectstorage.com/s/v3/05d227878ce6983c09be177e8d4f05ee94ce05dc_slack-toriel.mp4", autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
         </div>
         <%= render "shared/button", 
             text: "I'm done!",
@@ -112,7 +112,7 @@
             %>
       </div>
     <% end %>
-    <div data-modal-target="overlay" class="fixed inset-0 bg-black/50 z-40"></div>
+    <div data-modal-target="overlay" class="fixed inset-0 z-40 bg-black/50"></div>
   </div>
 </div>
 
@@ -120,16 +120,16 @@
   data-controller="modal"
   data-action="modal:show-github-link@window->modal#show modal:hide-github-link@window->modal#hide modal:toggle-github-link@window->modal#toggle modal:next-github-link@window->modal#next"
   data-modal-starting-step-value="0"
-  class="hidden fixed inset-0 z-50">
+  class="fixed inset-0 z-50 hidden">
   <div class="fixed inset-0 flex items-center justify-center p-4" data-controller="tasks-github" data-tasks-github-target-id-value="github-link">
     <%= render "shared/card", html_options: { data: { modal_target: "panel" } }, class: "z-50 min-w-xl space-y-0" do %>
       <div data-modal-target="step" class="space-y-6">
         <div>
           <p class="text-3xl">Link your GitHub account</p>
-          <p>GitHub is where you can store your project files!</p>
+          <p>GitHub is where you can store your project files!<br>We'll automatically sync your journals to GitHub</p>
         </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= video_tag asset_path('slack-intro.mp4'), autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
+        <div class="max-w-xl bg-gray-500">
+          <%= video_tag "https://hc-cdn.hel1.your-objectstorage.com/s/v3/aebc2a690812ca959742fcd99214b4ff527f0b3f_github-intro.mp4", autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
         </div>
         <%= render "shared/button", 
             text: "Link GitHub Account!",
@@ -138,35 +138,7 @@
             html_options: { data: { turbo: false } }
             %>
       </div>
-      <div data-modal-target="step" class="space-y-6">
-        <div>
-          <p class="text-3xl">Check your inbox!</p>
-          <p>Slack has sent you an invite. (Check your spam folder)</p>
-        </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= video_tag asset_path('slack-onboarding.mp4'), autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
-        </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= render "shared/button", 
-            text: "I'm in!",
-            class: "w-full", html_options: { data: { action: "click->modal#next" } } 
-            %>
-        </div>
-      </div>
-      <div data-modal-target="step" class="space-y-6">
-        <div>
-          <p class="text-3xl">Verify your Slack account</p>
-          <p>Head over to #slack-welcome-start and "Explore the Cave"</p>
-        </div>
-        <div class="bg-gray-500 max-w-xl">
-          <%= video_tag asset_path('slack-onboarding.mp4'), autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata', class: 'object-fit', type: 'video/mp4' %>
-        </div>
-        <%= render "shared/button", 
-            text: "I'm done!",
-            class: "w-full", html_options: { data: { action: "click->tasks-slack#checkVerified", tasks_slack_target: "button2" } } 
-            %>
-      </div>
     <% end %>
-    <div data-modal-target="overlay" class="fixed inset-0 bg-black/50 z-40"></div>
+    <div data-modal-target="overlay" class="fixed inset-0 z-40 bg-black/50"></div>
   </div>
 </div>
