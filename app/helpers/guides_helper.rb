@@ -8,6 +8,19 @@ module GuidesHelper
       super
     end
 
+    def image(link, title, alt_text)
+      # Convert /app/assets/images/ paths to /images/ (served from public/)
+      if link.start_with?('/app/assets/images/')
+        link = link.sub('/app/assets/images/', '/images/')
+      end
+      
+      attrs = []
+      attrs << %(src="#{ERB::Util.html_escape(link)}")
+      attrs << %(alt="#{ERB::Util.html_escape(alt_text)}") if alt_text
+      attrs << %(title="#{ERB::Util.html_escape(title)}") if title
+      "<img #{attrs.join(' ')} />"
+    end
+
     def link(href, title, content)
       href = href.to_s
       attrs = []
@@ -66,7 +79,8 @@ module GuidesHelper
         hard_wrap: true,
         filter_html: false,
         prettify: true,
-        base_url: base_url
+        base_url: base_url,
+        view_context: self
       )
       @__markdown_renderer = Redcarpet::Markdown.new(
         renderer,
