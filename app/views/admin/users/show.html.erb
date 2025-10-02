@@ -12,6 +12,7 @@
         <p>Email: <a class="underline" href="mailto:<%= @user.email %>"><%= @user.email %></a></p>
         <p>Slack ID: <%= @user.slack_id %></p>
         <p>GitHub username: <a class="underline" href="https://github.com/<%= @user.github_username %>"><%= @user.github_username %></a></p>
+        <p>Timezone: <%= @user.timezone ? ActiveSupport::TimeZone.new(@user.timezone) : "Not set" %></p>
         <p>Joined: <%= @user.created_at %></p>
         <p>Last active: <%= @user.last_active || "Never" %></p>
         <p>Updated: <%= @user.updated_at %></p>
