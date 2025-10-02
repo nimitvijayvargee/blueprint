@@ -290,7 +290,7 @@ class Project < ApplicationRecord
   def view_count
     Ahoy::Event.where(name: "project_view")
       .where("properties @> ?", { project_id: id }.to_json)
-      .count("DISTINCT ((properties->>'user_id')::bigint)") - 1
+      .count("DISTINCT ((properties->>'user_id')::bigint)")
   end
 
   private
