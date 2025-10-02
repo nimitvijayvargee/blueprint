@@ -15,7 +15,8 @@ module GuidesHelper
       attrs << %(title="#{ERB::Util.html_escape(title)}") if title
 
       if guide_internal_link?(href)
-        attrs << %(data-turbo-frame="guide_content")
+        # Remove turbo frame targeting to fix JavaScript compatibility issues
+        # attrs << %(data-turbo-frame="guide_content")
         attrs << %(data-turbo-action="advance")
       elsif !same_origin?(href)
         attrs << %(target="_blank")
