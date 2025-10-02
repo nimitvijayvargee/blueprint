@@ -8,7 +8,7 @@ This guide was donated by @alexren and was originally used for highway.hackclub.
 
 Welcome to part sourcing! Here's a ton of tips for you to optimize your part selection & costs!
 
-If you're ever unsure of your BOM, send it in #highway! People can definitely help you pick better parts and make better decisions.
+If you're ever unsure of your BOM, send it in #blueprint! People can definitely help you pick better parts and make better decisions.
 
 ## Overview
 
@@ -17,7 +17,7 @@ When picking parts, PLEASE be resourceful! Make the most out of every dollar and
 #### Do's
 
 - Lots of research into what parts to use!
-- Ask in #highway for advice on picking parts
+- Ask in #blueprint for advice on picking parts
 
 #### Don'ts
 
@@ -93,7 +93,7 @@ Arduinos are fairly outdated by todays standards
     - [3Ding](https://www.3ding.in/)
     -
 
-> confirmed more vendors? wanna add specific notes for your country? contribute [here](https://github.com/hackclub/highway/edit/main/app/views/advanced/part-sourcing.md)!! You'd be helping a ton of people!
+> confirmed more vendors? wanna add specific notes for your country? contribute [here](https://github.com/hackclub/blueprint/blob/main/docs/docs/parts-sourcing.md)!! You'd be helping a ton of people!
 
 ## Tips for specific vendors
 
