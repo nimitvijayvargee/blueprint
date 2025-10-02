@@ -42,11 +42,27 @@
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse, #000, transparent);
+  background: radial-gradient(ellipse, #000000b1, transparent);
   opacity: 0.2;
   filter: url(#grainy);
   mix-blend-mode: multiply;
   pointer-events: none;
+}
+
+.carousel {
+  animation: carousel 720s linear infinite;
+}
+
+@keyframes carousel {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 @layer components {

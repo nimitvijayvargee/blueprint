@@ -108,6 +108,7 @@ Rails.application.routes.draw do
       resources :users, only: [ :index, :show ]
       resources :projects, only: [ :index, :show ] do
         post :delete, on: :member
+        post :revive, on: :member
       end
       resources :allowed_emails, only: [ :index, :create, :destroy ]
     end

@@ -13,4 +13,10 @@ export default class extends Controller {
     }
     window.location.assign(url.toString())
   }
+  
+  checkEnter(event) {
+    if (event.key === "Enter") {
+      this.go()
+    }
+  }
 }

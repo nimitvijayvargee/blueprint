@@ -38,17 +38,23 @@
     <main>
       <div class="flex items-center justify-center min-h-screen">
         <div class="p-12 space-y-12 border-2 border-white/25 bg-hatch">
-          <div class="text-center">
+          <div class="space-y-2 text-center">
             <h1 class="text-4xl">Hey! Welcome to Blueprint!</h1>
-            <p>If you don't already have an account, we'll make one for you<p>
+            <% if params[:email].present? %>
+              <p>Join to get free stickers!<p>
+            <% else %>
+              <p>If you don't already have an account, we'll make one for you<p>
+            <% end %>
           </div>
           <div class="flex flex-col items-center space-y-4">
-          <%= render "shared/button", url: slack_login_path(redirect_to: params[:redirect_to]), text: "Log in with Hack Club Slack", class: "text-xl w-full", html_options: { data: { turbo: false } } %>
-          <div class="w-full flex items-center before:p-[1px] before:mr-2 before:bg-white before:grow after:p-[1px] after:ml-2 after:bg-white after:grow uppercase">or</div>
+            <% unless params[:email].present? %>
+              <%= render "shared/button", url: slack_login_path(redirect_to: params[:redirect_to]), text: "Log in with Hack Club Slack", class: "text-xl w-full", html_options: { data: { turbo: false } } %>
+              <div class="w-full flex items-center before:p-[1px] before:mr-2 before:bg-white before:grow after:p-[1px] after:ml-2 after:bg-white after:grow uppercase">or</div>
+            <% end %>
           <div class="w-full">
-          <%= turbo_frame_tag "login_form" do %>
-          <%= render partial: "email_form" %>
-          <% end %>
+            <%= turbo_frame_tag "login_form" do %>
+              <%= render partial: "email_form" %>
+            <% end %>
           </div>
           </div>
         </div>

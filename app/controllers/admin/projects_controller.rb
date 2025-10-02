@@ -29,4 +29,12 @@ class Admin::ProjectsController < Admin::ApplicationController
     @project.update!(is_deleted: true)
     redirect_to admin_projects_path, notice: "Project soft deleted."
   end
+
+  def revive
+    @project = Project.find(params[:id])
+    not_found unless @project
+
+    @project.update!(is_deleted: false)
+    redirect_to admin_project_path(@project), notice: "Project revived."
+  end
 end
