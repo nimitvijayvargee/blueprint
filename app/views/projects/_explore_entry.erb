@@ -1,11 +1,14 @@
 <% project = entry.project %>
 
-<%= render "shared/card" do %>
+<%= render "shared/card", class: "relative" do %>
  <div class="flex space-x-4">
     <p class="grow"><%= render "shared/user_inline", user: project.user %> published an update to <a href="<%= project_path(project) %>" class="underline"><%= project.title %></a> <%= time_ago_in_words(entry.created_at) %> ago</p>
   </div>
-  <div class="markdown timeline-journal">
+  <div class="overflow-hidden markdown timeline-journal max-h-[28rem]">
     <h1><%= entry.summary %></h1>
     <%= sanitize_marksmith_html(marksmithed(entry.content)) %>
+  </div>
+  <div class="absolute left-0 right-0 h-30 bottom-10 bg-gradient-to-t from-bp-darker to-transparent">
+    <%= link_to "See all →", project_path(project), class: "absolute -bottom-4 left-8 underline" %>
   </div>
 <% end %>
