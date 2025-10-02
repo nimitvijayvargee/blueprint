@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def invite_to_slack
-    ahoy.track("slack_user_create", user_id: current_user.id)
+    ahoy.track("slack_user_create", user_id: current_user&.id)
     current_user.invite_to_slack!
     render json: { ok: true, status: "done", user_id: current_user.id }
   rescue StandardError => e
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   def mcg_check
     current_user.refresh_profile!
     if current_user.is_mcg?
-      ahoy.track("slack_login", from_mcg: true, user_id: current_user.id)
+      ahoy.track("slack_login", from_mcg: true, user_id: current_user&.id)
     end
     render json: { ok: true, status: "done", user_id: current_user.id, is_mcg: current_user.is_mcg? }
   rescue StandardError => e

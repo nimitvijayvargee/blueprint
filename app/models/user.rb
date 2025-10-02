@@ -8,7 +8,7 @@
 #  github_access_token :string
 #  github_username     :string
 #  is_banned           :boolean          default(FALSE), not null
-#  is_mcg              :boolean          default(TRUE), not null
+#  is_mcg              :boolean          default(FALSE), not null
 #  last_active         :datetime
 #  role                :integer          default("user"), not null
 #  timezone            :string
@@ -30,6 +30,7 @@ class User < ApplicationRecord
   validates :is_banned, inclusion: { in: [ true, false ] }
 
   has_paper_trail
+  has_recommended :projects
 
   def self.exchange_slack_token(code, redirect_uri)
     response = Faraday.post("https://slack.com/api/oauth.v2.access",

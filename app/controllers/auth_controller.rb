@@ -70,9 +70,8 @@ class AuthController < ApplicationController
       end
 
       if validate_otp(email, otp)
-        ahoy.track "email_login"
-
         user = User.find_or_create_from_email(email)
+        ahoy.track("email_login", user_id: user&.id)
         session[:user_id] = user.id
         Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
         redirect_target = post_login_redirect_path
@@ -145,8 +144,6 @@ class AuthController < ApplicationController
 
   # Slack auth callback
   def create
-    ahoy.track "slack_login"
-
     if params[:state] != session[:state]
       Rails.logger.tagged("Authentication") do
         Rails.logger.error({
@@ -162,6 +159,7 @@ class AuthController < ApplicationController
 
     begin
       user = User.exchange_slack_token(params[:code], slack_callback_url)
+      ahoy.track("slack_login", user_id: user&.id)
       session[:user_id] = user.id
 
       Rails.logger.tagged("Authentication") do

@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
     @project = Project.find_by(id: params[:id])
     not_found and return unless @project
 
-    ahoy.track("project_view", project_id: @project.id, user_id: current_user.id)
+    ahoy.track("project_view", project_id: @project.id, user_id: current_user&.id)
   end
 
   def ship
@@ -60,7 +60,7 @@ class ProjectsController < ApplicationController
   def create
     @project = current_user.projects.build(project_params)
     if @project.save
-      ahoy.track("project_create", project_id: @project.id, user_id: current_user.id)
+      ahoy.track("project_create", project_id: @project.id, user_id: current_user&.id)
       redirect_to projects_path, notice: "Project created."
     else
       render :new, status: :unprocessable_entity
@@ -83,7 +83,7 @@ class ProjectsController < ApplicationController
 
     if @project.update(project_params)
       if has_ship
-        ahoy.track("project_ship", project_id: @project.id, user_id: current_user.id)
+        ahoy.track("project_ship", project_id: @project.id, user_id: current_user&.id)
 
         @project.ship_design
       end
