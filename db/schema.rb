@@ -430,16 +430,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_151600) do
     t.string "avatar"
     t.string "slack_id"
     t.string "username"
+    t.string "timezone_raw"
     t.integer "role", default: 0, null: false
     t.boolean "is_banned", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", null: false
-    t.boolean "is_mcg", default: false, null: false
+    t.boolean "is_mcg", default: true, null: false
     t.string "github_access_token"
     t.string "github_username"
     t.datetime "last_active"
-    t.string "timezone_raw"
   end
 
   create_table "versions", force: :cascade do |t|
