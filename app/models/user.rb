@@ -624,8 +624,8 @@ class User < ApplicationRecord
       local = email.split("@").first
       if local.blank?
         "User#{id}"
-      elsif local.length < 2
-        "*"
+      elsif local.length <= 4
+        local
       else
         "#{local[0]}**#{local[-1]}"
       end
