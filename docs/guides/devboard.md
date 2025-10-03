@@ -9,7 +9,7 @@ Today, we're going to be designing our own dev board, using one of the most popu
 
 All the source files for this tutorial can be [found here](https://github.com/KaiPereira/build-a-devboard), so if you need any help, feel free to resort to the repository!
 
-![Pasted image 20250930162537.png](https://hc-cdn.hel1.your-objectstorage.com/s/v3/b8a3a0b8f38d06f62f520cb6679fcb20e578e68e_Pasted_image_20250930162537.png)
+![Pasted image 20250930162537.png](https://hc-cdn.hel1.your-objectstorage.com/s/v3/4aa981745bdc07db1128bace017adfc69241c2ee_render.png)
 
 Now let's start off with the basic question, what's an SoC! An SoC or system on chip, basically has all the basic components like SRAM, processors, USB controllers, and other peripherals you'll break out onto your board. The RP2040 is a good SoC to start with, because the datasheets are simple, it's low-cost, has good on-chip memory and is really flexible with plenty of IO's.
 
