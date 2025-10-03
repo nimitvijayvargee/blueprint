@@ -8,8 +8,9 @@
 
 <ul style="font-size: 1.25rem; line-height: 1.6;">
 <li><a href="/guides/devboard">Custom Devboard</a></li>
-<li><a href="/guides/midi">Midi</a></li>
+<li><a href="/guides/midi">Midi Keyboard</a></li>
 <li><a href="/guides/split-keyboard">Split Keyboard</a></li>
+<li><a href="/guides/qmk">QMK for keybaords</a></li>
 </ul>
 
 #### Note about projects made with the community provided guides:
