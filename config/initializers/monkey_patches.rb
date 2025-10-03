@@ -1,3 +1,6 @@
+# 🐒🛠️
+
+# This is a fixup to bring the ref param we're using to track source into Ahoy.
 module Ahoy
   class VisitProperties
     def utm_properties
