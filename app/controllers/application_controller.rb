@@ -8,7 +8,8 @@ class ApplicationController < ActionController::Base
 
   before_action :set_paper_trail_whodunnit
   before_action :update_last_active
-  before_action :track_ahoy_visit
+
+  after_action :track_page_view
 
   def not_found
     raise ActionController::RoutingError.new("Not Found")
@@ -16,8 +17,12 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def track_ahoy_visit
-    ahoy.track_visit
+  def track_page_view
+    ahoy.track "$view", {
+      controller: params[:controller],
+      action: params[:action],
+      user_id: current_user&.id  # if you have user authentication
+    }
   end
 
   def update_last_active
