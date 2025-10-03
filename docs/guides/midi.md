@@ -1,3 +1,7 @@
+| title | Midi Keyboard |
+| --- | --- |
+| description | Mini Midi Magic's Kickstart guide to designing your own Midi Keyboard! |
+
 # Mini Midi Magic
 
 ![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/710054274784eca36dca4ca7a384e5b2f1fd4c9c_image.png)
