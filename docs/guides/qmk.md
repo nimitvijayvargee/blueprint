@@ -19,19 +19,19 @@ If you are not on windows, you may need to download qmk using brew (macOS) or pi
 ## Step 2 - Creating a new keyboard
 Now that QMK-MSYS is working, you can create your own custom keyboard! Start by creating a new keyboard by using `qmk new-keyboard`. Enter some basic details like your keyboard name, keyboard layout and your mainboard.
 ```
-nimit@nimit:~/mcserver$ qmk new-keyboard
+nimit@nimit:~$ qmk new-keyboard
 Ψ Generating a new QMK keyboard directory
 
 Ψ Name Your Keyboard Project
 Ψ For more information, see:
 https://docs.qmk.fm/hardware_keyboard_guidelines#naming-your-keyboard-project
-Keyboard Name? keyboardv2_guide
+Keyboard Name? keyboardv2_guide [⏎]
 Ψ Attribution
 Ψ Used for maintainer, copyright, etc.
-Your GitHub Username? [nimitvijayvargee] 
+Your GitHub Username? [nimitvijayvargee] [⏎]
 Ψ More Attribution
 Ψ Used for maintainer, copyright, etc.
-Your Real Name? [nimitvijayvargee] 
+Your Real Name? [nimitvijayvargee] [⏎]
 ```
 ```
 Default Layout?
@@ -40,10 +40,10 @@ Default Layout?
 	18. 75_ansi
 	19. 75_iso
 	...
-Please enter your choice: [65] 18
+Please enter your choice: [65] 18 [⏎]
 ```
 ```
-Using a Development Board? [y/n] n
+Using a Development Board? [y/n] n [⏎]
 Ψ Select Microcontroller
 Ψ For more information, see:
 https://docs.qmk.fm/compatible_microcontrollers
@@ -53,7 +53,7 @@ Microcontroller?
 	21. RP2040
 	22. STM32F042
 	...
-Please enter your choice: [13] 21
+Please enter your choice: [13] 21 [⏎]
 ```
 <br />
 The Raspberry Pi Pico is not considered a development board, so use the RP2040 instead! <br />
