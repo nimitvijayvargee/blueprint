@@ -38,8 +38,14 @@
     <%= render "shared/notice" %>
     <%= render "shared/nav" %>
 
-    <main class="ml-[15rem] print:ml-0 p-8 print:p-0 min-h-screen flex flex-col">
+    <main class="ml-[15rem] print:ml-0 p-8 print:p-0 min-h-screen flex flex-col overflow-hidden md:overflow-auto">
       <%= yield %>
     </main>
+
+    <div class="absolute inset-0 z-50 flex flex-col items-center justify-center h-screen px-4 text-center text-white md:hidden bg-bp-dark">
+      <p class="text-4xl">We're working on adding mobile support!</p>
+      <p class="mt-2 text-xl">In the meantime, please visit us on a desktop or laptop computer.</p>
+      <p class="mt-8 text-2xl">blueprint.hackclub.com</p>
+    </div>
   </body>
 </html>
