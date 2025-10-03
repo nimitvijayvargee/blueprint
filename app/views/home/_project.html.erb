@@ -1,7 +1,7 @@
 <% cache [project, project.banner&.blob] do %>
-  <div class="flex flex-col w-82 space-y-4 h-full">
+  <div class="flex flex-col h-full space-y-4 w-82">
       <%= link_to project_path(project) do %>
-          <div class="h-28 bg-gray-200 bg-cover bg-center" style="background-image: url(<%= project.banner.attached? ? url_for(project.banner) : nil %>)">
+          <div class="bg-gray-200 bg-center bg-cover h-28" style="background-image: url('<%= project.banner.attached? ? url_for(project.banner) : nil %>')">
           </div>
       <% end %>
       <div class="flex flex-col space-y-2 grow">

@@ -220,7 +220,7 @@
           <div class="flex h-64 space-x-8 space-y-8 carousel md:h-84">
             <% featured_projects.shuffle.each do |project| %>
               <a href="<%= project[:url] %>" target="_blank" rel="noopener noreferrer" class="flex flex-col w-40 h-full md:w-72 shrink-0 bg-bp-darker" data-carousel-target="item">
-                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url(<%= project[:image] %>)"></div>
+                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url('<%= project[:image] %>')"></div>
                 <div class="flex flex-col p-2 space-y-2 md:p-4 grow">
                   <p class="text-base font-bold md:text-xl"><%= project[:title] %> <span class="text-xs">by <%= project[:author] %></span></p>
                   <p class="text-xs md:text-base"><%= project[:description] %></p>
@@ -247,7 +247,7 @@
             <p class="text-base leading-relaxed text-center md:text-xl">
               Hack Club is a global network of high school hackers and makers. We're a nonprofit that supports students who want to build cool things with code and hardware. Blueprint is one of our programs where we fund your hardware projects and help you learn by building.
             </p>
-            <a href="https://hackclub.com?utm_source=blueprint" target="_blank" class="inline-block px-6 py-3 mt-6 text-lg font-bold text-center transition-colors border-2 border-white bg-white text-bp-dark hover:bg-gray-200 mx-auto cursor-pointer">
+            <a href="https://hackclub.com?utm_source=blueprint" target="_blank" class="inline-block px-6 py-3 mx-auto mt-6 text-lg font-bold text-center transition-colors bg-white border-2 border-white cursor-pointer text-bp-dark hover:bg-gray-200">
               Join Hack Club
             </a>
           </div>
