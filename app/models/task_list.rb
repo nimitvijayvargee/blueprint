@@ -25,7 +25,7 @@ class TaskList < ApplicationRecord
       join_slack: {
         met: user.slack_user? && !user.is_mcg?,
         msg: "Join the Hack Club Slack"
-      },
+    },
       create_project: {
         met: user.projects.any?,
         msg: "Start your first project"

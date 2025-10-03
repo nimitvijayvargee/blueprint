@@ -542,7 +542,7 @@ class User < ApplicationRecord
     response = fetch_github("/repos/#{org}/#{repo_name}/installation", jwt: true)
 
     if response.status == 404 || response.status == 301
-      return { ok: false, error: "This repo does not exist, or is private." }
+      return { ok: false, error: "You need to allow Blueprint access to this repo. Please configure GitHub." }
     end
 
     data = JSON.parse(response.body)
@@ -550,7 +550,7 @@ class User < ApplicationRecord
     can_push = data["permissions"]["contents"] == "write"
 
     unless can_push
-      return { ok: false, error: "You do not have permission to write to this repo." }
+      return { ok: false, error: "You need to allow Blueprint access to this repo. Please configure GitHub." }
     end
 
     normalized = Project.normalize_repo_link("#{org}/#{repo_name}", github_username)

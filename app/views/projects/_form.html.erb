@@ -1,8 +1,8 @@
 <%= form_with model: @project, html: { class: "space-y-6", data: { controller: "project-validator", project_validator_project_id_value: @project.id } } do |f| %>
   <% if @project.errors.any? %>
-    <div class="rounded-md bg-bp-danger p-4 text-red-900">
+    <div class="p-4 text-red-900 rounded-md bg-bp-danger">
       <p><strong><%= pluralize(@project.errors.count, "error") %></strong> prevented this project from being saved:</p>
-      <ul class="list-disc pl-5">
+      <ul class="pl-5 list-disc">
         <% @project.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
@@ -28,8 +28,14 @@
   </div>
 
   <div>
-    <%= f.label :repo_link, class: "block text-xl font-medium" %>
-    <p class="text-sm">We'll create a JOURNAL.md for you</p>
+    <div class="flex items-center">
+      <div>
+        <%= f.label :repo_link, class: "block text-xl font-medium" %>
+        <p class="text-sm">We'll create a JOURNAL.md for you</p>
+      </div>
+      <div class="grow"></div>
+      <%= render "shared/button", text: "Configure GitHub", class: "py-1 px-2 text-base", url: github_login_path, html_options: { target: "_blank" } %>
+    </div>
     <%= f.text_field :repo_link,
           placeholder: "https://github.com/...",
           class: "input px-3 mt-1 block w-full",
@@ -37,12 +43,14 @@
             project_validator_target: "repo",
             action: "input->project-validator#queueRepoCheck change->project-validator#queueRepoCheck"
           } %>
-    <p class="mt-1 text-sm text-right" data-project-validator-target="status">You must have write access to the repository.</p>
+    <div class="flex justify-end mt-1 space-x-2 text-sm text-right">
+      <p data-project-validator-target="status">You must have write access to the repository.</p>
+    </div>
   </div>
 
   <div>
     <%= f.label :banner, class: "block text-xl font-medium" %>
-    <div class="mt-1 flex items-center gap-3" data-controller="file-input">
+    <div class="flex items-center gap-3 mt-1" data-controller="file-input">
       <%= f.file_field :banner, direct_upload: true, id: "project_banner_input", class: "hidden", data: { file_input_target: "input" }, "data-action": "change->file-input#update" %>
       <label for="project_banner_input" class="btn btn-outline">Choose file</label>
       <span data-file-input-target="filename" data-placeholder="No file selected">No file selected</span>
