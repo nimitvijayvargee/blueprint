@@ -24,6 +24,9 @@ class User < ApplicationRecord
   has_many :followed_projects, through: :follows, source: :project
   has_one :task_list, dependent: :destroy
 
+  has_many :ahoy_visits
+  has_many :ahoy_events
+
   enum :role, { user: 0, admin: 1 }
 
   validates :role, presence: true
