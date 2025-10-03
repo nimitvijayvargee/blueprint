@@ -41,11 +41,11 @@ Through **printing legion!** It's an international network of Hack Clubbers 3D p
 
 ## How likely is it that my project will be approved?
 
-It's hard to say without seeing your project, but generally speaking, as long as you follow the [guidelines](/guides/custom-projects) on the submitting page for your project then you'll more likely than not get approved.
+It's hard to say without seeing your project, but generally speaking, as long as you follow the [guidelines](/docs/submission-guidelines) on the submitting page for your project then you'll more likely than not get approved.
 
 ## What's the minimum complexity for a custom project?
 
-The minimum complexity for a project depends on tiers. Check out [custom projects](/guides/custom-projects) for more information on that. Additionally, every project **must** be [shipped](/docs/shipping).
+The minimum complexity for a project depends on tiers. Check out [custom projects](/docs/submission-guidelines) for more information on that. Additionally, every project **must** be [shipped](/docs/shipping).
 
 ## What if my project does not reach the quality requirement for my tier, can I pay for the difference myself?
 
