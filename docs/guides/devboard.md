@@ -151,7 +151,9 @@ First add the global labels to the MCU XIN and XOUT, just called their relative 
 
 Remember to accurately represent your global label direction, but just keep in mind it doesn't actually change your schematic, it's only for whoever is reading it!
 
-Based off the RP2040 datasheet, we're going to be using a 12 MHz crystal with two, 15pF (I switch these later to 33pF because we use a different crystal than the Pi Pico) decoupling capacitors. **Make sure to use the crystal footprint with 4 pins and 1 and 3, as the input/output pins so pay attention to the symbol I use**:
+Based off the RP2040 datasheet, we're going to be using a 12 MHz crystal with two, 15pF (I switch these later to 33pF because we use a different crystal than the Pi Pico) decoupling capacitors. **Make sure to use the crystal footprint with 4 pins and 1 and 3, as the input/output pins so pay attention to the symbol I use, and remember to change the name to 12 "MHz"**:
+
+![Crystal symbol](https://hc-cdn.hel1.your-objectstorage.com/s/v3/15c2e7d28c599697a0524d9ebb3b053540ddeec1_image.png)
 
 ![Pasted image 20250926063705.png](https://hc-cdn.hel1.your-objectstorage.com/s/v3/1bd342474c73912b631ad764fc710f442f8ed0d8_Pasted_image_20250926063705.png)
 
