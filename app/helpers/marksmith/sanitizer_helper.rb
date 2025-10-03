@@ -46,9 +46,7 @@ module Marksmith
     end
 
     def allowed_marksmith_attributes
-      (%w[href rel target src alt title width height class] +
-        ActionView::Helpers::SanitizeHelper.sanitizer_vendor.safe_list_sanitizer.allowed_attributes.to_a
-      ).uniq
+      %w[href rel target src alt title width height]
     end
 
     def external_link?(href)
