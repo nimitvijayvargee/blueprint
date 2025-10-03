@@ -230,6 +230,8 @@ GEM
       activesupport (>= 7.0.0)
     jmespath (1.6.2)
     json (2.15.0)
+    jwt (3.1.2)
+      base64
     kamal (2.7.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -571,6 +573,7 @@ DEPENDENCIES
   importmap-rails
   inline_svg
   jbuilder
+  jwt
   kamal
   marksmith
   mission_control-jobs

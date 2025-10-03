@@ -185,37 +185,18 @@ class AuthController < ApplicationController
 
   # GitHub auth start
   def github
-    state = SecureRandom.hex(24)
-    session[:state] = state
-
-    params = {
-      client_id: ENV.fetch("GITHUB_CLIENT_ID", nil),
-      redirect_uri: github_callback_url,
-      state: state,
-      scope: "public_repo,read:user",
-      prompt: current_user.github_user? ? "select_account": nil
-    }
-    redirect_to "https://github.com/login/oauth/authorize?#{params.to_query}", allow_other_host: true
+    redirect_to "https://github.com/apps/blueprint-hackclub/installations/new", allow_other_host: true
   end
 
   # GitHub auth callback
   def create_github
-    if params[:state] != session[:state]
-      Rails.logger.tagged("Authentication") do
-        Rails.logger.error({
-          event: "github_csrf_validation_failed",
-          expected_state: session[:state],
-          received_state: params[:state],
-          user_id: current_user.id
-        }.to_json)
-      end
-      session[:state] = nil
-      redirect_to home_path, alert: "GitHub authentication failed due to CSRF token mismatch"
-      return
-    end
-
     begin
-      current_user.exchange_github_token(params[:code], github_callback_url)
+      if !user_logged_in?
+        redirect_to root_path, alert: "You must be logged in to link your GitHub account."
+        return
+      end
+
+      current_user.link_github_account(params[:installation_id])
 
       Rails.logger.tagged("Authentication") do
         Rails.logger.info({

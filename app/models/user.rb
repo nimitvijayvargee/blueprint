@@ -2,20 +2,20 @@
 #
 # Table name: users
 #
-#  id                  :bigint           not null, primary key
-#  avatar              :string
-#  email               :string           not null
-#  github_access_token :string
-#  github_username     :string
-#  is_banned           :boolean          default(FALSE), not null
-#  is_mcg              :boolean          default(TRUE), not null
-#  last_active         :datetime
-#  role                :integer          default("user"), not null
-#  timezone_raw        :string
-#  username            :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  slack_id            :string
+#  id                     :bigint           not null, primary key
+#  avatar                 :string
+#  email                  :string           not null
+#  github_username        :string
+#  is_banned              :boolean          default(FALSE), not null
+#  is_mcg                 :boolean          default(FALSE), not null
+#  last_active            :datetime
+#  role                   :integer          default("user"), not null
+#  timezone_raw           :string
+#  username               :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  github_installation_id :bigint
+#  slack_id               :string
 #
 class User < ApplicationRecord
   has_many :projects
@@ -292,33 +292,17 @@ class User < ApplicationRecord
     end
   end
 
-  def exchange_github_token(code, redirect_uri)
-    response = Faraday.post("https://github.com/login/oauth/access_token",
-                            {
-                              client_id: ENV.fetch("GITHUB_CLIENT_ID", nil),
-                              client_secret: ENV.fetch("GITHUB_CLIENT_SECRET", nil),
-                              redirect_uri: redirect_uri,
-                              code: code
-                            },
-                            {
-                              "Accept" => "application/json"
-                            })
+  def link_github_account(installation_id)
+    response = GithubHelper.get_installation_token(installation_id)
 
-    # if result is not successful
-    if response.status != 200
+    if response.nil?
       Rails.logger.error("GitHub OAuth error: #{response.body}")
       raise StandardError, "Failed to authenticate with GitHub: #{response.body}"
+      return
     end
 
-    result = JSON.parse(response.body)
-
-    access_token = result["access_token"]
-    if access_token.blank?
-      Rails.logger.error("GitHub OAuth error: access token is blank")
-      raise StandardError, "Failed to authenticate with GitHub: access token is blank"
-    end
-
-    update!(github_access_token: access_token)
+    update!(github_installation_id: installation_id)
+    refresh_github_installation!
     refresh_profile!
   end
 
@@ -429,7 +413,7 @@ class User < ApplicationRecord
           user_id: id
         }.to_json)
       end
-      update!(github_access_token: nil)
+      invalidate_github_installation!
       return
     end
 
@@ -455,7 +439,7 @@ class User < ApplicationRecord
   end
 
   def github_user?
-    github_access_token.present? && !github_access_token.blank?
+    github_installation_id.present? && !github_installation_id.blank?
   end
 
   def tasks
@@ -555,7 +539,7 @@ class User < ApplicationRecord
       return false
     end
 
-    response = fetch_github("/repos/#{org}/#{repo_name}")
+    response = fetch_github("/repos/#{org}/#{repo_name}/installation", jwt: true)
 
     if response.status == 404 || response.status == 301
       return { ok: false, error: "This repo does not exist, or is private." }
@@ -563,7 +547,7 @@ class User < ApplicationRecord
 
     data = JSON.parse(response.body)
 
-    can_push = data["permissions"]["push"]
+    can_push = data["permissions"]["contents"] == "write"
 
     unless can_push
       return { ok: false, error: "You do not have permission to write to this repo." }
@@ -585,7 +569,7 @@ class User < ApplicationRecord
     end
   end
 
-  def fetch_github(path, method: :get, check_token: true, get_all: false, params: {}, data: {}, headers: {})
+  def fetch_github(path, method: :get, check_token: true, get_all: false, jwt: false, params: {}, data: {}, headers: {})
     unless github_user?
       Rails.logger.tagged("GitHubFetch") do
         Rails.logger.info({
@@ -597,7 +581,7 @@ class User < ApplicationRecord
     end
 
     headers = {
-      "Authorization" => "Bearer #{github_access_token}",
+      "Authorization" => jwt ? "Bearer #{GithubHelper.generate_jwt}" : "Bearer #{github_access_token}",
       "X-GitHub-Api-Version" => "2022-11-28",
       "Accept" => "application/vnd.github+json"
     }.merge(headers)
@@ -627,7 +611,7 @@ class User < ApplicationRecord
       Rails.logger.tagged("GitHubFetch") do
         Rails.logger.warn({ event: "fetch_401", user_id: id }.to_json)
       end
-      update!(github_access_token: nil)
+      invalidate_github_installation!
     end
 
     response
@@ -688,5 +672,49 @@ class User < ApplicationRecord
   def timezone_raw=(value)
     @timezone = nil
     super(value)
+  end
+
+  def github_access_token
+    if github_installation_id.present? && !github_installation_id.blank?
+      cache_key = "github_access_token_#{id}_#{github_installation_id}"
+
+      cached_response = Rails.cache.read(cache_key)
+      if cached_response.present?
+        return cached_response["token"]
+      end
+
+      response = GithubHelper.get_installation_token(github_installation_id)
+
+      # Invalid installation id
+      if response.nil?
+        Rails.logger.tagged("GitHubFetch") do
+          Rails.logger.warn({ event: "fetch_401", user_id: id }.to_json)
+        end
+        invalidate_github_installation!
+        return
+      end
+
+      # Cache the full response until 5 minutes before expiration
+      expires_at = Time.parse(response["expires_at"])
+      cache_expires_at = expires_at - 5.minutes
+      cache_ttl = cache_expires_at - Time.current
+
+      if cache_ttl > 0
+        Rails.cache.write(cache_key, response, expires_in: cache_ttl)
+      end
+
+      response["token"]
+    else
+      nil
+    end
+  end
+
+  def invalidate_github_installation!
+    Rails.cache.delete("github_access_token_#{id}_#{github_installation_id}")
+    update!(github_installation_id: nil)
+  end
+
+  def refresh_github_installation!
+    Rails.cache.delete("github_access_token_#{id}_#{github_installation_id}")
   end
 end
