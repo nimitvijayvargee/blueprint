@@ -67,6 +67,8 @@ Rails.application.routes.draw do
 
   get "home" => "home#index", as: :home
 
+  get "api/site" => "api#site", as: :api_site
+
   resources :projects, only: [ :index, :new, :create, :show, :edit, :update, :destroy ] do
     member do
       get :ship
