@@ -62,4 +62,4 @@ There are four tiers that a project can follow and they are as follows:
 
 To be a higher tier (ex. tier 1) does not mean that you need to cost in the $200-$400 range. Actually, we would MUCH prefer you made the highest quality projects for as cheap as possible. So PLEASE don’t think that a cheaper project means it’s lower quality.
 
-For more information about Hack Club and cost, look [here](https://www.notion.so/the-talk-272cefc204bf80d6ad54f4605069c485?pvs=21)
+For more information about Hack Club and cost, look [here](/docs/about-cost)
