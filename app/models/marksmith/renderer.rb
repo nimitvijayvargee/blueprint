@@ -27,7 +27,8 @@ module Marksmith
         lax_spacing: true,
         space_after_headers: true,
         footnotes: false,
-        no_intra_emphasis: false
+        no_intra_emphasis: false,
+        no_html: true
       )
     end
 
