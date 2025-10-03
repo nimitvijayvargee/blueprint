@@ -26,7 +26,7 @@
             <% end %>
           <% elsif name == :link_github %>
             <% if done %>
-              <p class="line-through"><%= task[:msg] %></p>
+              <p class="line-through"><%= task[:msg] %></p><a class="block underline" href="<%= github_login_path %>">(configure)</a>
             <% else %>
               <button type="button"
               data-controller="modal"
