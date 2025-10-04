@@ -75,7 +75,7 @@ Rails.application.routes.draw do
       post :follow
       post :unfollow
     end
-    resources :journal_entries, only: [ :create, :destroy ]
+    resources :journal_entries, only: [ :create, :destroy, :show ]
 
     post :check_github_repo, on: :collection
     post :check_bom, on: :collection

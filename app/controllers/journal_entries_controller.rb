@@ -1,6 +1,11 @@
 class JournalEntriesController < ApplicationController
   before_action :set_project
-  before_action :set_journal_entry, only: [ :destroy ]
+  before_action :set_journal_entry, only: [ :show, :destroy ]
+
+  def show
+    ahoy.track "journal_entry_view", journal_entry_id: @journal_entry.id, user_id: current_user&.id, project_id: @project.id
+    redirect_to project_path(@journal_entry.project)
+  end
 
   def create
     not_found and return unless @project.user == current_user
