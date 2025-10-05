@@ -71,9 +71,14 @@ class AuthController < ApplicationController
       end
 
       if validate_otp(email, otp)
-        user = User.find_or_create_from_email(email)
+        referrer_id = cookies[:referrer_id]&.to_i
+        user = User.find_or_create_from_email(email, referrer_id: referrer_id)
         ahoy.track("email_login", user_id: user&.id)
         session[:user_id] = user.id
+
+        # Clear the referrer cookie after successful signup
+        cookies.delete(:referrer_id) if referrer_id
+
         Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
         redirect_target = post_login_redirect_path
         redirect_to(redirect_target || home_path)
@@ -159,9 +164,13 @@ class AuthController < ApplicationController
     end
 
     begin
-      user = User.exchange_slack_token(params[:code], slack_callback_url)
+      referrer_id = cookies[:referrer_id]&.to_i
+      user = User.exchange_slack_token(params[:code], slack_callback_url, referrer_id: referrer_id)
       ahoy.track("slack_login", user_id: user&.id)
       session[:user_id] = user.id
+
+      # Clear the referrer cookie after successful signup
+      cookies.delete(:referrer_id) if referrer_id
 
       Rails.logger.tagged("Authentication") do
         Rails.logger.info({

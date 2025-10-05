@@ -15,7 +15,16 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  github_installation_id :bigint
+#  referrer_id            :bigint
 #  slack_id               :string
+#
+# Indexes
+#
+#  index_users_on_referrer_id  (referrer_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (referrer_id => users.id)
 #
 class User < ApplicationRecord
   has_many :projects
@@ -27,6 +36,9 @@ class User < ApplicationRecord
   has_many :ahoy_visits
   has_many :ahoy_events
 
+  # Simple referrer: a user may have one referrer (another User)
+  belongs_to :referrer, class_name: "User", optional: true
+
   enum :role, { user: 0, admin: 1 }
 
   validates :role, presence: true
@@ -35,7 +47,7 @@ class User < ApplicationRecord
   has_paper_trail
   has_recommended :projects
 
-  def self.exchange_slack_token(code, redirect_uri)
+  def self.exchange_slack_token(code, redirect_uri, referrer_id: nil)
     response = Faraday.post("https://slack.com/api/oauth.v2.access",
                             {
                               client_id: ENV.fetch("SLACK_CLIENT_ID", nil),
@@ -73,11 +85,11 @@ class User < ApplicationRecord
       return user
     end
 
-    user = create_from_slack(slack_id)
+    user = create_from_slack(slack_id, referrer_id: referrer_id)
     user
   end
 
-  def self.create_from_slack(slack_id)
+  def self.create_from_slack(slack_id, referrer_id: nil)
     user_info = fetch_slack_user_info(slack_id)
     if user_info.user.is_bot
       Rails.logger.warn({
@@ -156,11 +168,12 @@ class User < ApplicationRecord
       email: email,
       timezone_raw: timezone,
       avatar: avatar,
-      is_banned: false
+      is_banned: false,
+      referrer_id: referrer_id
     )
   end
 
-  def self.find_or_create_from_email(email)
+  def self.find_or_create_from_email(email, referrer_id: nil)
     begin
       user_info = fetch_slack_user_info_from_email(email)
     rescue Slack::Web::Api::Errors::UsersNotFound => e
@@ -171,8 +184,9 @@ class User < ApplicationRecord
       end
 
       user = User.find_or_create_by!(email: email) do |user|
-      user.is_banned = false
-      user.role = :user
+        user.is_banned = false
+        user.role = :user
+        user.referrer_id = referrer_id
       end
       return user
     end
@@ -250,7 +264,8 @@ class User < ApplicationRecord
       email: email,
       timezone_raw: timezone,
       avatar: avatar,
-      is_banned: false
+      is_banned: false,
+      referrer_id: referrer_id
     )
   end
 
@@ -739,5 +754,9 @@ class User < ApplicationRecord
       .first
 
     visit&.utm_source
+  end
+
+  def eligible_referral_count
+    User.where(referrer_id: id).where.not(slack_id: [ nil, "" ]).where(is_mcg: false).count
   end
 end

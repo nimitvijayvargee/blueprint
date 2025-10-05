@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_03_022309) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -440,6 +440,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_022309) do
     t.datetime "last_active"
     t.string "timezone_raw"
     t.bigint "github_installation_id"
+    t.bigint "referrer_id"
+    t.index ["referrer_id"], name: "index_users_on_referrer_id"
   end
 
   create_table "versions", force: :cascade do |t|
@@ -475,4 +477,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_022309) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "task_lists", "users"
   add_foreign_key "timeline_items", "projects"
+  add_foreign_key "users", "users", column: "referrer_id"
 end

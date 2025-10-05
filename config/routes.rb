@@ -55,6 +55,9 @@ Rails.application.routes.draw do
   root "landing#index"
   get "landing" => "landing#authed", as: :landing
 
+  # Referral system
+  get "r/:id" => "referral#show", as: :referral
+
   # Authentication
   get "auth/login" => "auth#index", as: :login
   get "auth/slack" => "auth#new", as: :slack_login

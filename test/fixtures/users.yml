@@ -17,7 +17,16 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  github_installation_id :bigint
+#  referrer_id            :bigint
 #  slack_id               :string
+#
+# Indexes
+#
+#  index_users_on_referrer_id  (referrer_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (referrer_id => users.id)
 #
 one:
   avatar: MyString
