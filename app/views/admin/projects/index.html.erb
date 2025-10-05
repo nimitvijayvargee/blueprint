@@ -16,9 +16,10 @@
     <!-- Header row -->
     <div class="grid grid-cols-12 p-3 text-lg border-b-2 border-white">
       <div class="col-span-1">ID</div>
-      <div class="col-span-5">Title</div>
+      <div class="col-span-4">Title</div>
       <div class="col-span-2">Author</div>
       <div class="col-span-2">Status</div>
+      <div class="col-span-1">Hours</div>
       <div class="col-span-1">Views</div>
       <div class="col-span-1">Actions</div>
     </div>
@@ -28,7 +29,7 @@
       <% @projects.each do |project| %>
         <div class="grid grid-cols-12 px-3 text-lg border-b border-white/30 last:border-0">
           <div class="flex items-center col-span-1 py-2"><%= project.id %></div>
-          <div class="flex items-center col-span-5 font-medium">
+          <div class="flex items-center col-span-4 font-medium">
             <%= link_to (project.title.presence || "(untitled)"), admin_project_path(project), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
           </div>
           <div class="flex items-center col-span-2">
@@ -40,6 +41,9 @@
           </div>
           <div class="flex items-center col-span-2">
             <%= project.review_status || "not_submitted" %>
+          </div>
+          <div class="flex items-center col-span-1">
+            <%= (project.journal_entries.sum(:duration_seconds) / 3600).round(1)  || 0 %>
           </div>
           <div class="flex items-center col-span-1">
             <%= project.view_count || 0 %>
