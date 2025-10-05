@@ -3,7 +3,7 @@
 | description | Places to go to get help with your design |
 
 # Design Resources
-Never designed a PCB before? You're in the right place! The OnBoard community has collected resources for you to get up-to-speed with circuit and PCB design! If you have any questions, feel free to ask in [`#blueprint`](https://hackclub.slack.com/archives/C0593MG26TT)
+Never designed a PCB before? You're in the right place! The Blueprint community has collected resources for you to get up-to-speed with circuit and PCB design! If you have any questions, feel free to ask in [`#blueprint`](https://hackclub.slack.com/archives/C083S537USC)
 
 ## Electronic Basics
 - AfroTechMods' [Electronic of Beginners](https://www.youtube.com/watch?v=8gvJzrjwjds&list=PLzqS33DOPhJkRn6e9_OTdQwRojO8qlusI)
