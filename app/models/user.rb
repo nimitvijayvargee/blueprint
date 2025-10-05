@@ -720,4 +720,24 @@ class User < ApplicationRecord
   def refresh_github_installation!
     Rails.cache.delete("github_access_token_#{id}_#{github_installation_id}")
   end
+
+  # Returns the earliest non-null utm_source for this user based on ahoy_visits
+  # It looks up visits that share the same visitor_token as any visit for this user
+  def earliest_ref
+    ahoy_visits = Class.new(ActiveRecord::Base) { self.table_name = "ahoy_visits" }
+
+    # Find visitor_tokens associated with this user
+    visitor_tokens = ahoy_visits.where(user_id: id).distinct.pluck(:visitor_token)
+    return nil if visitor_tokens.blank?
+
+    # Find the earliest visit across those visitor_tokens with a non-null utm_source
+    visit = ahoy_visits
+      .where(visitor_token: visitor_tokens)
+      .where.not(utm_source: [ nil, "" ])
+      .order(:started_at)
+      .limit(1)
+      .first
+
+    visit&.utm_source
+  end
 end
