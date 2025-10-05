@@ -53,7 +53,7 @@ namespace :ahoy do
           Ahoy::Visit.transaction do
             updates.each do |vid, uid|
               # Only update if visit still has nil user_id to avoid overwriting concurrent updates
-              affected = Ahoy::Visit.where(id: vid, user_id: nil).update_all(user_id: uid, updated_at: Time.current)
+              affected = Ahoy::Visit.where(id: vid, user_id: nil).update_all(user_id: uid)
               updated_in_batch += affected
             end
           end
