@@ -65,7 +65,7 @@
                     <% name = current_user.display_name || current_user.email || "unknown" %>
                     <img src="<%= avatar_url %>" alt="<%= name %>'s avatar" class="rounded-lg size-12">
                     <div>
-                        <p class="w-32 truncate whitespace-nowrap"><%= name %> <%= current_user.created_at < Date.new(2025, 10,4) ? "🚀" : "" %></p>
+                        <p class="w-32 truncate whitespace-nowrap"><%= name %> <%= current_user.created_at < DateTime.new(2025,10,4,4,0,0) ? "🚀" : "" %></p>
                         <p>0 Tickets</p>
                     </div>
                 </div>

@@ -5,7 +5,7 @@
 <% if user %>
   <a href="<%= admin_view ? admin_user_path(user) : user_path(user) %>">
     <img src="<%= user.avatar_url %>" alt="<%= user.display_name %>" class="<%= avatar_classes %>" />
-    <span class="underline"><%= user.display_name %></span> <%= user.admin? ? "⚡" : "" %><%= user.created_at < Date.new(2025, 10,4) ? "🚀" : "" %>
+    <span class="underline"><%= user.display_name %></span> <%= user.admin? ? "⚡" : "" %><%= user.created_at < DateTime.new(2025,10,4,4,0,0) ? "🚀" : "" %>
   </a>
 <% else %>
   <span class="">Unknown User</span>
