@@ -6,6 +6,10 @@ class UsersController < ApplicationController
     not_found unless @user
   end
 
+  def me
+    redirect_to user_path(current_user)
+  end
+
   def invite_to_slack
     ahoy.track("slack_user_create", user_id: current_user&.id)
     current_user.invite_to_slack!

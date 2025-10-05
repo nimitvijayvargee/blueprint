@@ -88,6 +88,7 @@ Rails.application.routes.draw do
 
   get "toolbag" => "toolbag#index", as: :toolbag
 
+  get "users/me", to: "users#me", as: :me
   resources :users, only: [ :show ] do
     post :invite_to_slack, on: :collection
     post :mcg_check, on: :collection
