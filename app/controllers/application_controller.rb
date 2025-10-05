@@ -23,6 +23,11 @@ class ApplicationController < ActionController::Base
       action: params[:action],
       user_id: current_user&.id  # if you have user authentication
     }
+
+    # Associate the visit with the user if not already associated
+    if user_logged_in? && ahoy.visit && ahoy.visit.user_id != current_user.id
+      ahoy.visit.update(user_id: current_user.id)
+    end
   end
 
   def update_last_active

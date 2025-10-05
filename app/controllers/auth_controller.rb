@@ -221,6 +221,11 @@ class AuthController < ApplicationController
   # Logout
   def destroy
     terminate_session
+
+    # clear Ahoy cookies
+    cookies.delete(:ahoy_visit)
+    cookies.delete(:ahoy_visitor)
+
     redirect_to root_path, notice: "Signed out successfully. Cya!"
   end
 
