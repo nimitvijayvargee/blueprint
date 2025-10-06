@@ -29,7 +29,7 @@
     </div>
     <div class="markdown timeline-journal">
         <h1><%= entry.summary %></h1>
-        <%= sanitize_marksmith_html(marksmithed(entry.content)) %>
+        <%= sanitize_marksmith_html(entry.rendered_html) %>
     </div>
   <% end %>
 

@@ -6,7 +6,7 @@
   </div>
   <div class="overflow-hidden markdown timeline-journal max-h-[28rem]">
     <h1><%= entry.summary %></h1>
-    <%= sanitize_marksmith_html(marksmithed(entry.content)) %>
+    <%= sanitize_marksmith_html(entry.rendered_html) %>
   </div>
   <div class="absolute left-0 right-0 h-30 bottom-10 bg-gradient-to-t from-bp-darker to-transparent">
     <%= link_to "See all →", project_journal_entry_path(project, entry), class: "absolute -bottom-4 left-8 underline" %>

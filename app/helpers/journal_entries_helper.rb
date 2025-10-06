@@ -1,6 +1,6 @@
 module JournalEntriesHelper
   def render_journal(entry)
     return "" if entry.content.blank?
-    marksmithed(entry.content)
+    entry.rendered_html
   end
 end
