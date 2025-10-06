@@ -35,14 +35,11 @@ class JournalEntry < ApplicationRecord
   validates :summary, presence: true, length: { maximum: 60 }
 
   after_commit :sync_project_github_journal, on: %i[create update destroy]
-  after_destroy :clear_rendered_html_cache
-  after_update :clear_rendered_html_cache_if_content_changed
 
   def rendered_html
     return "" if content.blank?
 
-    cache_key = "journal_entry_html_#{id}_#{updated_at.to_i}"
-    Rails.cache.fetch(cache_key, expires_in: 1.week) do
+    Rails.cache.fetch("journal_entry_html/#{cache_key_with_version}", expires_in: 1.week) do
       base_url = Rails.application.routes.default_url_options[:host] || "localhost:3000"
       Marksmith::Renderer.new(body: content, base_url: "http://#{base_url}").render
     end
@@ -69,22 +66,5 @@ class JournalEntry < ApplicationRecord
 
   def sync_project_github_journal
     project&.sync_github_jourunal!
-  end
-
-  def clear_rendered_html_cache
-    cache_key = "journal_entry_html_#{id}_#{updated_at.to_i}"
-    Rails.cache.delete(cache_key)
-  end
-
-  def clear_rendered_html_cache_if_content_changed
-    if saved_change_to_content?
-      # Clear cache for the previous version as well in case of race conditions
-      previous_updated_at = updated_at_before_last_save || updated_at
-      old_cache_key = "journal_entry_html_#{id}_#{previous_updated_at.to_i}"
-      Rails.cache.delete(old_cache_key)
-
-      # The new cache key will be different due to updated_at change,
-      # so no need to clear the current one
-    end
   end
 end
