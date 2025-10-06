@@ -37,6 +37,7 @@
         <p>Journal entries: <%= @user.journal_entries.count %></p>
         <p>Total hours: <%= @user.journal_entries.sum(:duration_seconds) / 3600 %> (<%= @user.journal_entries.joins(:project).where.not(projects: { review_status: nil }).sum(:duration_seconds) / 3600 %> shipped)</p>
         <p>Following: <%= @user.followed_projects.count %></p>
+        <p>Referred: <%= @user.eligible_referral_count %></p>
       </div>
     <% end %>
     <%= render "shared/card", class: "space-y-2 col-span-2" do %>
