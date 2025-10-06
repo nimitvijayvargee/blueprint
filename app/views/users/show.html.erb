@@ -21,5 +21,30 @@
         <% end %>
       </div>
     <% end %>
+    <% if user_logged_in? && current_user == @user %>
+      <%= render "shared/card" do %>
+        <div class="space-y-1">
+          <p class="text-3xl">Blueprint Referral Program</p>
+          <p>Share Blueprint with friends and get cool stuff!</p>
+        </div>
+        <div class="space-y-1">
+          <p>You have referred <%= pluralize(@user.eligible_referral_count, "user") %>.</p>
+          <div class="flex space-x-2 items-center">
+            <p>Your referral link:</p>
+            <% referral = "https://#{ENV['APPLICATION_HOST']}/r/#{@user.id}?ref=r" %>
+            <code class="text-sm inline font-mono bg-bp-dark px-3 py-0.5 rounded"><%= referral %></code>
+          </div>
+        </div>
+        <div>
+          <p>Rewards:</p>
+          <ul class="list-disc list-inside">
+            <li>3 referrals: Blueprint-style profile picture <% if @user.eligible_referral_count >= 3 %>(<a class="underline" target="_blank" href="#">claim</a>)<% end %></li>
+            <li>More coming soon!</li>
+        </div>
+        <div>
+          <p>A referral is a new user who signs up with your link and finishes joining Slack.</p>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 </section>
