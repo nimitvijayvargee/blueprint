@@ -4,66 +4,106 @@
 
 # Welcome to Blueprint
 
-## Earn up to $400 to make any hardware project
+Blueprint is a You Ship, We Ship program open to all teenagers 13-18 (inclusive) where you build cool hardware projects (or learn how to) and get funding to make them real!
 
-Blueprint is a little like a you-ship-we-ship, you-ship-we-ship.
+![Blueprint banner](https://hc-cdn.hel1.your-objectstorage.com/s/v3/72b79bc96a159671eb566cbcbd895f7679a073ac_blueprint-header.png)
 
-### You ship:
+## Here's the quick rundown
 
-A design of your hardware project. This includes 3d models, PCB’s, simulations, assemblies, firmware.
+1. Design a hardware project (or follow one of our [guides](/guides))
+2. Log your design process in a journal on Blueprint
+3. Apply for a grant up to $400 to buy the parts you need
+4. Build your project and log your build time
+5. Earn tickets based on your build time
+6. Redeem tickets for tools in the [toolbag](/toolbag) that you can use in your next project
 
-### We ship:
+_Alternatively, if you don't need a grant, you can earn extra tickets for the [toolbag](/toolbag) by logging your project._
 
-A grant that allows you to purchase the required parts for your project. **This grant does not depend on the time spend making the project.**
+## What can I build?
 
-### You ship (again):
+Anything! From as simple as a 3D print, to full robots with PCBs. You can create new designs, or build off of existing creations. Work in groups if you want. We really want to see what you can cook up!
+See the [submission guidelines](/docs/submission-guidelines) for more details on what we expect from your project.  
+If you need inspiration, check out what other hackers have built on our [explore page](/explore) or check out our [guides](/guides) for some tutorials.
 
-Journal the time spent building your project and track the hours. We will give you 10 tickets for every approved hour you spend making your project work. Each tier of project has a cap for the number of tickets you can get from it. **It is not expected that you reach this amount.**
+## How much money can I get?
 
-### We ship (again):
+You can apply up to $400 per project. The amount you can get depends on the complexity of your project and how much effort you put into it. If you're building off of an existing creation, we only count the parts you added.  
+You want to keep your projects original and your journal highly detailed. Don't be afraid to write everything down, it's good practice for engineering!  
+We split grants into tiers, each tier has a:
 
-You can use the tickets that you earn from logging your build-time and use it to buy prizes from the [Toolbag](/toolbag)
+- Maximum cost <span class="text-bp-warning">which is not your goal</span> – you want to [reduce cost](/docs/about-cost) as much as possible
+- Maximum amount of tickets you can earn for [toolbag](/toolbag) prizes.
+- Estimate of how many hours it would take to reach this level of effort
 
-How does it work?
-Here is how it works:
-There are four tiers that a project can follow and they are as follows:
+> <span class="text-bp-warning">The hour amounts are not hard requirements, they are just estimates of time needed for the average hacker to achieve the quality required.</span>
 
-> <span class="text-bp-warning">\*The hour amounts are not hard requirements, they are just estimates of time needed for the average hacker to achieve the quality required.</span>
+#### Tier 4: up to $50 and a limit of 400 tickets (8-16 hours)
 
-#### Tier 4: up to $50 and a limit of 400 tickets (8-16 hours\*)
+A basic project that doesn’t require much time. This is a project that is cool but not very unique.
 
-- A basic project that doesn’t require much time. This is a project that is cool but not very unique. Examples include:
-  - A drone (it doesn’t have many custom parts)
-  - A custom ubikey
-  - A custom LED lamp
-  - A custom keyboard/macropad
+Examples include:
 
-#### Tier 3: up to $100 and a limit of 625 tickets (17-33 hours\*)
+- A drone (it doesn’t have many custom parts)
+- A custom ubikey
+- A custom LED lamp
+- A custom keyboard/macropad
 
-- An intermediate custom project that has a bit more of that “flare”. Typically, this would include multiple components such as a case and PCB. This is something that your friends would say “oh that’s cool”. Examples include:
-  - A full **split** keyboard
-  - A MIDI
-  - A custom game console
+#### Tier 3: up to $100 and a limit of 625 tickets (17-33 hours)
 
-#### Tier 2: up to $200 and a limit of 1250 tickets (34-66 hours\*)
+An intermediate custom project that has a bit more of that “flare”.
 
-- A fairly advanced project that you are very proud of. This is something that your friends would tell **Their** friends about. Examples include:
-  - A Fairy weight battle Bot
-  - A custom robot arm
-  - A custom devboard
+Examples include:
 
-#### Tier 1: up to $400 and up to 2500 tickets (67-131+ hours\*)
+- A full **split** keyboard
+- A MIDI
+- A custom game console
 
-- A super advanced project that would be the cornerstone of your portfolio. This is the type of project that people don’t believe you made.
-  - A 3d Printer
-  - A CNC mill/router
-  - A custom robot dog
-  - A custom FPGA board
+#### Tier 2: up to $200 and a limit of 1250 tickets (34-66 hours)
 
-> <span class="text-bp-warning">\*The hour amounts are not hard requirements, they are just estimates of time needed for the average hacker to achieve the quality required.</span>
+A fairly advanced project that you are very proud of.
 
-# Please note!!!
+Examples include:
 
-To be a higher tier (ex. tier 1) does not mean that you need to cost in the $200-$400 range. Actually, we would MUCH prefer you made the highest quality projects for as cheap as possible. So PLEASE don’t think that a cheaper project means it’s lower quality.
+- A Fairy weight battle Bot
+- A custom robot arm
+- A custom devboard
 
-For more information about Hack Club and cost, look [here](/docs/about-cost)
+#### Tier 1: up to $400 and up to 2500 tickets (67-131+ hours)
+
+A super advanced project that would be the cornerstone of your portfolio.
+
+Examples include:
+
+- A 3d Printer
+- A CNC mill/router
+- A custom robot dog
+- A custom FPGA board
+
+---
+
+<span class="text-bp-warning">REMINDER: The hour amounts are not hard requirements, they are just estimates of time needed for the average hacker to achieve the quality required.</span>
+
+<span class="text-bp-warning">A tier's maximum cost is not a goal, you want to [reduce cost](/docs/about-cost) as much as possible!</span>
+
+## What are tickets? How do I earn them?
+
+Tickets reward you for the effort spent on building the project.
+
+<span class="text-bp-warning">You get 10 tickets per hour of building.</span>
+
+Your building time must be accurately logged in your journal. And we may adjust your ticket amount based on the quality of your final build.
+
+You can spend tickets in the [toolbag](/toolbag) to get tools and parts for your next project. The more tickets you have, the better stuff you can get.
+
+## How do I get started?
+
+We've made it super easy to get started, it takes less than 5 minutes to start journaling.
+
+1. If you haven't already, [create an account](/auth/login) on Blueprint!
+2. Follow the tasks listed on your [home page](/) to set up your account and get started!
+3. Check the [faq](/faq) if you have any questions.
+4. Ask for help in [#blueprint-support](https://hackclub.slack.com/archives/C09CMJV6V6K) on the Hack Club Slack if you have more questions!
+
+---
+
+We're excited to see what build!

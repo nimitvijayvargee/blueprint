@@ -5,6 +5,14 @@
       <p class="text-xl">Here's what's cooking today</p>
     </div>
     <div class="grid grid-cols-2 gap-8">
+      <% unless current_user.tasks.completed? %>
+        <%= render 'shared/card', class: 'col-span-2' do %>
+            <p class="text-3xl">Hey! Welcome to Blueprint</p>
+            <a href="/docs" class="text-2xl bg-bp-warning text-bp-dark grow px-8 text-center py-1">
+              Start Here!
+            </a>        
+        <% end %>
+      <% end %>
       <%= render 'tasks' %>
       <%= render 'announcements' %>
       <%= render 'projects' %>
