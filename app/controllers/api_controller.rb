@@ -20,7 +20,7 @@ class ApiController < ApplicationController
     unless user
       render json: { ok: false, error: "User not found" }, status: :not_found
       return
-    endl
+    end
 
     eligible = user.tasks.completed?
     render json: { ok: true, eligible: eligible }
