@@ -418,11 +418,7 @@ class User < ApplicationRecord
       return
     end
 
-    response = Faraday.get("https://api.github.com/user", nil, {
-      "Authorization" => "Bearer #{github_access_token}",
-      "X-GitHub-Api-Version" => "2022-11-28",
-      "Accept" => "application/vnd.github+json"
-    })
+    response = fetch_github("/app/installations/#{github_installation_id}", jwt: true)
 
     if response.status == 401
       Rails.logger.tagged("ProfileRefresh") do
@@ -437,7 +433,7 @@ class User < ApplicationRecord
 
     result = JSON.parse(response.body)
 
-    update!(github_username: result["login"]) if result["login"].present?
+    update!(github_username: result.dig("account", "login")) if result.dig("account", "login").present?
   end
 
   def follow(project)
