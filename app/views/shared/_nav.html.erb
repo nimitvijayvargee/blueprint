@@ -4,7 +4,7 @@
     "Explore" => explore_path,
     "Tool Bag" => toolbag_path,
     "Guides" => guides_path,
-    "Docs" => docs_path,
+    "Blueprint Docs" => docs_path,
     "FAQ" => faq_path,
     "Admin" => current_user&.admin? ? admin_root_path : nil
 } %>
@@ -23,9 +23,9 @@
     <div class="flex flex-col space-y-3 grow">
         <% nav_links.each do |name, path| %>
             <% next if path.nil? %>
-            <% match = ["Guides", "Docs"].include?(name) ? "prefix" : "exact" %>
+            <% match = ["Guides", "Blueprint Docs"].include?(name) ? "prefix" : "exact" %>
 
-            <% if name == "Docs" %>
+            <% if name == "Blueprint Docs" %>
                 <div class="flex flex-col btn btn-nav hover:bg-bp-dark py-0! px-0! gap-0! text-base" data-nav-target="link" data-nav-match="prefix" data-nav-base="/docs">
                     <%= render "shared/button", url: path, text: name, variant: :none, class: "text-base py-0 nav-submenu-btn" %>
                     <ul data-nav-target="submenu" data-submenu-base="/docs" class="flex-col hidden w-full pb-3 space-y-1 text-sm text-center">

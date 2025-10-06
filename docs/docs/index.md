@@ -10,7 +10,7 @@ Blueprint is a You Ship, We Ship program open to all teenagers 13-18 (inclusive)
 
 ## Here's the quick rundown
 
-1. Design a hardware project (or follow one of our [guides](/guides))
+1. Design a custom hardware project (or build off of one of our [guides](/guides))
 2. Log your design process in a journal on Blueprint
 3. Apply for a grant up to $400 to buy the parts you need
 4. Build your project and log your build time
