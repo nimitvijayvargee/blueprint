@@ -38,7 +38,7 @@
 
     <main>
       <div class="flex items-center justify-center min-h-screen">
-        <div class="flex flex-col items-center justify-center min-h-screen px-4 space-y-12 border-2 md:p-12 md:min-h-auto border-white/25 bg-hatch">
+        <%= render "shared/card", class: "flex flex-col items-center justify-center min-h-screen px-4 space-y-12 md:p-12 md:min-h-auto" do %>
           <div class="space-y-2 text-center">
             <h1 class="text-4xl">Hey! Welcome to Blueprint!</h1>
             <% if params[:email].present? %>
@@ -57,8 +57,7 @@
               <%= render partial: "email_form" %>
             <% end %>
           </div>
-          </div>
-        </div>
+        <% end %>
       </div>
     </main>
   </body>
