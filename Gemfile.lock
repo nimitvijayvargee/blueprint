@@ -254,6 +254,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    lz_string (0.3.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -577,6 +578,7 @@ DEPENDENCIES
   jbuilder
   jwt
   kamal
+  lz_string
   marksmith
   mission_control-jobs
   pagy

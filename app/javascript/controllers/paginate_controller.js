@@ -28,9 +28,21 @@ export default class extends Controller {
     this._updatePages()
   }
 
+  nextJump() {
+    if (this.pageTargets.length === 0) return
+    this.indexValue = Math.min(this.indexValue + 2, this.pageTargets.length - 1)
+    this._updatePages()
+  }
+
   prev() {
     if (this.pageTargets.length === 0) return
     this.indexValue = Math.max(this.indexValue - 1, 0)
+    this._updatePages()
+  }
+
+  prevJump() {
+    if (this.pageTargets.length === 0) return
+    this.indexValue = Math.max(this.indexValue - 2, 0)
     this._updatePages()
   }
 

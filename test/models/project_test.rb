@@ -7,6 +7,7 @@
 #  description            :text
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
+#  needs_funding          :boolean          default(TRUE)
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string
@@ -14,6 +15,7 @@
 #  tier                   :integer
 #  title                  :string
 #  views_count            :integer          default(0), not null
+#  ysws                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :bigint           not null

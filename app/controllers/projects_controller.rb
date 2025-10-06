@@ -22,6 +22,11 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.find_by(id: params[:id], is_deleted: false)
     not_found and return unless @project
 
+    if !@project.can_ship?
+      redirect_to project_path(@project), alert: "Project cannot be shipped."
+      return
+    end
+
     repo_linked = @project.repo_link.present?
     desc_ok = @project.description.to_s.strip.length >= 50
     journal_ok = @project.journal_entries.exists?
@@ -30,8 +35,8 @@ class ProjectsController < ApplicationController
       { msg: "GitHub repo linked", met: repo_linked },
       { key: "bom", msg: "Bill of materials (bom.csv) present", met: nil },
       { key: "readme", msg: "README.md present", met: nil },
-      { msg: "Description is at least 50 characters", met: desc_ok, url: edit_project_path(@project) },
-      { msg: "At least one journal entry", met: journal_ok }
+      { msg: "Description is at least 50 characters", met: desc_ok },
+      { msg: "Project has journal entries", met: journal_ok }
     ]
 
     @base_ok = repo_linked && desc_ok && journal_ok
@@ -81,13 +86,37 @@ class ProjectsController < ApplicationController
     has_ship = params.dig(:project, :ship).present?
     params[:project].delete(:ship) if has_ship
 
+    if params.dig(:project, :ysws) == "none"
+      params[:project][:ysws] = nil
+    elsif params.dig(:project, :ysws) == "other" && params.dig(:project, :ysws_other).present?
+      params[:project][:ysws] = params[:project][:ysws_other]
+    end
+    params[:project].delete(:ysws_other)
+
+    if params.dig(:project, :needs_funding) == "false" || params.dig(:project, :needs_funding) == false
+      params[:project][:tier] = nil
+    end
+
     if @project.update(project_params)
       if has_ship
         ahoy.track("project_ship", project_id: @project.id, user_id: current_user&.id)
 
-        @project.ship_design
+        if Flipper.enabled?(:new_ship_flow_10_06, current_user)
+          current_user.refresh_idv_data!
+          @project.ship!
+
+          if current_user.idv_linked?
+            redirect_to project_path(@project), notice: "Project shipped."
+          else
+            render "ship_idv", status: 303
+          end
+        else
+          @project.ship!
+          redirect_to project_path(@project), notice: "Project shipped."
+        end
+      else
+        redirect_to project_path(@project), notice: "Project updated."
       end
-      redirect_to project_path(@project), notice: "Project updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -192,7 +221,10 @@ class ProjectsController < ApplicationController
       :project_type,
       :banner,
       :tier,
-      :ship
+      :ship,
+      :ysws,
+      :ysws_other,
+      :needs_funding
     )
   end
 end

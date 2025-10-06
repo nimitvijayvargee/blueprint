@@ -7,6 +7,7 @@
 #  description            :text
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
+#  needs_funding          :boolean          default(TRUE)
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string
@@ -14,6 +15,7 @@
 #  tier                   :integer
 #  title                  :string
 #  views_count            :integer          default(0), not null
+#  ysws                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :bigint           not null
@@ -39,6 +41,7 @@ class Project < ApplicationRecord
   }
 
   enum :review_status, {
+    awaiting_idv: "awaiting_idv",
     design_pending: "design_pending",
     design_approved: "design_approved",
     design_needs_revision: "design_needs_revision",
@@ -259,12 +262,39 @@ class Project < ApplicationRecord
       Project.tiers.map { |key, value| [ "Tier #{key} (#{tier_amounts[key.to_i]})", value ] }
   end
 
-  def ship_design
-    unless review_status.nil?
+  def can_ship?
+    review_status.nil? || review_status == "design_needs_revision" || review_status == "build_needs_revision" || review_status == "awaiting_idv"
+  end
+
+  def ship!(design: nil)
+    unless can_ship?
       throw "Project is already shipped!"
     end
 
-    update!(review_status: :design_pending)
+    if Flipper.enabled?(:new_ship_flow_10_06, user)
+      if user.ysws_verified.nil? || user.ysws_verified == false
+        update!(review_status: :awaiting_idv)
+        return
+      end
+    end
+
+    if !design.nil?
+      if design
+        update!(review_status: :design_pending)
+      else
+        update!(review_status: :build_pending)
+      end
+    else
+      if needs_funding?
+        update!(review_status: :design_pending)
+      else
+        update!(review_status: :build_pending)
+      end
+    end
+  end
+
+  def passed_idv!
+    ship!
   end
 
   def under_review?
@@ -276,7 +306,11 @@ class Project < ApplicationRecord
   end
 
   def can_edit?
-    !under_review? && !rejected?
+    !under_review? && !rejected? && !awaiting_idv?
+  end
+
+  def can_ship?
+    !under_review? && !rejected? && !awaiting_idv?
   end
 
   def followed_by?(user)

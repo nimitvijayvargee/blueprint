@@ -135,4 +135,24 @@ export default class extends Controller {
     const allOk = !!this.baseOkValue && bomOk && readmeOk && tierOk
     this.submitTarget.disabled = !allOk
   }
+
+  handlePrev(event) {
+    event.preventDefault()
+    
+    const needsFundingRadio = document.querySelector('input[name="project[needs_funding]"]:checked')
+    const needsFunding = needsFundingRadio ? needsFundingRadio.value === "true" : true
+    
+    const paginateController = this.application.getControllerForElementAndIdentifier(
+      document.querySelector('[data-controller*="paginate"]'),
+      "paginate"
+    )
+    
+    if (paginateController) {
+      if (needsFunding) {
+        paginateController.prev()
+      } else {
+        paginateController.prevJump()
+      }
+    }
+  }
 }

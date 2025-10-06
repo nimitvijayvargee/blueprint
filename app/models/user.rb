@@ -2,21 +2,24 @@
 #
 # Table name: users
 #
-#  id                     :bigint           not null, primary key
-#  avatar                 :string
-#  email                  :string           not null
-#  github_username        :string
-#  is_banned              :boolean          default(FALSE), not null
-#  is_mcg                 :boolean          default(FALSE), not null
-#  last_active            :datetime
-#  role                   :integer          default("user"), not null
-#  timezone_raw           :string
-#  username               :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  github_installation_id :bigint
-#  referrer_id            :bigint
-#  slack_id               :string
+#  id                          :bigint           not null, primary key
+#  avatar                      :string
+#  email                       :string           not null
+#  github_username             :string
+#  identity_vault_access_token :string
+#  is_banned                   :boolean          default(FALSE), not null
+#  is_mcg                      :boolean          default(FALSE), not null
+#  last_active                 :datetime
+#  role                        :integer          default("user"), not null
+#  timezone_raw                :string
+#  username                    :string
+#  ysws_verified               :boolean
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  github_installation_id      :bigint
+#  identity_vault_id           :string
+#  referrer_id                 :bigint
+#  slack_id                    :string
 #
 # Indexes
 #
@@ -758,5 +761,54 @@ class User < ApplicationRecord
 
   def eligible_referral_count
     User.where(referrer_id: id).where.not(slack_id: [ nil, "" ]).where(is_mcg: false).count
+  end
+
+  def identity_vault_oauth_link(callback_url)
+    IdentityVaultService.authorize_url(callback_url, {
+                                         prefill: {
+                                           email: email
+                                         }
+                                       })
+  end
+
+  def link_identity_vault_callback(callback_url, code)
+    code_response = IdentityVaultService.exchange_token(callback_url, code)
+
+    access_token = code_response[:access_token]
+
+    idv_data = fetch_idv(access_token)
+    identity_vault_id = idv_data.dig(:identity, :id)
+
+    # Ensure no other user has this identity_vault_id linked already
+    if User.where.not(id:).exists?(identity_vault_id:)
+      raise StandardError, "Another user already has this identity linked."
+    end
+
+    update!(
+      identity_vault_access_token: access_token,
+      identity_vault_id:,
+      ysws_verified: idv_data.dig(:identity,
+                                  :verification_status) == "verified" && idv_data.dig(:identity, :ysws_eligible)
+    )
+  end
+
+  def fetch_idv(access_token = nil)
+    IdentityVaultService.me(access_token || identity_vault_access_token)
+  end
+
+  def idv_linked?
+    identity_vault_access_token.present?
+  end
+
+  def refresh_idv_data!
+    return unless idv_linked?
+    return if ysws_verified == true
+
+    idv_data = fetch_idv
+
+    update!(
+      ysws_verified: idv_data.dig(:identity,
+                                  :verification_status) == "verified" && idv_data.dig(:identity, :ysws_eligible)
+    )
   end
 end

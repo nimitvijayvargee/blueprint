@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_06_193713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -231,6 +231,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tier"
+    t.boolean "needs_funding", default: true
+    t.string "ysws"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -441,6 +443,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
     t.string "timezone_raw"
     t.bigint "github_installation_id"
     t.bigint "referrer_id"
+    t.string "identity_vault_access_token"
+    t.string "identity_vault_id"
+    t.boolean "ysws_verified"
     t.index ["referrer_id"], name: "index_users_on_referrer_id"
   end
 
