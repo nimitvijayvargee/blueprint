@@ -19,6 +19,10 @@ These are general resources provided by the community. PR's open!
 <li><a href="/guides/design-resources">External Hardware Design Resources</a></li>
 <li><a href="/guides/schematic-tips">Schematic Tips and Tricks</a></li>
 <li><a href="/guides/qmk">QMK for keybaords</a></li>
+<li><a href="/guides/jlc-ordering">How to order from JLCPCB</a></li>
+<li><a href="/guides/parts-sourcing">How to cost effectively source parts</a></li>
+
+
 
 </ul>
 
