@@ -32,7 +32,7 @@
         <p>Count: <%= @project.journal_entries.count %></p>
         <p>Total: <%= @project.journal_entries.sum(:duration_seconds) / 3600.0 %>h</p>
         <p>Average: <%= @project.journal_entries.average(:duration_seconds).to_f / 3600.0 %>h</p>
-        <p>≥1h: <%= @project.journal_entries.where("duration_seconds >= ?", 3600.0).count %>/<%= @project.journal_entries.count %></p>
+        <p>≥1h: <%= @project.journal_entries.where("duration_seconds >= ?", 3600).count %>/<%= @project.journal_entries.count %></p>
         <p>Max: <%= (@project.journal_entries.maximum(:duration_seconds).to_f / 3600.0) %>h</p>
         <p>Min: <%= (@project.journal_entries.minimum(:duration_seconds).to_f / 3600.0) %>h</p>
       </div>
