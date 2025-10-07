@@ -24,3 +24,8 @@ production:
     class: UptimePingJob
     queue: uptime
     schedule: every minute
+
+  refresh_idv_data:
+    class: RefreshIdvDataJob
+    queue: background
+    schedule: every 10 minutes

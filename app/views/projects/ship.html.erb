@@ -1,67 +1,242 @@
 <section class="flex flex-col items-center grow space-y-6">
   <div class="w-full max-w-3xl min-h-full flex flex-col m-8 space-y-8">
-    <%= render "shared/card", class: "flex flex-col space-y-6" do %>
-      <div class="space-y-2 -mt-4 -mx-6 p-6 pb-0">
-        <p class="text-3xl">It's time to ship "<%= @project.title %>"</p>
-        <p class="text-lg text-bp-muted">Complete these last steps before you can ship!</p>
-      </div>
-
-      <div class="space-y-8" 
-      data-controller="ship-bom" 
-      data-ship-bom-project-id-value="<%= @project.id %>"
-      data-ship-bom-base-ok-value="<%= @base_ok %>">
-        <div class="text-xl">
-          <ul class="space-y-2">
-            <% @checks.each do |c| %>
-              <% met = c[:met] %>
-              <% is_bom = c[:key] == "bom" %>
-              <% is_readme = c[:key] == "readme" %>
-              <li class="flex items-center space-x-4">
-              <%# Square checkbox, matching tasks style but with status colors %>
-                <% if met.nil? %>
-                  <% if is_bom || is_readme %>
-                    <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
-                  <% else %>
-                    <div class="border-2 size-4 border-bp-muted"></div>
-                  <% end %>
-                <% elsif met %>
-                  <div class="border-2 size-4 bg-bp-success border-bp-success" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
-                <% else %>
-                  <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
-                <% end %>
-                <% if c[:url].present? %>
-                  <% is_external = c[:url].start_with?('http') %>
-                  <%= link_to c[:msg], c[:url], class: "underline underline-offset-2", 
-                      **( is_external ? { target: "_blank", rel: "noopener noreferrer" } : {} ) %>
-                <% else %>
-                  <span><%= c[:msg] %></span>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
+    <% unless Flipper.enabled?(:new_ship_flow_10_06, current_user) %>
+      <%= render "shared/card", class: "flex flex-col space-y-6" do %>
+        <div class="space-y-2 -mt-4 -mx-6 p-6 pb-0">
+          <p class="text-3xl">It's time to ship "<%= @project.title %>"</p>
+          <p class="text-lg text-bp-muted">Complete these last steps before you can ship!</p>
         </div>
 
-        <%= form_with model: @project, class: "space-y-10" do |f| %>
-          <%= f.hidden_field :ship, value: true %>
-          
-          <div class="space-y-2">
-            <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
-            <div class="select w-full text-left text-white bg-bp-dark">
-              <%= f.select :tier, Project.tier_options, { include_blank: false, selected: 4 }, { data: { ship_bom_target: "select" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
-            </div>
+        <div class="space-y-8" 
+        data-controller="ship-bom" 
+        data-ship-bom-project-id-value="<%= @project.id %>"
+        data-ship-bom-base-ok-value="<%= @base_ok %>">
+          <div class="text-xl">
+            <ul class="space-y-2">
+              <% @checks.each do |c| %>
+                <% met = c[:met] %>
+                <% is_bom = c[:key] == "bom" %>
+                <% is_readme = c[:key] == "readme" %>
+                <li class="flex items-center space-x-4">
+                <%# Square checkbox, matching tasks style but with status colors %>
+                  <% if met.nil? %>
+                    <% if is_bom || is_readme %>
+                      <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
+                    <% else %>
+                      <div class="border-2 size-4 border-bp-muted"></div>
+                    <% end %>
+                  <% elsif met %>
+                    <div class="border-2 size-4 bg-bp-success border-bp-success" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
+                  <% else %>
+                    <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
+                  <% end %>
+                  <% if c[:url].present? %>
+                    <% is_external = c[:url].start_with?('http') %>
+                    <%= link_to c[:msg], c[:url], class: "underline underline-offset-2", 
+                        **( is_external ? { target: "_blank", rel: "noopener noreferrer" } : {} ) %>
+                  <% else %>
+                    <span><%= c[:msg] %></span>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
           </div>
-          <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>
+
+          <%= form_with model: @project, class: "space-y-10" do |f| %>
+            <%= f.hidden_field :ship, value: true %>
+            
+            <div class="space-y-2">
+              <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
+              <div class="select w-full text-left text-white bg-bp-dark">
+                <%= f.select :tier, Project.tier_options, { include_blank: false, selected: 4 }, { data: { ship_bom_target: "select" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+              </div>
+            </div>
+            <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>
 
 
-          <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between">
+              <%= link_to project_path(@project), class: "btn btn-outline" do %>
+                Not yet
+              <% end %>
+
+              <%= f.submit "Ship it!", data: { ship_bom_target: "submit" }, class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= form_with model: @project, data: { controller: "paginate", paginate_index_value: 0 } do |f| %>
+        <%= f.hidden_field :ship, value: true %>
+        <%= render "shared/card", html_options: { data: { paginate_target: "page" } } do %>
+          <div>
+            <p class="text-3xl">It's time to ship "<%= @project.title %>"</p>
+            <p class="text-lg">We'll guide you through the final steps to ship your project and make sure everything is ready!</p>
+          </div>
+          <div class="text-lg">
+            <p>Before you continue, check the guide for <a href="/docs/submission-guidelines" class="text-bp-warning underline">submission requirements</a>, and check to make sure your project can count as <a href="/docs/shipping" class="text-bp-warning underline">shipped</a>.</p>
+          </div>
+          <div class="flex items-center mt-4">
             <%= link_to project_path(@project), class: "btn btn-outline" do %>
-              Not yet
+                Not yet
             <% end %>
-
-            <%= f.submit "Ship it!", data: { ship_bom_target: "submit" }, class: "btn btn-primary" %>
+            <div class="grow"></div>
+            <%= render "shared/button", text: "Let's go!", html_options: { data: { action: "click->paginate#next" } } %>
           </div>
         <% end %>
-      </div>
+        <%= render "shared/card", class: "space-y-10 hidden", html_options: { data: { paginate_target: "page" } } do %>
+          <div>
+            <%= f.label :needs_funding, "Do you need a grant to build your project?", class: "text-3xl" %>
+            <p class="text-lg">You can get extra tickets if you do not need funding</p>
+          </div>
+          <div class="grid grid-cols-2 gap-10 mx-6">
+            <%= f.label :needs_funding_true do %>
+              <%= f.radio_button :needs_funding, true, class: "peer hidden" %>
+              <div class="border-2 border-dashed flex flex-col items-center p-10 px-12 space-y-4 text-xl peer-checked:border-solid peer-checked:bg-white/10 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-12" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M11.025 21v-2.15q-1.325-.3-2.287-1.15t-1.413-2.4l1.85-.75q.375 1.2 1.113 1.825t1.937.625q1.025 0 1.738-.462t.712-1.438q0-.875-.55-1.387t-2.55-1.163q-2.15-.675-2.95-1.612t-.8-2.288q0-1.625 1.05-2.525t2.15-1.025V3h2v2.1q1.25.2 2.063.913t1.187 1.737l-1.85.8q-.3-.8-.85-1.2t-1.5-.4q-1.1 0-1.675.488T9.825 8.65q0 .825.75 1.3t2.6 1q1.725.5 2.613 1.588t.887 2.512q0 1.775-1.05 2.7t-2.6 1.15V21z"/></svg>
+                <p>I need funding</p>
+              </div>
+            <% end %>
+            <%= f.label :needs_funding_false do %>
+              <%= f.radio_button :needs_funding, false, class: "peer hidden" %>
+              <div class="border-2 border-dashed flex flex-col items-center p-10 px-12 space-y-4 text-xl peer-checked:border-solid peer-checked:bg-white/10 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-12" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M14.35 8.55q-.3-.75-.887-1.175T12.05 6.95q-.45 0-.875.125t-.775.475L8.95 6.1q.35-.35.95-.638T11 5.1V3h2v2.05q1.125.225 1.975.913T16.25 7.75zM19.8 22.6L15.2 18q-.375.375-1.025.613T13 18.9V21h-2v-2.15q-1.4-.35-2.337-1.275T7.3 15.25l2-.8q.3 1.05 1.013 1.8T12.2 17q.45 0 .825-.112t.725-.338L1.4 4.2l1.4-1.4l18.4 18.4z"/></svg>
+                <p>I don't need funding</p>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex items-center">
+            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <div class="grow"></div>
+            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
+          </div>
+        <% end %>
+        <%= render "shared/card", class: "hidden", html_options: { data: { controller: "ysws", paginate_target: "page" } } do %>
+          <div>
+            <%= f.label :ysws, "Was this project from another program?", class: "text-3xl" %>
+            <p class="text-lg">Did you work on or submit this project to another program?<br>Or, was this project originally meant for another program?</p>
+          </div>
+          <div class="flex-flex-col space-y-10 pt-4">
+            <div class="space-y-2">
+              <div class="select w-full text-left text-white bg-bp-dark">
+                <% ysws_options = [
+                  ["Was not for another program", "none"],
+                  ["Mini Midi Magic", "midi"],
+                  ["Athena", "athena"],
+                  ["Grounded", "grounded"],
+                  ["Other", "other"]
+                ] %>
+                <%= f.select :ysws, ysws_options, { selected: "none" }, { data: { ysws_target: "select", action: "change->ysws#toggle" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+              </div>
+              <div class="hidden" data-ysws-target="otherField">
+                <%= f.label :ysws_other, "Please specify:", class: "block text-lg font-medium mb-2" %>
+                <%= f.text_field :ysws_other, data: { ysws_target: "otherInput", action: "input->ysws#validate" }, class: "input w-full", placeholder: "Enter program name..." %>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="text-xl">Blueprint projects cannot be submitted to other programs unless specified.</p>
+          </div>
+          <div class="flex items-center pt-2">
+            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <div class="grow"></div>
+            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->ysws#handleNext", ysws_target: "nextButton" } } %>
+          </div>
+        <% end %>
+        <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
+          <div>
+            <%= f.label :tier, "What tier should this project be?", class: "text-3xl" %>
+            <p class="text-lg">We may adjust this as we see fit.<br>If you're unsure what to pick, check the <a href="/docs" target="_blank" class="underline text-bp-warning">tier docs</a>.</p>
+          </div>
+          <div class="flex-flex-col space-y-10 py-4">
+            <div class="space-y-2">
+              <div class="select w-full text-left text-white bg-bp-dark">
+                <%= f.select :tier, Project.tier_options, { include_blank: false, selected: @project.tier || 4 }, { class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center pt-2">
+            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <div class="grow"></div>
+            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
+          </div>
+        <% end %>
+        <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
+          <div>
+            <p class="text-3xl">Running some checks...</p>
+            <p class="text-lg">Just making sure your project is ready for submission.</p>
+          </div>
+          <div class="space-y-8" 
+          data-controller="ship-bom" 
+          data-ship-bom-project-id-value="<%= @project.id %>"
+          data-ship-bom-base-ok-value="<%= @base_ok %>">
+            <div class="text-xl">
+              <ul class="space-y-2">
+                <% @checks.each do |c| %>
+                  <% met = c[:met] %>
+                  <% is_bom = c[:key] == "bom" %>
+                  <% is_readme = c[:key] == "readme" %>
+                  <li class="flex items-center space-x-4">
+                    <% if met.nil? %>
+                      <% if is_bom || is_readme %>
+                        <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
+                      <% else %>
+                        <div class="border-2 size-4 border-bp-muted"></div>
+                      <% end %>
+                    <% elsif met %>
+                      <div class="border-2 size-4 bg-bp-success border-bp-success" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
+                    <% else %>
+                      <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
+                    <% end %>
+                    <% if c[:url].present? %>
+                      <% is_external = c[:url].start_with?('http') %>
+                      <%= link_to c[:msg], c[:url], class: "underline underline-offset-2", 
+                          **( is_external ? { target: "_blank", rel: "noopener noreferrer" } : {} ) %>
+                    <% else %>
+                      <span><%= c[:msg] %></span>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="flex items-center pt-2">
+              <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->ship-bom#handlePrev" } } %>
+              <div class="grow"></div>
+              <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next", ship_bom_target: "submit" } } %>
+            </div>
+          </div>
+        <% end %>
+        <%= render "shared/card", class: "hidden", html_options: { data: { controller: "ship-checks", paginate_target: "page" } } do %>
+          <div>
+            <p class="text-3xl">Final things before shipping</p>
+            <p class="text-lg">Please confirm the following statements and check the boxes</p>
+          </div>
+          <% manual_checks = [
+            ["repo", "I have included all code, 3D models, schematics, and other project files into the repository in a format that can be edited (e.g. STEP, not STL)"],
+            ["readme", "I have described my project in the README.md on the repository"],
+            ["bom", "I have researched the cheapest option for my components"],
+            ["unique", "I have not copied an existing project to my knowledge, or have modified an existing project significantly"],
+            ["design", "I have tried my best to build a functional design (electronics, 3D parts, etc)"],
+            ["journal", "I wrote my journal entries to the best of my ability"],
+            ["hours", "I reported time spent honestly and to the best of my ability."]
+          ] %>
+          <div>
+            <% manual_checks.each do |key, msg| %>
+              <div class="flex items-start space-x-3">
+                <label for="ship-<%= key %>" class="flex space-x-3 items-start">
+                  <input type="checkbox" class="hidden peer" id="ship-<%= key %>" data-ship-checks-target="checkbox" data-action="change->ship-checks#validate">
+                  <div class="mt-1 size-4 shrink-0 border-2 peer-checked:bg-bp-success peer-checked:border-bp-success"></div>
+                </label>
+                <p><%= msg %></p>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex items-center pt-2">
+            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->ship-checks#handlePrev" } } %>
+            <div class="grow"></div>
+            <%= f.submit "Ship it!", class: "btn btn-primary", data: { ship_checks_target: "submitButton" } %>
+          </div>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 </section>
