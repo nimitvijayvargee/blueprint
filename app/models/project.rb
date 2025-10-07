@@ -7,6 +7,7 @@
 #  description            :text
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
+#  needs_funding          :boolean          default(TRUE)
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string
@@ -14,6 +15,7 @@
 #  tier                   :integer
 #  title                  :string
 #  views_count            :integer          default(0), not null
+#  ysws                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  user_id                :bigint           not null
@@ -32,6 +34,7 @@ class Project < ApplicationRecord
   has_many :timeline_items, dependent: :destroy
   has_many :follows, dependent: :destroy
   has_many :followers, through: :follows, source: :user
+  has_many :design_reviews, dependent: :destroy
 
   # Enums
   enum :project_type, {
@@ -202,7 +205,9 @@ class Project < ApplicationRecord
     false
   end
 
-  def generate_journal
+  def generate_journal(include_time)
+    include_time ||= false
+
     contents =
     <<~EOS
     <!--
@@ -237,6 +242,9 @@ class Project < ApplicationRecord
       end
 
       contents += "## #{header_ts}#{entry.summary.present? ? " - #{entry.summary}" : ""}  \n\n"
+      if include_time
+        contents += "_Time spent: #{(entry.duration_seconds / 3600.0).round(2)}h_  \n\n"
+      end
       contents += "#{replace_local_images(entry.content)}  \n\n"
     end
 

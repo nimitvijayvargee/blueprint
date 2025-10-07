@@ -1,0 +1,37 @@
+# == Schema Information
+#
+# Table name: design_reviews
+#
+#  id                   :bigint           not null, primary key
+#  admin_review         :boolean
+#  feedback             :text
+#  grant_override_cents :integer
+#  hours_override       :float
+#  invalidated          :boolean          default(FALSE)
+#  reason               :string
+#  result               :integer
+#  tier_override        :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  project_id           :bigint           not null
+#  reviewer_id          :bigint           not null
+#
+# Indexes
+#
+#  index_design_reviews_on_project_id                  (project_id)
+#  index_design_reviews_on_reviewer_id                 (reviewer_id)
+#  index_design_reviews_on_reviewer_id_and_project_id  (reviewer_id,project_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (project_id => projects.id)
+#  fk_rails_...  (reviewer_id => users.id)
+#
+class DesignReview < ApplicationRecord
+  belongs_to :reviewer, class_name: "User"
+  belongs_to :project
+
+  enum :result, { approved: 0, returned: 1, rejected: 2 }
+
+  validates :reviewer_id, uniqueness: { scope: :project_id, message: "has already reviewed this project" }
+end

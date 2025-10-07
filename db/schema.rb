@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_202510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -148,6 +148,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
     t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
   end
 
+  create_table "design_reviews", force: :cascade do |t|
+    t.bigint "reviewer_id", null: false
+    t.bigint "project_id", null: false
+    t.float "hours_override"
+    t.boolean "admin_review"
+    t.string "reason"
+    t.integer "grant_override_cents"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "result"
+    t.text "feedback"
+    t.integer "tier_override"
+    t.boolean "invalidated", default: false
+    t.index ["project_id"], name: "index_design_reviews_on_project_id"
+    t.index ["reviewer_id", "project_id"], name: "index_design_reviews_on_reviewer_id_and_project_id", unique: true
+    t.index ["reviewer_id"], name: "index_design_reviews_on_reviewer_id"
+  end
+
   create_table "disco_recommendations", force: :cascade do |t|
     t.string "subject_type"
     t.bigint "subject_id"
@@ -231,6 +249,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tier"
+    t.boolean "needs_funding", default: true
+    t.string "ysws"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -430,17 +450,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
     t.string "avatar"
     t.string "slack_id"
     t.string "username"
-    t.string "timezone_raw"
     t.integer "role", default: 0, null: false
     t.boolean "is_banned", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", null: false
-    t.boolean "is_mcg", default: true, null: false
+    t.boolean "is_mcg", default: false, null: false
     t.string "github_username"
     t.datetime "last_active"
+    t.string "timezone_raw"
     t.bigint "github_installation_id"
     t.bigint "referrer_id"
+    t.string "identity_vault_access_token"
+    t.string "identity_vault_id"
+    t.boolean "ysws_verified"
     t.index ["referrer_id"], name: "index_users_on_referrer_id"
   end
 
@@ -458,6 +481,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_152000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "design_reviews", "projects"
+  add_foreign_key "design_reviews", "users", column: "reviewer_id"
   add_foreign_key "follows", "projects"
   add_foreign_key "follows", "users"
   add_foreign_key "journal_entries", "projects"

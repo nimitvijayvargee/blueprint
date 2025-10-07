@@ -120,6 +120,11 @@ Rails.application.routes.draw do
         post :revive, on: :member
       end
       resources :allowed_emails, only: [ :index, :create, :destroy ]
+
+      get "design_reviews", to: "design_reviews#index", as: :design_reviews
+      get "design_reviews/random", to: "design_reviews#show_random", as: :random_design_review
+      get "design_reviews/:id", to: "design_reviews#show", as: :design_review
+      post "design_reviews/:id", to: "design_reviews#create", as: :design_review_create
     end
   end
 end

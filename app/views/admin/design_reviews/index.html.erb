@@ -1,0 +1,69 @@
+<div class="mb-10">
+  <%= render "shared/button", text: "Back", url: admin_root_path, class: "py-0" %>
+</div>
+<section class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="pb-2 text-4xl">Pending Design Review</h1>
+    <%= form_with url: admin_projects_path, method: :get, local: true, class: "w-full max-w-2xl" do %>
+      <div class="flex items-center gap-3">
+        <input type="text" name="q" value="<%= h(@q) %>" placeholder="Search by ID, title, or author" class="w-full text-white border-white rounded-none input bg-bp-darker placeholder-white/60" />
+        <button type="submit" class="text-lg rounded-none btn btn-primary">Search</button>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <%= render "shared/button", text: "Review Random", url: admin_random_design_review_path, class: "py-0" %>
+  </div>
+
+  <div class="border-2 border-white rounded-none">
+    <!-- Header row -->
+    <div class="grid grid-cols-12 p-3 text-lg border-b-2 border-white">
+      <div class="col-span-1">ID</div>
+      <div class="col-span-4">Title</div>
+      <div class="col-span-2">Author</div>
+      <div class="col-span-2">Status</div>
+      <div class="col-span-1">Hours</div>
+      <div class="col-span-1">Entries</div>
+      <div class="col-span-1">Actions</div>
+    </div>
+
+    <!-- Rows -->
+    <% if @projects.present? %>
+      <% @projects.each do |project| %>
+        <div class="grid grid-cols-12 px-3 text-lg border-b border-white/30 last:border-0">
+          <div class="flex items-center col-span-1 py-2"><%= project.id %></div>
+          <div class="flex items-center col-span-4 font-medium">
+            <%= link_to (project.title.presence || "(untitled)"), admin_project_path(project), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
+          </div>
+          <div class="flex items-center col-span-2">
+            <% if project.user %>
+              <%= link_to project.user.display_name, admin_user_path(project.user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
+            <% else %>
+              –
+            <% end %>
+          </div>
+          <div class="flex items-center col-span-2">
+            <%= project.review_status || "not_submitted" %>
+          </div>
+          <div class="flex items-center col-span-1">
+            <%= (project.journal_entries.sum(:duration_seconds) / 3600).round(1)  || 0 %>
+          </div>
+          <div class="flex items-center col-span-1">
+            <%= project.view_count || 0 %>
+          </div>
+          <div class="flex items-center col-span-1">
+            <div class="flex items-center gap-2">
+              <%= render "shared/button", text: "Review", url: admin_design_review_path(project), class: "text-sm py-0 px-2" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="px-4 py-6 text-center text-white/70">No projects found.</div>
+    <% end %>
+  </div>
+
+  <div class="flex items-center justify-end text-lg">
+    <%== pagy_nav(@pagy) if @pagy.present? && @pagy.pages > 1 %>
+  </div>
+</section>

@@ -1,0 +1,123 @@
+<section class="space-y-6">
+  <%= render "shared/button", text: "Back", url: admin_design_reviews_path, class: "py-0" %>
+  <%= render "shared/card" do %>
+    <div class="flex flex-col justify-between space-y-1" >
+      <h1 class="pb-2 text-4xl">Project #<%= @project.id %>, <%= link_to @project.title, admin_project_path(@project), class: "underline" %></h1>
+      <div>
+        <p>By <%= render "shared/user_inline", user: @project.user, admin_view: true %> on <%= @project.created_at.strftime("%B %d, %Y") %></p>
+      </div>
+      <div class="flex justify-start text-xl mt-4">
+        <% if @project.tier.present? %>
+          <% tier_style = @project.tier == 1 ? "bg-bp-danger text-bp-darker" : (@project.tier == 2 ? "bg-bp-warning text-bp-darker" : (@project.tier == 3 ? "bg-bp-success text-bp-darker" : "bg-bp-dark text-white")) %>
+          <p>Tier: <span class="<%= tier_style %> p-1 px-3 "><%= @project.tier %></span></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="space-y-6">
+      <p class="text-xl wrap-break-word"><%= @project.description %></p>
+      <div>
+        <% if @project.repo_link.present? %>
+          <%= render "shared/button", text: "Repository", url: @project.repo_link, class: "py-0", html_options: { target: "_blank" } %>
+        <% end %>
+        <% if @project.demo_link.present? %>
+          <%= render "shared/button", text: "Demo", url: @project.demo_link, class: "py-0", html_options: { target: "_blank" } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <%= render "shared/card" do %>
+    <div class="space-y-2">
+      <p class="text-3xl">Journal Entries</p>
+      <div class="flex space-x-12 text-xl">
+        <p>Count: <%= @project.journal_entries.count %></p>
+        <p>Total: <%= @project.journal_entries.sum(:duration_seconds) / 3600.0 %>h</p>
+        <p>Average: <%= @project.journal_entries.average(:duration_seconds).to_f / 3600.0 %>h</p>
+        <p>≥1h: <%= @project.journal_entries.where("duration_seconds >= ?", 3600.0).count %>/<%= @project.journal_entries.count %></p>
+        <p>Max: <%= (@project.journal_entries.maximum(:duration_seconds).to_f / 3600.0) %>h</p>
+        <p>Min: <%= (@project.journal_entries.minimum(:duration_seconds).to_f / 3600.0) %>h</p>
+      </div>
+      <% if @project.journal_entries.count > 1 %>
+        <% chart_data = @project.journal_entries.order(:id).pluck(:id, :duration_seconds).map { |id, duration| ["##{id}", duration / 3600.0] }.to_h %>
+        <div class="mt-4">
+          <%= bar_chart chart_data,
+            suffix: " hrs",
+            height: "300px",
+            colors: ["#ffc857"],
+            library: {
+              plugins: {
+                legend: { display: false },
+                title: {
+                  display: true,
+                  text: "Time spent per entry (hours)",
+                  color: "white"
+                }
+              },
+              scales: {
+                y: {
+                  title: {
+                    display: true,
+                    text: "Entries",
+                    color: "white"
+                  },
+                  ticks: { color: "white" }
+                },
+                x: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "Hours",
+                    color: "white"
+                  },
+                  ticks: { color: "white" }
+                }
+              }
+            } %>
+        </div>
+      <% end %>
+      <div>
+        <details>
+          <summary>Show Entire Journal</summary>
+          <div class="mt-4 space-y-6 markdown">
+          <% base_url = Rails.application.routes.default_url_options[:host] || "localhost:3000" %>
+          <%= sanitize_marksmith_html(Marksmith::Renderer.new(body: @project.generate_journal(true), base_url: "http://#{base_url}").render) %>
+          </div>
+        </details>
+      </div>
+    </div>
+  <% end %>
+  <%= render "shared/card" do %>
+    <p class="text-3xl pb-4">Submit Design Review</p>
+    <%= form_with model: @design_review, url: admin_design_review_create_path(@project), method: :post, html: { class: "space-y-6" } do |f| %>
+      <div>
+        <%= f.label :hours_override, "Hours Override", class: "block text-xl font-medium" %>
+        <%= f.number_field :hours_override, step: 0.01, placeholder: "Leave blank to use calculated hours (#{@project.journal_entries.sum(:duration_seconds) / 3600.0})", class: "input px-3 mt-1 block w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :tier_override, "Tier Override", class: "block text-xl font-medium" %>
+        <%= f.select :tier_override, Project.tier_options, { include_blank: "Leave blank for default tier (#{@project.tier})" }, class: "input px-3 mt-1 block w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :grant_override_cents, "Grant Override (cents)", class: "block text-xl font-medium" %>
+        <%= f.number_field :grant_override_cents, placeholder: "Leave blank for default calculation", class: "input px-3 mt-1 block w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :reason, "Internal Reason", class: "block text-xl font-medium" %>
+        <%= f.text_area :reason, rows: 4, placeholder: "Add notes or reasons for your decision", class: "input px-3 mt-1 block w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :feedback, class: "block text-xl font-medium" %>
+        <%= f.text_area :feedback, rows: 4, placeholder: "Feedback is shown to users", class: "input px-3 mt-1 block w-full" %>
+      </div>
+
+      <div class="flex gap-4">
+        <%= f.button "Approve", type: "submit", name: "design_review[result]", value: "approved", class: "btn btn-primary flex-1 bg-bp-success border-bp-success" %>
+        <%= f.button "Return", type: "submit", name: "design_review[result]", value: "returned", class: "btn btn-primary flex-1 bg-bp-warning border-bp-warning" %>
+        <%= f.button "Permanently Reject", type: "submit", name: "design_review[result]", value: "rejected", class: "btn btn-primary flex-1 bg-bp-danger border-bp-danger" %>
+      </div>
+    <% end %>
+  <% end %>
+</section>

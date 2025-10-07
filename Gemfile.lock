@@ -562,6 +562,7 @@ DEPENDENCIES
   brakeman
   bullet
   capybara
+  chartkick
   debug
   disco
   dotenv-rails
