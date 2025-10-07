@@ -291,7 +291,7 @@ class Project < ApplicationRecord
   end
 
   def can_ship?
-    review_status.nil? || review_status == "design_needs_revision" || review_status == "build_needs_revision" || review_status == "awaiting_idv"
+    review_status.nil? || design_needs_revision? || build_needs_revision? || awaiting_idv?
   end
 
   def ship!(design: nil)
