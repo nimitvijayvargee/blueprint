@@ -13,7 +13,7 @@ class GithubJournalSyncJob < ApplicationJob
       nil
     end
 
-    content = project.generate_journal
+    content = project.generate_journal(false)
 
     begin
       org, repo = project.parse_repo.values_at(:org, :repo_name)
