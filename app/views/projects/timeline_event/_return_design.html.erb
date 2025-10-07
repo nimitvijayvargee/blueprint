@@ -1,0 +1,21 @@
+<% if event[:feedback] %>
+  <%= render "timeline_event_card" do %>
+    <div class="flex space-x-4">
+      <% if event[:user] %>
+        <p class="grow"><%= render "shared/user_inline", user: event[:user] %> requested changes for <%= project.title %> <%= time_ago_in_words(event[:date]) %> ago</p>
+      <% else %>
+      <% end %>
+    </div>
+    <div class="timeline-journal">
+      <p><%= event[:feedback] %></p>
+    </div>
+  <% end %>
+<% else %>
+  <%= render "timeline_event_basic", icon: "icons/return.svg" do %>
+    <% if event[:user] %>
+        <p><%= render "shared/user_inline", user: event[:user] %> requested changes for <%= project.title %> <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+    <% else %>
+      <p><%= project.title %> was returned needing changes <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+    <% end %>
+  <% end %>
+<% end %>

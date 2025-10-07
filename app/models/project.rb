@@ -141,10 +141,15 @@ class Project < ApplicationRecord
     ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
     user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
 
-    return_design_events = design_reviews.where(result: "returned").order(created_at: :asc).map do |review|
-      { type: :return_design, date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback }
+    negative_reviews = design_reviews.where(result: %w[returned rejected]).order(created_at: :asc)
+    return_design_events = []
+    reject_design_events = []
+
+    negative_reviews.each do |review|
+      event = { type: review.result == "returned" ? :return_design : :reject_design, date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback }
+      review.result == "returned" ? return_design_events << event : reject_design_events << event
+      user_ids << event[:user_id].to_s
     end
-    user_ids.concat(return_design_events.map { |e| e[:user_id].to_s })
 
     users = User.where(id: user_ids).index_by { |u| u.id.to_s }
 
@@ -156,6 +161,11 @@ class Project < ApplicationRecord
     return_design_events.each do |event|
       user = users[event[:user_id].to_s]
       timeline << { type: :return_design, date: event[:date], user: user, feedback: event[:feedback] }
+    end
+
+    reject_design_events.each do |event|
+      user = users[event[:user_id].to_s]
+      timeline << { type: :reject_design, date: event[:date], user: user, feedback: event[:feedback] }
     end
 
     timeline.sort_by { |e| e[:date] }
@@ -279,8 +289,12 @@ class Project < ApplicationRecord
       Project.tiers.map { |key, value| [ "Tier #{key} (#{tier_amounts[key.to_i]})", value ] }
   end
 
+  def can_ship_design?
+    review_status.nil? || review_status == "design_needs_revision"
+  end
+
   def ship_design
-    unless review_status.nil?
+    unless can_ship_design?
       throw "Project is already shipped!"
     end
 
