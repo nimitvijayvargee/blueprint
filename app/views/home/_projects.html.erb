@@ -10,6 +10,11 @@
   <% else %>
     <div class="flex space-x-6 overflow-x-auto mt-2 h-full">
       <%= render partial: "project", collection: @projects, as: :project %>
+      <div class="flex items-center justify-center h-full flex-shrink-0">
+        <%= link_to new_project_path, class: "flex items-center justify-center size-28 bg-hatch border-2 border-white/25 hover:bg-bp-success/20 transition-colors" do %>
+          <span class="text-4xl font-bold">+</span>
+        <% end %>
+      </div>
     </div>
   <% end %>
 <% end %>
