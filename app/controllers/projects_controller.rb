@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find_by(id: params[:id], is_deleted: false)
+    @project = Project.includes(:user).find_by(id: params[:id], is_deleted: false)
     not_found and return unless @project
 
     ahoy.track("project_view", project_id: @project.id, user_id: current_user&.id)
