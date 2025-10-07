@@ -8,7 +8,7 @@
       </div>
       <div class="flex justify-start text-xl mt-4">
         <% if @project.tier.present? %>
-          <% tier_style = @project.tier == 1 ? "bg-bp-danger text-bp-darker" : (@project.tier == 2 ? "bg-bp-warning text-bp-darker" : (@project.tier == 3 ? "bg-bp-success text-bp-darker" : "bg-bp-dark text-white")) %>
+          <% tier_style = @project.tier == "1" ? "bg-bp-danger text-bp-darker" : (@project.tier == "2" ? "bg-bp-warning text-bp-darker" : (@project.tier == "3" ? "bg-bp-success text-bp-darker" : "bg-bp-dark text-white")) %>
           <p>Tier: <span class="<%= tier_style %> p-1 px-3 "><%= @project.tier %></span></p>
         <% end %>
       </div>
