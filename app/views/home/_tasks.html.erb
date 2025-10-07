@@ -1,18 +1,18 @@
 <% tasks = current_user.tasks.task_requirements %>
 
 <%= render "shared/card", class: "flex flex-col" do %>
-  <div class="absolute flex items-center justify-center bg-center bg-no-repeat bg-contain size-32 -right-1 -top-8 -rotate-5"
+  <div class="absolute flex items-center justify-center bg-center bg-no-repeat bg-contain size-24 md:size-32 -right-1 -top-6 md:-top-8 -rotate-5"
   style="background-image: url('<%= asset_path('stickers.png') %>')">
   </div>
   <div class="">
-    <h2 class="text-3xl">Your tasks</h2>
-    <p>Get stickers when you finish!</p>
+    <h2 class="text-2xl md:text-3xl">Your tasks</h2>
+    <p class="text-sm md:text-base">Get stickers when you finish!</p>
   </div>
   <div class="flex flex-col space-y-4 grow">
     <div class="space-y-4 grow">
       <% tasks.each do |name, task| %>
         <% done = task[:met] %>
-        <div class="flex items-center space-x-4 text-xl border-0">
+        <div class="flex items-center space-x-3 md:space-x-4 text-base md:text-xl border-0">
           <div class="border-2 size-4 <%= done ? 'bg-white' : '' %>"></div>
           <% if name == :join_slack %>
             <% if done %>

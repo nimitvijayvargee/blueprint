@@ -1,15 +1,15 @@
 <% cache [project, project.banner&.blob] do %>
-  <div class="flex flex-col h-full space-y-4 w-82">
+  <div class="flex flex-col h-full space-y-3 md:space-y-4 w-64 md:w-82 flex-shrink-0">
       <%= link_to project_path(project) do %>
-          <div class="bg-gray-200 bg-center bg-cover h-28" style="background-image: url('<%= project.banner.attached? ? url_for(project.banner) : nil %>')">
+          <div class="bg-gray-200 bg-center bg-cover h-24 md:h-28" style="background-image: url('<%= project.banner.attached? ? url_for(project.banner) : nil %>')">
           </div>
       <% end %>
       <div class="flex flex-col space-y-2 grow">
           <%= link_to project_path(project), class: "grow" do %>
-              <p class="text-2xl"><%= project.title %></p>
+              <p class="text-lg md:text-2xl"><%= project.title %></p>
           <% end %>
-          <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-base bg-bp-warning text-bp-dark hover:bg-bp-warning/80" %>
-          <%= render "shared/button", url: ship_project_path(project), variant: :inset, text: "Ship", class: "text-base " %>
+          <%= render "shared/button", url: project_path(project), variant: :inset, text: "New Journal Entry", class: "text-sm md:text-base bg-bp-warning text-bp-dark hover:bg-bp-warning/80 min-h-[44px]" %>
+          <%= render "shared/button", url: ship_project_path(project), variant: :inset, text: "Ship", class: "text-sm md:text-base min-h-[44px]" %>
       </div>
   </div>
 <% end %>
