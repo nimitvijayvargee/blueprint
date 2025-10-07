@@ -1,22 +1,22 @@
 <section class="flex justify-center grow">
   <div class="w-full max-w-6xl space-y-4 min-h-full flex flex-col">
-    <div class="py-4 space-y-1">
-      <h1 class="text-5xl">Your projects</h1>
-      <p class="text-xl">What are you gonna build today?</p>
+    <div class="py-2 md:py-4 space-y-1">
+      <h1 class="text-3xl md:text-5xl">Your projects</h1>
+      <p class="text-lg md:text-xl">What are you gonna build today?</p>
     </div>
     <% if @projects.empty? %>
     <div class="m-4 mt-0 grow flex flex-col space-y-4 items-center justify-center max-h-96">
-      <p class="text-2xl">Hmm... Nothing's here yet.</p>
-      <%= render "shared/button", url: new_project_path, text: "+ Start a project" %>
+      <p class="text-lg md:text-2xl">Hmm... Nothing's here yet.</p>
+      <%= render "shared/button", url: new_project_path, text: "+ Start a project", class: "min-h-[44px]" %>
     </div>
     <% else %>
-      <div class="grid grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <% @projects.each do |project| %>
           <%= render "project", project: project %>
         <% end %>
         <%= link_to new_project_path do %>
-          <%= render "shared/card", class: "flex items-center justify-center h-full hover:scale-105 hover:shadow-xl motion-safe:transition-all min-h-70" do %>
-            <p class="text-xl">+ Start a new project</p>
+          <%= render "shared/card", class: "flex items-center justify-center h-full hover:scale-105 hover:shadow-xl motion-safe:transition-all min-h-44 md:min-h-70" do %>
+            <p class="text-base md:text-xl">+ Start a new project</p>
           <% end %>
         <% end %>
       </div>
