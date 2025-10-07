@@ -26,6 +26,26 @@ If you follow guides from online or even from the [guides](/guides), thats fine!
 
 This means that you have a nice looking ReadMe.md, all of your required files (see below), a good description of what the project is for and how to use the files to recreate the project. You should render or screenshot any of the 3d models for the projects and once you build the project, add a GIF or video of the project working. 
 
+  **Here are some great examples of shipped projects**. Notice how the files are organized using folders, and, more importantly, it’s well documented what the project is about and what you can do with it!
+
+  **Keyboards & Macropads:**
+
+- [Seigaiha Keyboard](https://github.com/yiancar/Seigaiha)
+- [Ducky Pad](https://github.com/dekuNukem/duckyPad)
+
+**3D printers:**
+
+- [Voron 0](https://github.com/VoronDesign/Voron-0)
+- [Annex K3](https://github.com/Annex-Engineering/Gasherbrum-K3)
+
+**Misc projects:**
+
+- [PiGRRL](https://github.com/adafruit/Adafruit-PiGRRL-PCB) Game console
+- [Nevermore filters](https://github.com/nevermore3d/Nevermore_Micro) (I’ll admit - this one is a little excessive)
+
+**When you make your repository nothing but a dump of files and 2 sentences for a README**, what happens is that it’s hard for other people to recognize your work, nor does it make it easy to learn from. *It’s not real*. It only lives on in your tiny corner of this earth.
+
+
 -----------
 
 ### 3) Required files 
@@ -44,6 +64,19 @@ For EasyEDA, you will need your:
 
 
 For projects with 3d models, you will also need the `.obj` or `.step` files for each part along with the project assembly.
+
+All projects should also have 
+  - Some pictures of the design (hopefully you have some cool renders)
+
+### 4) A Good Journal
+
+Your journal is very important for Blueprint! Not only does it allow us to verify the hours you spent, it also allows for other people to look back at your project and follow it's journey. Here are some important things to keep in mind while journaling:
+- Try to keep each entry under 5 hours, this is not a hard requirement but your project will be more likely to be rejected
+- Take into account your thoughts while making a project
+- Don't just log the steps that led to your final project! You should have all of your failures and rabbit holes that didn't end up making it to the final piece.
+
+There is no one thing that makes a Journal "Good" but a follow the suggestions above and your project is likely to be approved!
+
 
 
 Once you meet all of the requirements, your project is good to submit!
