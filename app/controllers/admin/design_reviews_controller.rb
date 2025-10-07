@@ -26,9 +26,9 @@ class Admin::DesignReviewsController < Admin::ApplicationController
 
     if @design_review.save
       update_project_review_status(@project, @design_review)
-      redirect_to admin_design_review_path(@project), notice: "Design review submitted successfully."
+      redirect_to admin_random_design_review_path, notice: "Design review submitted successfully. Showing new project."
     else
-      render :show
+      redirect_to admin_design_review_path(@project), alert: @design_review.errors.full_messages.to_sentence
     end
   end
 

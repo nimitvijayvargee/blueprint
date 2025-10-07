@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_07_202510) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_203736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -162,7 +162,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_202510) do
     t.integer "tier_override"
     t.boolean "invalidated", default: false
     t.index ["project_id"], name: "index_design_reviews_on_project_id"
-    t.index ["reviewer_id", "project_id"], name: "index_design_reviews_on_reviewer_id_and_project_id", unique: true
+    t.index ["reviewer_id", "project_id"], name: "index_design_reviews_on_reviewer_id_and_project_id", unique: true, where: "(invalidated = false)"
     t.index ["reviewer_id"], name: "index_design_reviews_on_reviewer_id"
   end
 

@@ -22,7 +22,7 @@
 #
 #  index_design_reviews_on_project_id                  (project_id)
 #  index_design_reviews_on_reviewer_id                 (reviewer_id)
-#  index_design_reviews_on_reviewer_id_and_project_id  (reviewer_id,project_id) UNIQUE
+#  index_design_reviews_on_reviewer_id_and_project_id  (reviewer_id,project_id) UNIQUE WHERE (invalidated = false)
 #
 # Foreign Keys
 #

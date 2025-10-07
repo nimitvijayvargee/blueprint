@@ -76,6 +76,7 @@ class Project < ApplicationRecord
 
   before_validation :normalize_repo_link
   after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
+  after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && review_status == "design_pending" }
 
   def self.parse_repo(repo)
     # Supports:
@@ -139,11 +140,22 @@ class Project < ApplicationRecord
 
     ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
     user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
+
+    return_design_events = design_reviews.where(result: "returned").order(created_at: :asc).map do |review|
+      { type: :return_design, date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback }
+    end
+    user_ids.concat(return_design_events.map { |e| e[:user_id].to_s })
+
     users = User.where(id: user_ids).index_by { |u| u.id.to_s }
 
     ship_design_events.each do |event|
       user = users[event[:whodunnit].to_s]
       timeline << { type: :ship_design, date: event[:timestamp], user: user }
+    end
+
+    return_design_events.each do |event|
+      user = users[event[:user_id].to_s]
+      timeline << { type: :return_design, date: event[:date], user: user, feedback: event[:feedback] }
     end
 
     timeline.sort_by { |e| e[:date] }
@@ -306,6 +318,10 @@ class Project < ApplicationRecord
   def normalize_repo_link
     normalized = Project.normalize_repo_link(repo_link, user&.github_username)
     self.repo_link = normalized if normalized.present?
+  end
+
+  def invalidate_design_reviews_on_resubmit
+    design_reviews.update_all(invalidated: true)
   end
 
   def replace_local_images(content)

@@ -20,7 +20,7 @@
 #
 #  index_design_reviews_on_project_id                  (project_id)
 #  index_design_reviews_on_reviewer_id                 (reviewer_id)
-#  index_design_reviews_on_reviewer_id_and_project_id  (reviewer_id,project_id) UNIQUE
+#  index_design_reviews_on_reviewer_id_and_project_id  (reviewer_id,project_id) UNIQUE WHERE (invalidated = false)
 #
 # Foreign Keys
 #
@@ -33,5 +33,9 @@ class DesignReview < ApplicationRecord
 
   enum :result, { approved: 0, returned: 1, rejected: 2 }
 
-  validates :reviewer_id, uniqueness: { scope: :project_id, message: "has already reviewed this project" }
+  validates :reviewer_id, uniqueness: { 
+    scope: :project_id, 
+    conditions: -> { where(invalidated: false) },
+    message: "has already reviewed this project" 
+  }
 end
