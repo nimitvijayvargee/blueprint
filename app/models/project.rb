@@ -77,7 +77,7 @@ class Project < ApplicationRecord
 
   before_validation :normalize_repo_link
   after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
-  after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && review_status == "design_pending" }
+  after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -326,11 +326,11 @@ class Project < ApplicationRecord
   end
 
   def under_review?
-    review_status == "design_pending" || review_status == "build_pending"
+    design_pending? || build_pending?
   end
 
   def rejected?
-    review_status == "design_rejected" || review_status == "build_rejected"
+    design_rejected? || build_rejected?
   end
 
   def can_edit?
