@@ -4,13 +4,22 @@
 
 <h1 style="font-size: 2.5rem; line-height: 1.6;">Guides</h1>
 
-<p style="font-size: 1.25rem; line-height: 1.6;">Kick off with these guides.</p>
+#### Starter Projects
+Follow and modify one of these awesome projects
 
 <ul style="font-size: 1.25rem; line-height: 1.6;">
 <li><a href="/guides/devboard">Custom Devboard</a></li>
 <li><a href="/guides/midi">Midi Keyboard</a></li>
 <li><a href="/guides/split-keyboard">Split Keyboard</a></li>
+</ul>
+
+#### Check out these community provided resources
+These are general resources provided by the community. PR's open!
+<ul style="font-size: 1.25rem; line-height: 1.6;">
+<li><a href="/guides/design-resources">External Hardware Design Resources</a></li>
+<li><a href="/guides/schematic-tips">Schematic Tips and Tricks</a></li>
 <li><a href="/guides/qmk">QMK for keybaords</a></li>
+
 </ul>
 
 #### Note about projects made with the community provided guides:

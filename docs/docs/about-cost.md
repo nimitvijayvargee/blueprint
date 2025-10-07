@@ -2,6 +2,7 @@
 | ----------- | ------------------------------------- |
 | description | A quick not about Hack Club and cost. |
 
+
 # The Relationship Between Hack Club and Cost
 
 If you do not know what Hack Club is, we are a 501c3 non-profit based in Shelburne, Vermont. We have run many large and expensive programs such as [Shipwrecked](https://shipwrecked.hackclub.com/), [Outernet](https://outernet.hackclub.com/), [Boreal](https://boreal.hackclub.com/) and many more.
