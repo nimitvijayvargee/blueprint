@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   post "auth/email" => "auth#create_email", as: :login_email
   delete "auth/logout" => "auth#destroy", as: :logout
   post "auth/track" => "auth#track", as: :auth_tracks
+  get "auth/idv" => "auth#idv", as: :idv
   get "idv_callback" => "auth#idv_callback", as: :idv_callback
 
   get "home" => "home#index", as: :home

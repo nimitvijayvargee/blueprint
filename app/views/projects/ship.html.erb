@@ -8,9 +8,10 @@
         </div>
 
         <div class="space-y-8" 
-        data-controller="ship-bom" 
+        data-controller="ship-bom funding-amount" 
         data-ship-bom-project-id-value="<%= @project.id %>"
-        data-ship-bom-base-ok-value="<%= @base_ok %>">
+        data-ship-bom-base-ok-value="<%= @base_ok %>"
+        data-funding-amount-tier-max-cents-value="<%= Project.tier_max_cents.to_json %>">
           <div class="text-xl">
             <ul class="space-y-2">
               <% @checks.each do |c| %>
@@ -44,14 +45,31 @@
 
           <%= form_with model: @project, class: "space-y-10" do |f| %>
             <%= f.hidden_field :ship, value: true %>
-            
-            <div class="space-y-2">
-              <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
-              <div class="select w-full text-left text-white bg-bp-dark">
-                <%= f.select :tier, Project.tier_options, { include_blank: false, selected: 4 }, { data: { ship_bom_target: "select" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+
+            <% if @project.needs_funding %>
+              <div class="space-y-2">
+                <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
+                <div class="select w-full text-left text-white bg-bp-dark">
+                  <%= f.select :tier, Project.tier_options, { include_blank: false, selected: 4 }, { data: { ship_bom_target: "select", funding_amount_target: "tierSelect", action: "change->funding-amount#tierChanged" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+                </div>
               </div>
-            </div>
-            <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>
+              <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>
+
+              <div class="space-y-2">
+                <%= f.label :funding_needed, "How much funding do you need?", class: "block text-xl font-medium" %>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg">$</span>
+                  <input type="text" 
+                    placeholder="0.00" 
+                    data-funding-amount-target="input" 
+                    data-action="input->funding-amount#formatInput"
+                    class="input w-full pl-8" 
+                    value="<%= @project.funding_needed_cents > 0 ? '%.2f' % (@project.funding_needed_cents / 100.0) : '' %>">
+                  <%= f.hidden_field :funding_needed_cents, data: { funding_amount_target: "hidden" }, value: @project.funding_needed_cents %>
+                </div>
+                <p class="text-sm text-bp-danger hidden" data-funding-amount-target="error"></p>
+              </div>
+            <% end %>
 
 
             <div class="flex items-center justify-between">
@@ -121,16 +139,30 @@
           </div>
         <% end %>
         <% if @project.needs_funding %>
-          <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
+          <%= render "shared/card", class: "hidden", html_options: { data: { controller: "funding-amount", funding_amount_tier_max_cents_value: Project.tier_max_cents.to_json, paginate_target: "page" } } do %>
             <div>
               <%= f.label :tier, "What tier should this project be?", class: "text-3xl" %>
               <p class="text-lg">We may adjust this as we see fit.<br>If you're unsure what to pick, check the <a href="/docs" target="_blank" class="underline text-bp-warning">tier docs</a>.</p>
             </div>
-            <div class="flex-flex-col space-y-10 py-4">
+            <div class="flex-flex-col space-y-6 py-4">
               <div class="space-y-2">
                 <div class="select w-full text-left text-white bg-bp-dark">
-                  <%= f.select :tier, Project.tier_options, { include_blank: false, selected: @project.tier || 4 }, { class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+                  <%= f.select :tier, Project.tier_options, { include_blank: false, selected: @project.tier || 4 }, { data: { funding_amount_target: "tierSelect", action: "change->funding-amount#tierChanged" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
                 </div>
+              </div>
+              <div class="space-y-2">
+                <%= f.label :funding_needed, "How much funding do you need?", class: "block text-xl font-medium" %>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg">$</span>
+                  <input type="text" 
+                    placeholder="0.00" 
+                    data-funding-amount-target="input" 
+                    data-action="input->funding-amount#formatInput"
+                    class="input w-full pl-8" 
+                    value="<%= @project.funding_needed_cents > 0 ? '%.2f' % (@project.funding_needed_cents / 100.0) : '' %>">
+                  <%= f.hidden_field :funding_needed_cents, data: { funding_amount_target: "hidden" }, value: @project.funding_needed_cents %>
+                </div>
+                <p class="text-sm text-bp-danger hidden" data-funding-amount-target="error"></p>
               </div>
             </div>
             <div class="flex items-center pt-2">

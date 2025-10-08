@@ -5,6 +5,7 @@
 #  id                     :bigint           not null, primary key
 #  demo_link              :string
 #  description            :text
+#  funding_needed_cents   :integer          default(0), not null
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
 #  needs_funding          :boolean          default(TRUE)
@@ -62,6 +63,8 @@ class Project < ApplicationRecord
 
   validates :title, presence: true
   validates :description, presence: true
+  validates :funding_needed_cents, numericality: { greater_than_or_equal_to: 0 }
+  validate :funding_needed_within_tier_max
   has_one_attached :banner
 
   has_paper_trail
@@ -76,8 +79,10 @@ class Project < ApplicationRecord
   }
 
   before_validation :normalize_repo_link
+  before_validation :set_funding_needed_cents_to_zero_if_no_funding
   after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
   after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
+  after_update :dm_status!, if: -> { saved_change_to_review_status? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -290,6 +295,15 @@ class Project < ApplicationRecord
       Project.tiers.map { |key, value| [ "Tier #{key} (#{tier_amounts[key.to_i]})", value ] }
   end
 
+  def self.tier_max_cents
+    { 1 => 40000, 2 => 20000, 3 => 10000, 4 => 5000 }
+  end
+
+  def tier_max_cents
+    return 0 unless tier.present?
+    Project.tier_max_cents[tier] || 0
+  end
+
 
 
   def ship!(design: nil)
@@ -353,11 +367,59 @@ class Project < ApplicationRecord
       .count("DISTINCT ((properties->>'user_id')::bigint)")
   end
 
+  def dm_status!
+    unless user&.slack_id.present?
+      Rails.logger.tagged("Project##{id}DM") do
+        Rails.logger.warn "User #{user&.id} has no slack_id"
+      end
+      return
+    end
+
+    msg = "Hey <@#{user.slack_id}>!\n\n"
+
+    if awaiting_idv?
+      msg += "Your Blueprint project *#{title}* is almost ready to be reviewed! But before we can review your project, you need to verify your identity.\n\nHack Club has given out over $1M in grants to teens like you, and with that comes a lot of adults trying to slip in.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/auth/idv|Click here to verify your identity>\n\n"
+    elsif design_pending?
+      msg += "Your Blueprint project *#{title}* is currently waiting for a design review. An inspector will take a look at it soon!\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+    elsif design_needs_revision?
+      review = design_reviews.where(result: "returned", invalidated: false).last
+      if review && review.feedback.present? && review.reviewer&.slack_id.present?
+        msg += "Your Blueprint project *#{title}* needs some changes before it can be approved. Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+      else
+        msg += "Your Blueprint project *#{title}* needs some changes before it can be approved.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+      end
+    elsif design_rejected?
+      review = design_reviews.where(result: "rejected", invalidated: false).last
+      if review && review.feedback.present? && review.reviewer&.slack_id.present?
+        msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+      else
+        msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+      end
+    else
+      msg += "Your Blueprint project *#{title}* has been updated!\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+    end
+
+    SlackDmJob.perform_later(user.slack_id, msg)
+  end
+
   private
 
   def normalize_repo_link
     normalized = Project.normalize_repo_link(repo_link, user&.github_username)
     self.repo_link = normalized if normalized.present?
+  end
+
+  def set_funding_needed_cents_to_zero_if_no_funding
+    self.funding_needed_cents = 0 unless needs_funding?
+  end
+
+  def funding_needed_within_tier_max
+    return unless needs_funding? && tier.present? && funding_needed_cents.present? && funding_needed_cents > 0
+
+    max_cents = tier_max_cents
+    if max_cents > 0 && funding_needed_cents > max_cents
+      errors.add(:funding_needed_cents, "cannot exceed tier maximum of $#{max_cents / 100.0}")
+    end
   end
 
   def invalidate_design_reviews_on_resubmit

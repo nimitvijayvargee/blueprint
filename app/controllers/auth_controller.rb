@@ -250,6 +250,10 @@ class AuthController < ApplicationController
     end
   end
 
+  def idv
+    render "projects/ship_idv", layout: "application"
+  end
+
   def idv_callback
     begin
       current_user.link_identity_vault_callback(idv_callback_url, params[:code])

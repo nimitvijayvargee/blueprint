@@ -5,6 +5,7 @@
 #  id                     :bigint           not null, primary key
 #  demo_link              :string
 #  description            :text
+#  funding_needed_cents   :integer          default(0), not null
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
 #  needs_funding          :boolean          default(TRUE)

@@ -226,7 +226,8 @@ class ProjectsController < ApplicationController
       :ship,
       :ysws,
       :ysws_other,
-      :needs_funding
+      :needs_funding,
+      :funding_needed_cents
     )
   end
 end
