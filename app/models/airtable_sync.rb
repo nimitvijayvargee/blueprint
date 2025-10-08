@@ -75,8 +75,6 @@ class AirtableSync < ApplicationRecord
     records
   end
 
-  private
-
   def self.batch_sync!(table_id, records, sync_id, mappings)
     csv_string = CSV.generate do |csv|
       csv << mappings.keys
@@ -102,6 +100,13 @@ class AirtableSync < ApplicationRecord
   end
 
   def self.individual_sync!(table_id, record, mappings, old_airtable_record_id)
+    fields = build_airtable_fields(record, mappings)
+    upload_or_create!(table_id, record, fields)
+  end
+
+  def self.upload_or_create!(table_id, object, fields)
+    old_airtable_record_id = find_by(record_identifier: build_identifier(object))&.airtable_record_id
+
     if old_airtable_record_id.present?
       method = :patch
       url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}/#{old_airtable_record_id}"
@@ -110,7 +115,6 @@ class AirtableSync < ApplicationRecord
       url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}"
     end
 
-    fields = build_airtable_fields(record, mappings)
     response = Faraday.send(method, url) do |req|
       req.headers = {
         "Authorization" => "Bearer #{ENV['AIRTABLE_PAT']}",
@@ -126,6 +130,8 @@ class AirtableSync < ApplicationRecord
 
     JSON.parse(response.body)["id"]
   end
+
+  private
 
   def self.resolve_class(classname)
     classname.is_a?(String) ? classname.constantize : classname

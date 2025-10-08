@@ -37,6 +37,10 @@ class Project < ApplicationRecord
   has_many :followers, through: :follows, source: :user
   has_many :design_reviews, dependent: :destroy
 
+  def self.airtable_sync_table_id
+    "tblRH1aELwmy7rgEU"
+  end
+
   # Enums
   enum :project_type, {
     custom: "custom"
@@ -83,6 +87,7 @@ class Project < ApplicationRecord
   after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
   after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
   after_update :dm_status!, if: -> { saved_change_to_review_status? }
+  after_update :sync_to_airtable!, if: -> { saved_change_to_review_status? && design_approved? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -406,6 +411,54 @@ class Project < ApplicationRecord
     end
 
     SlackDmJob.perform_later(user.slack_id, msg)
+  end
+
+  def upload_to_airtable!
+    idv_data = user&.fetch_idv || {}
+    addresses = idv_data.dig(:identity, :addresses) || []
+    primary_address = addresses.find { |a| a[:primary] } || addresses.first || {}
+
+    hours = design_reviews.where.not(hours_override: nil).where(invalidated: false, admin_review: true).order(created_at: :desc).first&.hours_override || journal_entries.sum(:duration_seconds) / 3600.0
+    grant = design_reviews.where.not(grant_override_cents: nil).where(invalidated: false, admin_review: true).order(created_at: :desc).first&.grant_override_cents || funding_needed_cents
+
+    valid_reviews = design_reviews.where(invalidated: false, result: "approved")
+    reasoning = ""
+    valid_reviews.each do |review|
+      reasoning += "On #{review.created_at.strftime('%Y-%m-%d')}, #{review.admin_review ? 'Admin' : 'Reviewer'} #{review.reviewer.display_name} (#{review.reviewer.email}) decided \"#{review.result}\" with reason: #{review.reason.present? && !review.reason.empty? ? review.reason : 'no reason'}\n\n\n"
+    end
+
+    fields = {
+      "Code URL" => repo_link,
+      "Playable URL" => demo_link || repo_link,
+      "First Name" => idv_data.dig(:identity, :first_name),
+      "Last Name" => idv_data.dig(:identity, :last_name),
+      "Email" => user&.email,
+      "Screenshot" => ([
+        {
+          "url" => Rails.application.routes.url_helpers.rails_blob_url(banner, host: ENV.fetch("APPLICATION_HOST")),
+          "filename" => banner.filename.to_s
+        }
+      ]),
+      "Description" => description,
+      "Address (Line 1)" => primary_address.dig(:line_1),
+      "Address (Line 2)" => primary_address.dig(:line_2),
+      "City" => primary_address.dig(:city),
+      "State / Province" => primary_address.dig(:state),
+      "Country" => primary_address.dig(:country),
+      "ZIP / Postal Code" => primary_address.dig(:postal_code),
+      "Birthday" => idv_data.dig(:identity, :birthday),
+      "Optional - Override Hours Spent" => hours,
+      "Optional - Override Hours Spent Justification" => reasoning,
+      "Slack ID" => user&.slack_id,
+      "Project Name" => title,
+      "Requested Amount" => grant ? (grant / 100.0) : nil,
+      "Grant Tier" => tier,
+      "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0
+    }
+
+    AirtableSync.upload_or_create!(
+      Project.airtable_sync_table_id, self, fields
+    )
   end
 
   private
