@@ -58,6 +58,25 @@
   </div>
 
   <div>
+    <div>
+      <%= f.label :needs_funding, "Do you need a grant to build your project?", class: "block text-xl font-medium" %>
+      <p class="text-sm">You can get extra tickets if you don't need funding.</p>
+    </div>
+    <div class="flex gap-4 mt-2">
+      <%= f.label :needs_funding_true, class: "flex items-center gap-2 cursor-pointer" do %>
+        <%= f.radio_button :needs_funding, true, class: "hidden peer" %>
+        <div class="size-4 border-2 peer-checked:bg-white"></div>
+        <span>I need funding</span>
+      <% end %>
+      <%= f.label :needs_funding_false, class: "flex items-center gap-2 cursor-pointer" do %>
+        <%= f.radio_button :needs_funding, false, class: "hidden peer" %>
+        <div class="size-4 border-2 peer-checked:bg-white"></div>
+        <span>I don't need funding</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
     <%= f.submit (@project.new_record? ? "Create project" : "Update project"), class: "btn btn-primary block w-full", data: { project_validator_target: "submit" } %>
   </div>
 <% end %>

@@ -72,6 +72,11 @@
             <p class="text-3xl">It's time to ship "<%= @project.title %>"</p>
             <p class="text-lg">We'll guide you through the final steps to ship your project and make sure everything is ready!</p>
           </div>
+          <% if @project.needs_funding == false %>
+            <div class="text-lg">
+              <p>It seems like you don't need a grant for this project. You'll be getting extra tickets for your time.
+            </div>
+          <% end %>
           <div class="text-lg">
             <p>Before you continue, check the guide for <a href="/docs/submission-guidelines" class="text-bp-warning underline">submission requirements</a>, and check to make sure your project can count as <a href="/docs/shipping" class="text-bp-warning underline">shipped</a>.</p>
           </div>
@@ -81,33 +86,6 @@
             <% end %>
             <div class="grow"></div>
             <%= render "shared/button", text: "Let's go!", html_options: { data: { action: "click->paginate#next" } } %>
-          </div>
-        <% end %>
-        <%= render "shared/card", class: "space-y-10 hidden", html_options: { data: { paginate_target: "page" } } do %>
-          <div>
-            <%= f.label :needs_funding, "Do you need a grant to build your project?", class: "text-3xl" %>
-            <p class="text-lg">You can get extra tickets if you do not need funding</p>
-          </div>
-          <div class="grid grid-cols-2 gap-10 mx-6">
-            <%= f.label :needs_funding_true do %>
-              <%= f.radio_button :needs_funding, true, class: "peer hidden" %>
-              <div class="border-2 border-dashed flex flex-col items-center p-10 px-12 space-y-4 text-xl peer-checked:border-solid peer-checked:bg-white/10 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-12" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M11.025 21v-2.15q-1.325-.3-2.287-1.15t-1.413-2.4l1.85-.75q.375 1.2 1.113 1.825t1.937.625q1.025 0 1.738-.462t.712-1.438q0-.875-.55-1.387t-2.55-1.163q-2.15-.675-2.95-1.612t-.8-2.288q0-1.625 1.05-2.525t2.15-1.025V3h2v2.1q1.25.2 2.063.913t1.187 1.737l-1.85.8q-.3-.8-.85-1.2t-1.5-.4q-1.1 0-1.675.488T9.825 8.65q0 .825.75 1.3t2.6 1q1.725.5 2.613 1.588t.887 2.512q0 1.775-1.05 2.7t-2.6 1.15V21z"/></svg>
-                <p>I need funding</p>
-              </div>
-            <% end %>
-            <%= f.label :needs_funding_false do %>
-              <%= f.radio_button :needs_funding, false, class: "peer hidden" %>
-              <div class="border-2 border-dashed flex flex-col items-center p-10 px-12 space-y-4 text-xl peer-checked:border-solid peer-checked:bg-white/10 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-12" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M14.35 8.55q-.3-.75-.887-1.175T12.05 6.95q-.45 0-.875.125t-.775.475L8.95 6.1q.35-.35.95-.638T11 5.1V3h2v2.05q1.125.225 1.975.913T16.25 7.75zM19.8 22.6L15.2 18q-.375.375-1.025.613T13 18.9V21h-2v-2.15q-1.4-.35-2.337-1.275T7.3 15.25l2-.8q.3 1.05 1.013 1.8T12.2 17q.45 0 .825-.112t.725-.338L1.4 4.2l1.4-1.4l18.4 18.4z"/></svg>
-                <p>I don't need funding</p>
-              </div>
-            <% end %>
-          </div>
-          <div class="flex items-center">
-            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
-            <div class="grow"></div>
-            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
           </div>
         <% end %>
         <%= render "shared/card", class: "hidden", html_options: { data: { controller: "ysws", paginate_target: "page" } } do %>
@@ -139,26 +117,28 @@
           <div class="flex items-center pt-2">
             <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
             <div class="grow"></div>
-            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->ysws#handleNext", ysws_target: "nextButton" } } %>
-          </div>
-        <% end %>
-        <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
-          <div>
-            <%= f.label :tier, "What tier should this project be?", class: "text-3xl" %>
-            <p class="text-lg">We may adjust this as we see fit.<br>If you're unsure what to pick, check the <a href="/docs" target="_blank" class="underline text-bp-warning">tier docs</a>.</p>
-          </div>
-          <div class="flex-flex-col space-y-10 py-4">
-            <div class="space-y-2">
-              <div class="select w-full text-left text-white bg-bp-dark">
-                <%= f.select :tier, Project.tier_options, { include_blank: false, selected: @project.tier || 4 }, { class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center pt-2">
-            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
-            <div class="grow"></div>
             <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
           </div>
+        <% end %>
+        <% if @project.needs_funding %>
+          <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
+            <div>
+              <%= f.label :tier, "What tier should this project be?", class: "text-3xl" %>
+              <p class="text-lg">We may adjust this as we see fit.<br>If you're unsure what to pick, check the <a href="/docs" target="_blank" class="underline text-bp-warning">tier docs</a>.</p>
+            </div>
+            <div class="flex-flex-col space-y-10 py-4">
+              <div class="space-y-2">
+                <div class="select w-full text-left text-white bg-bp-dark">
+                  <%= f.select :tier, Project.tier_options, { include_blank: false, selected: @project.tier || 4 }, { class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center pt-2">
+              <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+              <div class="grow"></div>
+              <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
+            </div>
+          <% end %>
         <% end %>
         <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
           <div>
@@ -199,7 +179,7 @@
               </ul>
             </div>
             <div class="flex items-center pt-2">
-              <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->ship-bom#handlePrev" } } %>
+              <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
               <div class="grow"></div>
               <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next", ship_bom_target: "submit" } } %>
             </div>
