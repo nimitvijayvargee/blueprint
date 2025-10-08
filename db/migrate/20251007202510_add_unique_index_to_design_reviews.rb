@@ -9,7 +9,7 @@ class AddUniqueIndexToDesignReviews < ActiveRecord::Migration[8.0]
         GROUP BY reviewer_id, project_id
       )
     SQL
-    
-    add_index :design_reviews, [:reviewer_id, :project_id], unique: true
+
+    add_index :design_reviews, [ :reviewer_id, :project_id ], unique: true
   end
 end

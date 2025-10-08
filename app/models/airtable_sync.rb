@@ -12,7 +12,7 @@
 # Indexes
 #
 #  index_airtable_syncs_on_record_identifier  (record_identifier) UNIQUE
-
+#
 require "csv"
 
 class AirtableSync < ApplicationRecord
@@ -121,7 +121,6 @@ class AirtableSync < ApplicationRecord
     end
 
     JSON.parse(response.body)["id"]
-  end
   end
 
   def self.resolve_class(classname)

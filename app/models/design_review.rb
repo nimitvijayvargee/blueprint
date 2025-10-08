@@ -33,9 +33,9 @@ class DesignReview < ApplicationRecord
 
   enum :result, { approved: 0, returned: 1, rejected: 2 }
 
-  validates :reviewer_id, uniqueness: { 
-    scope: :project_id, 
+  validates :reviewer_id, uniqueness: {
+    scope: :project_id,
     conditions: -> { where(invalidated: false) },
-    message: "has already reviewed this project" 
+    message: "has already reviewed this project"
   }
 end
