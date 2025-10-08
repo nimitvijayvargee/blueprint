@@ -87,6 +87,9 @@ class AirtableSync < ApplicationRecord
     end
 
     Rails.logger.info("Airtable batch sync response: #{response.status} - #{response.body}")
+    if response.status != 200
+      raise "Airtable batch sync failed with status #{response.status}: #{response.body}"
+    end
   end
 
   def self.individual_sync!(table_id, records, mappings)
