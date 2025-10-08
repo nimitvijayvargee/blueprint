@@ -87,7 +87,7 @@ class AirtableSync < ApplicationRecord
     end
 
     Rails.logger.info("Airtable batch sync response: #{response.status} - #{response.body}")
-    if response.status != 200
+    if response.status < 200 || response.status >= 300
       raise "Airtable batch sync failed with status #{response.status}: #{response.body}"
     end
   end
