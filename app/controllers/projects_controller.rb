@@ -30,16 +30,18 @@ class ProjectsController < ApplicationController
     repo_linked = @project.repo_link.present?
     desc_ok = @project.description.to_s.strip.length >= 50
     journal_ok = @project.journal_entries.count >= 3
+    banner_ok = @project.banner.attached?
 
     @checks = [
       { msg: "GitHub repo linked", met: repo_linked },
       { key: "bom", msg: "Bill of materials (bom.csv) present", met: nil },
       { key: "readme", msg: "README.md present", met: nil },
       { msg: "Description is at least 50 characters", met: desc_ok },
-      { msg: "Project has 3 journal entries", met: journal_ok }
+      { msg: "Project has 3 journal entries", met: journal_ok },
+      { msg: "Banner image uploaded", met: banner_ok }
     ]
 
-    @base_ok = repo_linked && desc_ok && journal_ok
+    @base_ok = repo_linked && desc_ok && journal_ok && banner_ok
   end
 
   def follow
