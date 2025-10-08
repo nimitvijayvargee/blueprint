@@ -30,6 +30,11 @@
 #  fk_rails_...  (referrer_id => users.id)
 #
 class User < ApplicationRecord
+  # Fail safe in case i'm stupid
+  def to_s
+    "User##{id}"
+  end
+
   has_many :projects
   has_many :journal_entries
   has_many :follows, dependent: :destroy
