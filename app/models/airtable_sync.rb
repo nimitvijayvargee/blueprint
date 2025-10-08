@@ -145,12 +145,12 @@ class AirtableSync < ApplicationRecord
 
   def self.outdated_records(klass, limit)
     table_name = klass.table_name
-    
+
     join_sql = sanitize_sql_array([
       "LEFT JOIN airtable_syncs ON airtable_syncs.record_identifier = CONCAT(?, '#', #{table_name}.id::text)",
       klass.name
     ])
-    
+
     where_sql = "airtable_syncs.id IS NULL OR #{table_name}.updated_at > airtable_syncs.last_synced_at"
 
     records_query = klass.joins(join_sql).where(where_sql)
