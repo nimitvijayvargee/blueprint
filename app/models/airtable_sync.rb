@@ -46,10 +46,11 @@ class AirtableSync < ApplicationRecord
 
     records = batch || sync_all ? all_records(klass, limit) : outdated_records(klass, limit)
 
+    airtable_record_ids = []
+
     if batch
       batch_sync!(table_id, records, klass.airtable_sync_sync_id, field_mappings)
     else
-      airtable_record_ids = []
       records.each do |record|
         old_airtable_record_id = find_by(record_identifier: build_identifier(record))&.airtable_record_id
         airtable_record_ids << individual_sync!(table_id, record, field_mappings, old_airtable_record_id)
@@ -57,13 +58,16 @@ class AirtableSync < ApplicationRecord
     end
 
     sync_data = records.map do |record|
-      {
+      data = {
         record_identifier: build_identifier(record),
         last_synced_at: Time.current,
-        airtable_record_id: (airtable_record_ids.shift if !batch),
         created_at: Time.current,
         updated_at: Time.current
       }
+      if !batch
+        data[:airtable_record_id] = airtable_record_ids.shift
+      end
+      data
     end
 
     upsert_all(sync_data, unique_by: :record_identifier) if sync_data.any?
