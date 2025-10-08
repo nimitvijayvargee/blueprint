@@ -57,11 +57,11 @@ class User < ApplicationRecord
   has_recommended :projects
 
   def self.airtable_sync_table_id
-    "tblgIQIzxOy62SrKC"
+    "tblfvmJUeNMapzCBl"
   end
 
   def self.airtable_sync_sync_id
-    "2UmqDvC5"
+    "6mGZYU5X"
   end
 
   def self.airtable_sync_field_mappings
