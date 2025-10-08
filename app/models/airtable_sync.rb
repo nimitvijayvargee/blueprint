@@ -49,13 +49,18 @@ class AirtableSync < ApplicationRecord
     if batch
       batch_sync!(table_id, records, klass.airtable_sync_sync_id, field_mappings)
     else
-      individual_sync!(table_id, records, field_mappings)
+      airtable_record_ids = []
+      records.each do |record|
+        old_airtable_record_id = find_by(record_identifier: build_identifier(record))&.airtable_record_id
+        airtable_record_ids << individual_sync!(table_id, record, field_mappings, old_airtable_record_id)
+      end
     end
 
     sync_data = records.map do |record|
       {
         record_identifier: build_identifier(record),
         last_synced_at: Time.current,
+        airtable_record_id: (airtable_record_ids.shift if !batch),
         created_at: Time.current,
         updated_at: Time.current
       }
@@ -92,8 +97,31 @@ class AirtableSync < ApplicationRecord
     end
   end
 
-  def self.individual_sync!(table_id, records, mappings)
-    # Implementation for individual record syncing
+  def self.individual_sync!(table_id, record, mappings, old_airtable_record_id)
+    if old_airtable_record_id.present?
+      method = :patch
+      url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}/#{old_airtable_record_id}"
+    else
+      method = :post
+      url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}"
+    end
+
+    fields = build_airtable_fields(record, mappings)
+    response = Faraday.send(method, url) do |req|
+      req.headers = {
+        "Authorization" => "Bearer #{ENV['AIRTABLE_PAT']}",
+        "Content-Type" => "application/json"
+      }
+      req.body = { fields: fields }.to_json
+    end
+
+    Rails.logger.info("Airtable individual sync response: #{response.status} - #{response.body}")
+    if response.status < 200 || response.status >= 300
+      raise "Airtable individual sync failed with status #{response.status}: #{response.body}"
+    end
+
+    JSON.parse(response.body)["id"]
+  end
   end
 
   def self.resolve_class(classname)

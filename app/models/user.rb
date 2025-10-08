@@ -70,7 +70,7 @@ class User < ApplicationRecord
       "Slack ID" => :slack_id,
       "GitHub Username" => :github_username,
       "Email" => :email,
-      "Display Name" => :username,
+      "Display Name" => lambda { |user| user.display_name },
       "Avatar" => :avatar,
       "Is Banned" => :is_banned,
       "Is MCG" => :is_mcg,
