@@ -29,3 +29,8 @@ production:
     class: RefreshIdvDataJob
     queue: background
     schedule: every 10 minutes
+  
+  sync_airtable_data:
+    class: AirtableSyncJob
+    queue: background
+    schedule: every 10 minutes

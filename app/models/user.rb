@@ -56,6 +56,36 @@ class User < ApplicationRecord
   has_paper_trail
   has_recommended :projects
 
+  def self.airtable_sync_table_id
+    "tblgIQIzxOy62SrKC"
+  end
+
+  def self.airtable_sync_sync_id
+    "2UmqDvC5"
+  end
+
+  def self.airtable_sync_field_mappings
+    {
+      "User ID" => :id,
+      "Slack ID" => :slack_id,
+      "GitHub Username" => :github_username,
+      "Email" => :email,
+      "Display Name" => :username,
+      "Avatar" => :avatar,
+      "Is Banned" => :is_banned,
+      "Is MCG" => :is_mcg,
+      "Role" => lambda { |user| user.role.capitalize },
+      "Timezone" => :timezone_raw,
+      "Last Active" => :last_active,
+      "YSWS Verified" => :ysws_verified,
+      "Created At" => :created_at,
+      "Updated At" => :updated_at,
+      "Github Linked" => lambda { |user| user.github_user? },
+      "Referrer ID" => :referrer_id,
+      "Referrer Email" => lambda { |user| user.referrer&.email }
+    }
+  end
+
   def self.exchange_slack_token(code, redirect_uri, referrer_id: nil)
     response = Faraday.post("https://slack.com/api/oauth.v2.access",
                             {

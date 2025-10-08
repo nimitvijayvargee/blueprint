@@ -1,0 +1,30 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: airtable_syncs
+#
+#  id                 :bigint           not null, primary key
+#  last_synced_at     :datetime
+#  record_identifier  :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  airtable_record_id :string
+#
+# Indexes
+#
+#  index_airtable_syncs_on_record_identifier  (record_identifier) UNIQUE
+#
+one:
+  syncable: one
+  syncable_type: Syncable
+  airtable_id: MyString
+  last_synced_at: 2025-10-08 16:15:11
+  synced_attributes_hash: MyString
+
+two:
+  syncable: two
+  syncable_type: Syncable
+  airtable_id: MyString
+  last_synced_at: 2025-10-08 16:15:11
+  synced_attributes_hash: MyString
