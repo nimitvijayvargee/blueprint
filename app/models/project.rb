@@ -152,7 +152,7 @@ class Project < ApplicationRecord
     reject_design_events = []
 
     negative_reviews.each do |review|
-      event = { type: review.result == "returned" ? :return_design : :reject_design, date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback }
+      event = { type: review.result == "returned" ? :return_design : :reject_design, date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback, tier_override: review.tier_override, grant_override_cents: review.grant_override_cents }
       review.result == "returned" ? return_design_events << event : reject_design_events << event
       user_ids << event[:user_id].to_s
     end
@@ -171,7 +171,7 @@ class Project < ApplicationRecord
 
     reject_design_events.each do |event|
       user = users[event[:user_id].to_s]
-      timeline << { type: :reject_design, date: event[:date], user: user, feedback: event[:feedback] }
+      timeline << { type: :reject_design, date: event[:date], user: user, feedback: event[:feedback], tier_override: event[:tier_override], grant_override_cents: event[:grant_override_cents] }
     end
 
     timeline.sort_by { |e| e[:date] }
