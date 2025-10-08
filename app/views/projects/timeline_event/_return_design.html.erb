@@ -8,6 +8,12 @@
     </div>
     <div class="timeline-journal">
       <p><%= event[:feedback] %></p>
+      <% if event[:tier_override].present? %>
+        <p><strong>Recommended tier:</strong> <%= event[:tier_override] %></p>
+      <% end %>
+      <% if event[:grant_override_cents].present? %>
+        <p><strong>Grant to expect:</strong> $<%= sprintf("%.2f", event[:grant_override_cents] / 100.0) %></p>
+      <% end %>
     </div>
   <% end %>
 <% else %>

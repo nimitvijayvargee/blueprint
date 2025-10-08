@@ -166,7 +166,7 @@ class Project < ApplicationRecord
 
     return_design_events.each do |event|
       user = users[event[:user_id].to_s]
-      timeline << { type: :return_design, date: event[:date], user: user, feedback: event[:feedback] }
+      timeline << { type: :return_design, date: event[:date], user: user, feedback: event[:feedback], tier_override: event[:tier_override], grant_override_cents: event[:grant_override_cents] }
     end
 
     reject_design_events.each do |event|
@@ -384,14 +384,20 @@ class Project < ApplicationRecord
     elsif design_needs_revision?
       review = design_reviews.where(result: "returned", invalidated: false).last
       if review && review.feedback.present? && review.reviewer&.slack_id.present?
-        msg += "Your Blueprint project *#{title}* needs some changes before it can be approved. Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+        msg += "Your Blueprint project *#{title}* needs some changes before it can be approved. Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n"
+        msg += "*Recommended tier:* #{review.tier_override}\n\n" if review.tier_override.present?
+        msg += "*Grant to expect:* $#{'%.2f' % (review.grant_override_cents / 100.0)}\n\n" if review.grant_override_cents.present?
+        msg += "<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       else
         msg += "Your Blueprint project *#{title}* needs some changes before it can be approved.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       end
     elsif design_rejected?
       review = design_reviews.where(result: "rejected", invalidated: false).last
       if review && review.feedback.present? && review.reviewer&.slack_id.present?
-        msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
+        msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n"
+        msg += "*Recommended tier:* #{review.tier_override}\n\n" if review.tier_override.present?
+        msg += "*Grant to expect:* $#{'%.2f' % (review.grant_override_cents / 100.0)}\n\n" if review.grant_override_cents.present?
+        msg += "<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       else
         msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       end
