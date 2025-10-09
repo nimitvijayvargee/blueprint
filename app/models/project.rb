@@ -478,12 +478,7 @@ class Project < ApplicationRecord
       "First Name" => idv_data.dig(:identity, :first_name),
       "Last Name" => idv_data.dig(:identity, :last_name),
       "Email" => user&.email,
-      "Screenshot" => ([
-        {
-          "url" => Rails.application.routes.url_helpers.rails_blob_url(banner, host: ENV.fetch("APPLICATION_HOST")),
-          "filename" => banner.filename.to_s
-        }
-      ]),
+      "Screenshot" => Rails.application.routes.url_helpers.rails_blob_url(banner, host: ENV.fetch("APPLICATION_HOST")),
       "Description" => description,
       "Address (Line 1)" => primary_address.dig(:line_1),
       "Address (Line 2)" => primary_address.dig(:line_2),
