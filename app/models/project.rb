@@ -505,7 +505,7 @@ class Project < ApplicationRecord
       "Optional - Override Hours Spent Justification" => reasoning,
       "Slack ID" => user&.slack_id,
       "Project Name" => title,
-      "Requested Amount" => grant ? (grant / 100.0) : nil,
+      "Grant Amount" => grant ? (grant / 100.0) : nil,
       "Grant Tier" => tier,
       "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0
     }
