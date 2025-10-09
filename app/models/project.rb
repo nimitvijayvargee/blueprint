@@ -218,18 +218,28 @@ class Project < ApplicationRecord
     parsed = parse_repo
     return false unless parsed && parsed[:org].present? && parsed[:repo_name].present?
 
-    path = "/repos/#{parsed[:org]}/#{parsed[:repo_name]}/contents/bom.csv"
+    paths = [
+      "/repos/#{parsed[:org]}/#{parsed[:repo_name]}/contents/bom.csv",
+      "/repos/#{parsed[:org]}/#{parsed[:repo_name]}/contents/BOM.csv",
+      "/repos/#{parsed[:org]}/#{parsed[:repo_name]}/contents/Bom.csv"
+    ]
 
-    response = if user&.github_user?
-      user.fetch_github(path, check_token: true)
-    else
-      Faraday.get("https://api.github.com#{path}", nil, {
-        "Accept" => "application/vnd.github+json",
-        "X-GitHub-Api-Version" => "2022-11-28"
-      })
+    paths.each do |path|
+      response = if user&.github_user?
+        user.fetch_github(path, check_token: true)
+      else
+        Faraday.get("https://api.github.com#{path}", nil, {
+          "Accept" => "application/vnd.github+json",
+          "X-GitHub-Api-Version" => "2022-11-28"
+        })
+      end
+
+      if response.status == 200
+        return true
+      end
     end
 
-    response.status == 200
+    false
   rescue StandardError
     false
   end
