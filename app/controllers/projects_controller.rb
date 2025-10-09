@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
         @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
       elsif params[:sort] == "you"
         @journal_entries = current_user.recommended_journal_entries.limit(20).includes(project: :user) if current_user.present?
-        if @journal_entries.empty?
+        if @journal_entries.nil? || @journal_entries.count < 5
           redirect_to explore_path(sort: "top") and return
         end
       elsif params[:sort] == "top"
@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
         @projects = Project.where(is_deleted: false).includes(:banner_attachment).order(created_at: :desc).limit(21)
       elsif params[:sort] == "you"
         @projects = current_user.recommended_projects.limit(21).includes(:banner_attachment) if current_user.present?
-        if @projects.empty?
+        if @projects.nil? || @projects.count < 5
           redirect_to explore_path(type: "projects", sort: "top") and return
         end
       elsif params[:sort] == "top"
