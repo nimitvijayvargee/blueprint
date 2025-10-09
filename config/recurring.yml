@@ -34,3 +34,8 @@ production:
     class: AirtableSyncJob
     queue: background
     schedule: every 10 minutes
+
+  refresh_recommendations:
+    class: RecommenderJob
+    queue: recommendation
+    schedule: every hour

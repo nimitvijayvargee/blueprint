@@ -11,10 +11,12 @@
 #
 # Indexes
 #
-#  index_ahoy_events_on_name_and_time  (name,time)
-#  index_ahoy_events_on_properties     (properties) USING gin
-#  index_ahoy_events_on_user_id        (user_id)
-#  index_ahoy_events_on_visit_id       (visit_id)
+#  index_ahoy_events_on_name_and_time     (name,time)
+#  index_ahoy_events_on_project_id        (((properties ->> 'project_id'::text)))
+#  index_ahoy_events_on_properties        (properties) USING gin
+#  index_ahoy_events_on_user_id           (user_id)
+#  index_ahoy_events_on_user_id_and_name  (user_id,name)
+#  index_ahoy_events_on_visit_id          (visit_id)
 #
 class Ahoy::Event < ApplicationRecord
   include Ahoy::QueryMethods

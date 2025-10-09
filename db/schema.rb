@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_153136) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_193848) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,8 +48,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_153136) do
     t.string "name"
     t.jsonb "properties"
     t.datetime "time"
+    t.index "((properties ->> 'project_id'::text))", name: "index_ahoy_events_on_project_id"
     t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
     t.index ["properties"], name: "index_ahoy_events_on_properties", opclass: :jsonb_path_ops, using: :gin
+    t.index ["user_id", "name"], name: "index_ahoy_events_on_user_id_and_name"
     t.index ["user_id"], name: "index_ahoy_events_on_user_id"
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
@@ -86,8 +88,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_153136) do
   end
 
   create_table "airtable_syncs", force: :cascade do |t|
-    t.string "airtable_record_id"
+    t.string "airtable_id"
     t.datetime "last_synced_at"
+    t.string "synced_attributes_hash"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "record_identifier", null: false
@@ -469,7 +472,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_153136) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", null: false
-    t.boolean "is_mcg", default: true, null: false
+    t.boolean "is_mcg", default: false, null: false
     t.string "github_username"
     t.datetime "last_active"
     t.bigint "github_installation_id"
