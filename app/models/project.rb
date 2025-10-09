@@ -467,7 +467,7 @@ class Project < ApplicationRecord
     grant = design_reviews.where.not(grant_override_cents: nil).where(invalidated: false, admin_review: true).order(created_at: :desc).first&.grant_override_cents || funding_needed_cents
 
     valid_reviews = design_reviews.where(invalidated: false, result: "approved")
-    reasoning = ""
+    reasoning = "This user logged #{pluralize(hours, 'hour')} across #{pluralize(journal_entries.count, 'journal entry')}.\n\n\n"
     valid_reviews.each do |review|
       reasoning += "On #{review.created_at.strftime('%Y-%m-%d')}, #{review.admin_review ? 'Admin' : 'Reviewer'} #{review.reviewer.display_name} (#{review.reviewer.email}) decided \"#{review.result}\" with reason: #{review.reason.present? && !review.reason.empty? ? review.reason : 'no reason'}\n\n\n"
     end
