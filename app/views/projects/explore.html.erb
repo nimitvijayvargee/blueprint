@@ -7,15 +7,15 @@
       </div>
       <div class="flex flex-col items-end ml-auto">
         <div class="space-x-2">
-          <%= link_to "Journals", explore_path(type: "journals", sort: params[:sort]), class: (params[:type] == "journals" || params[:type].nil? ? "underline" : "hover:underline") %>
-          <%= link_to "Projects", explore_path(type: "projects", sort: params[:sort]), class: (params[:type] == "projects" ? "underline" : "hover:underline") %>
+          <%= link_to "Journals", explore_path(type: "journals", sort: params[:sort]), class: (params[:type] == "journals" || params[:type].nil? ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
+          <%= link_to "Projects", explore_path(type: "projects", sort: params[:sort]), class: (params[:type] == "projects" ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
         </div>
         <div class="space-x-2">
           <% if current_user %>
-            <%= link_to "For You", explore_path(sort: "you", type: params[:type]), class: (params[:sort] == "you" || params[:sort].nil? ? "underline" : "hover:underline") %>
+            <%= link_to "For You", explore_path(sort: "you", type: params[:type]), class: (params[:sort] == "you" || params[:sort].nil? ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
           <% end %>
-          <%= link_to "Top", explore_path(sort: "top", type: params[:type]), class: (params[:sort] == "top" ? "underline" : "hover:underline") %>
-          <%= link_to "New", explore_path(sort: "new", type: params[:type]), class: (params[:sort] == "new" ? "underline" : "hover:underline") %>
+          <%= link_to "Top", explore_path(sort: "top", type: params[:type]), class: (params[:sort] == "top" ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
+          <%= link_to "New", explore_path(sort: "new", type: params[:type]), class: (params[:sort] == "new" ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
         </div>
       </div>
     </div>
