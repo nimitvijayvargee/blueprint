@@ -38,4 +38,4 @@ production:
   refresh_recommendations:
     class: RecommenderJob
     queue: recommendation
-    schedule: every hour
+    schedule: every hour at minute 24
