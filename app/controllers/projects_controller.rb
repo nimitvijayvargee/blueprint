@@ -18,18 +18,20 @@ class ProjectsController < ApplicationController
 
     if params[:type] == "journals"
       if params[:sort] == "new"
-        @pagy, @journal_entries = pagy(JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc), items: 20)
+        @pagy, @journal_entries = pagy(JournalEntry.includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(created_at: :desc), items: 20)
       elsif params[:sort] == "you"
-        @journal_entries = current_user.recommended_journal_entries.includes(project: :user) if current_user.present?
-        if @journal_entries.nil? || @journal_entries.count < 5
+        all_entries = current_user.recommended_journal_entries if current_user.present?
+        if all_entries.nil? || all_entries.count < 5
           redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
         end
-        @pagy, @journal_entries = pagy_array(@journal_entries.to_a, items: 20)
+        entry_ids = all_entries.pluck(:id)
+        @pagy, paginated_ids = pagy_array(entry_ids, items: 20)
+        @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{paginated_ids.join(',')}], journal_entries.id::int)"))
       elsif params[:sort] == "top"
         top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
         if top_entries.present?
           entry_ids = top_entries.map { |item| item["item_id"] }
-          all_entries = JournalEntry.where(id: entry_ids).joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{entry_ids.join(',')}], journal_entries.id::int)"))
+          all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql("array_position(ARRAY[#{entry_ids.join(',')}], journal_entries.id::int)"))
           @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
         end
       else
@@ -39,11 +41,13 @@ class ProjectsController < ApplicationController
       if params[:sort] == "new"
         @pagy, @projects = pagy(Project.where(is_deleted: false).includes(:banner_attachment).order(created_at: :desc), limit: 21)
       elsif params[:sort] == "you"
-        all_projects = current_user.recommended_projects.where(is_deleted: false).includes(:banner_attachment) if current_user.present?
+        all_projects = current_user.recommended_projects.where(is_deleted: false) if current_user.present?
         if all_projects.nil? || all_projects.count < 5
           redirect_to explore_path(type: "projects", sort: "top", page: params[:page]) and return
         end
-        @pagy, @projects = pagy_array(all_projects.to_a, limit: 21)
+        project_ids = all_projects.pluck(:id)
+        @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
+        @projects = Project.where(id: paginated_ids).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{paginated_ids.join(',')}], projects.id::int)"))
       elsif params[:sort] == "top"
         top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
         if top_projects.present?

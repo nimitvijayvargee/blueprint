@@ -1,4 +1,4 @@
-<%= link_to project_path(project) do %>
+<%= link_to project_path(project), data: { turbo_frame: "_top" } do %>
   <%= render "shared/card", class: "space-y-6 hover:scale-105 hover:shadow-xl motion-safe:transition-all overflow-hidden" do %>
     <div class="h-48 -mx-8 -mt-6 bg-gray-200 bg-center bg-cover" style="background-image: url('<%= project.banner.attached? ? url_for(project.banner) : nil %>')">
     </div>
@@ -7,7 +7,7 @@
         <p class="text-2xl"><%= project.title %></p>
       </div>
       <div>
-      <p class="overflow-hidden line-clamp-3 break-words"><%= project.description.empty? ? "No description yet" : project.description %></p>
+      <p class="overflow-hidden break-words line-clamp-3"><%= project.description.empty? ? "No description yet" : project.description %></p>
       </div>
       <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-b from-transparent to-bp-darker"></div>
     </div>
