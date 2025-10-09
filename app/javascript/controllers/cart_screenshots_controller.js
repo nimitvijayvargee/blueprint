@@ -2,16 +2,21 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { needsFunding: Boolean, hasExisting: Boolean }
-  static targets = ["input", "error", "previews"]
+  static targets = ["input", "error", "previews", "nextButton"]
 
   connect() {
     this.updatePreviews()
+    this.updateButtonState()
   }
 
   filesChanged() {
-    this.errorTarget.classList.add("hidden")
-    this.errorTarget.textContent = ""
+    this.clearError()
     this.updatePreviews()
+    // Update hasExisting value when files are selected
+    if (this.inputTarget.files && this.inputTarget.files.length > 0) {
+      this.hasExistingValue = true
+    }
+    this.updateButtonState()
   }
 
   updatePreviews() {
@@ -28,13 +33,23 @@ export default class extends Controller {
     })
   }
 
-  handleNext(event) {
-    event.preventDefault()
+  updateButtonState() {
+    if (!this.hasNextButtonTarget) return
     
     if (this.needsFundingValue && !this.hasAtLeastOneImage()) {
-      this.errorTarget.textContent = "Please upload at least one image."
-      this.errorTarget.classList.remove("hidden")
-      return
+      this.nextButtonTarget.disabled = true
+      this.nextButtonTarget.classList.add("opacity-50", "cursor-not-allowed")
+    } else {
+      this.nextButtonTarget.disabled = false
+      this.nextButtonTarget.classList.remove("opacity-50", "cursor-not-allowed")
+    }
+  }
+
+  handleNext(event) {
+    if (this.needsFundingValue && !this.hasAtLeastOneImage()) {
+      event.preventDefault()
+      event.stopPropagation()
+      return false
     }
     
     // Find and call paginate controller's next method
@@ -50,5 +65,15 @@ export default class extends Controller {
 
   hasAtLeastOneImage() {
     return this.hasExistingValue || (this.inputTarget.files && this.inputTarget.files.length > 0)
+  }
+
+  showError(message) {
+    this.errorTarget.textContent = message
+    this.errorTarget.classList.remove("hidden")
+  }
+
+  clearError() {
+    this.errorTarget.textContent = ""
+    this.errorTarget.classList.add("hidden")
   }
 }

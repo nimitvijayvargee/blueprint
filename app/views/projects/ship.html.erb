@@ -337,7 +337,7 @@
             <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
             <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
             <div class="grow"></div>
-            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->cart-screenshots#handleNext" } } %>
+            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->cart-screenshots#handleNext", cart_screenshots_target: "nextButton" } } %>
           </div>
         <% end %>
         <%= render "shared/card", class: "hidden", html_options: { data: { controller: "ship-checks", paginate_target: "page" } } do %>
