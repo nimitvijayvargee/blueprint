@@ -152,6 +152,7 @@
               </div>
               <div class="space-y-2">
                 <%= f.label :funding_needed, "How much funding do you need?", class: "block text-xl font-medium" %>
+                <p>This should match your BOM (Bill Of Materials)
                 <div class="relative">
                   <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg">$</span>
                   <input type="text" 
@@ -226,9 +227,9 @@
             ["repo", "I have included all code, 3D models, schematics, and other project files into the repository in a format that can be edited (e.g. STEP, not STL)"],
             ["readme", "I have described my project in the README.md on the repository"],
             ["bom", "I have researched the cheapest option for my components"],
-            ["unique", "I have not copied an existing project to my knowledge, or have modified an existing project significantly"],
+            ["unique", "I know my project is original, or I have modified an existing project significantly"],
             ["design", "I have tried my best to build a functional design (electronics, 3D parts, etc)"],
-            ["journal", "I wrote my journal entries to the best of my ability"],
+            ["journal", "I journaled all aspects of my project creation"],
             ["hours", "I reported time spent honestly and to the best of my ability."]
           ] %>
           <div>

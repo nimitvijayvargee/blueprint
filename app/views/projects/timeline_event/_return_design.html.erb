@@ -1,4 +1,4 @@
-<% if event[:feedback] %>
+<% if event[:feedback].present? || event[:tier_override].present? || event[:grant_override_cents].present? %>
   <%= render "timeline_event_card" do %>
     <div class="flex space-x-4">
       <% if event[:user] %>
@@ -7,7 +7,9 @@
       <% end %>
     </div>
     <div class="timeline-journal">
-      <p><%= event[:feedback] %></p>
+      <% if event[:feedback].present? %>
+        <p><%= event[:feedback] %></p>
+      <% end %>
       <% if event[:tier_override].present? %>
         <p><strong>Recommended tier:</strong> <%= event[:tier_override] %></p>
       <% end %>
@@ -17,11 +19,11 @@
     </div>
   <% end %>
 <% else %>
-  <%= render "timeline_event_basic", icon: "icons/return.svg" do %>
+  <%= render "timeline_event_basic", icon: "icons/reject.svg" do %>
     <% if event[:user] %>
         <p><%= render "shared/user_inline", user: event[:user] %> requested changes for <%= project.title %> <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
     <% else %>
-      <p><%= project.title %> was returned needing changes <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+      <p><%= project.title %> was determined to need changes <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
     <% end %>
   <% end %>
 <% end %>

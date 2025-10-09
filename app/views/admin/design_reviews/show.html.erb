@@ -12,6 +12,7 @@
           <p>Tier: <span class="<%= tier_style %> p-1 px-3 "><%= @project.tier %></span></p>
         <% end %>
       </div>
+      <p class="text-xl">Requesting: $<%= sprintf("%.2f", @project.funding_needed_cents / 100.0) %></p>
     </div>
     <div class="space-y-6">
       <p class="text-xl wrap-break-word"><%= @project.description %></p>
@@ -100,7 +101,7 @@
 
       <div>
         <%= f.label :grant_override_cents, "Grant Override (cents)", class: "block text-xl font-medium" %>
-        <%= f.number_field :grant_override_cents, placeholder: "Leave blank for default calculation", class: "input px-3 mt-1 block w-full" %>
+        <%= f.number_field :grant_override_cents, placeholder: "Leave blank for default (#{@project.funding_needed_cents})", class: "input px-3 mt-1 block w-full" %>
       </div>
 
       <div>

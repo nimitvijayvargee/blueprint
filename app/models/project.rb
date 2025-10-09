@@ -3,6 +3,8 @@
 # Table name: projects
 #
 #  id                     :bigint           not null, primary key
+#  approved_funding_cents :integer
+#  approved_tier          :integer
 #  demo_link              :string
 #  description            :text
 #  funding_needed_cents   :integer          default(0), not null
@@ -86,8 +88,8 @@ class Project < ApplicationRecord
   before_validation :set_funding_needed_cents_to_zero_if_no_funding
   after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
   after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
+  after_update :approve_design!, if: -> { saved_change_to_review_status? && design_approved? }
   after_update :dm_status!, if: -> { saved_change_to_review_status? }
-  after_update :sync_to_airtable!, if: -> { saved_change_to_review_status? && design_approved? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -152,14 +154,27 @@ class Project < ApplicationRecord
     ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
     user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
 
-    negative_reviews = design_reviews.where(result: %w[returned rejected]).order(created_at: :asc)
+    all_reviews = design_reviews.where(result: %w[returned rejected approved]).order(created_at: :asc)
     return_design_events = []
     reject_design_events = []
+    approve_design_groups = []
+    previous_result = nil
 
-    negative_reviews.each do |review|
-      event = { type: review.result == "returned" ? :return_design : :reject_design, date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback, tier_override: review.tier_override, grant_override_cents: review.grant_override_cents }
-      review.result == "returned" ? return_design_events << event : reject_design_events << event
-      user_ids << event[:user_id].to_s
+    all_reviews.each do |review|
+      user_ids << review.reviewer_id.to_s
+
+      if review.result == "returned"
+        return_design_events << { date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback, tier_override: review.tier_override, grant_override_cents: review.grant_override_cents }
+      elsif review.result == "rejected"
+        reject_design_events << { date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback, tier_override: review.tier_override, grant_override_cents: review.grant_override_cents }
+      elsif review.result == "approved"
+        if previous_result != "approved"
+          approve_design_groups << { date: review.created_at, reviews: [] }
+        end
+        approve_design_groups.last[:reviews] << { date: review.created_at, user_id: review.reviewer_id, feedback: review.feedback, tier_override: review.tier_override, grant_override_cents: review.grant_override_cents, admin_review: review.admin_review }
+      end
+
+      previous_result = review.result
     end
 
     users = User.where(id: user_ids).index_by { |u| u.id.to_s }
@@ -177,6 +192,13 @@ class Project < ApplicationRecord
     reject_design_events.each do |event|
       user = users[event[:user_id].to_s]
       timeline << { type: :reject_design, date: event[:date], user: user, feedback: event[:feedback], tier_override: event[:tier_override], grant_override_cents: event[:grant_override_cents] }
+    end
+
+    approve_design_groups.each do |group|
+      reviews_with_users = group[:reviews].map do |r|
+        r.merge(user: users[r[:user_id].to_s])
+      end
+      timeline << { type: :approve_design, date: group[:date], reviews: reviews_with_users }
     end
 
     timeline.sort_by { |e| e[:date] }
@@ -391,7 +413,7 @@ class Project < ApplicationRecord
       if review && review.feedback.present? && review.reviewer&.slack_id.present?
         msg += "Your Blueprint project *#{title}* needs some changes before it can be approved. Here's some feedback from your inspector, <@#{review.reviewer.slack_id}>:\n\n#{review.feedback}\n\n"
         msg += "*Recommended tier:* #{review.tier_override}\n\n" if review.tier_override.present?
-        msg += "*Grant to expect:* $#{'%.2f' % (review.grant_override_cents / 100.0)}\n\n" if review.grant_override_cents.present?
+        msg += "*Recommended funding:* $#{'%.2f' % (review.grant_override_cents / 100.0)}\n\n" if review.grant_override_cents.present?
         msg += "<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       else
         msg += "Your Blueprint project *#{title}* needs some changes before it can be approved.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
@@ -406,6 +428,17 @@ class Project < ApplicationRecord
       else
         msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       end
+    elsif design_approved?
+      msg += "Your Blueprint project *#{title}* has passed the design review! You should receive an email from HCB about your grant soon.\n\n"
+
+      msg += "*Grant approved:* $#{'%.2f' % (approved_funding_cents / 100.0)}\n\n" if approved_funding_cents.present?
+      msg += "*Tier approved:* #{approved_tier}\n\n" if approved_tier.present?
+
+      admin_review = design_reviews.where(admin_review: true, result: "approved", invalidated: false).order(created_at: :desc).first
+      if admin_review && admin_review.feedback.present? && admin_review.reviewer&.slack_id.present?
+        msg += "<@#{admin_review.reviewer.slack_id}> left the following notes:\n\n#{admin_review.feedback}\n\n"
+      end
+      msg += "You can now start building your project and ship it for tickets when it's ready.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
     else
       msg += "Your Blueprint project *#{title}* has been updated!\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
     end
@@ -483,6 +516,17 @@ class Project < ApplicationRecord
 
   def invalidate_design_reviews_on_resubmit
     design_reviews.update_all(invalidated: true)
+  end
+
+  def approve_design!
+    admin_review = design_reviews.where(admin_review: true, result: "approved", invalidated: false).order(created_at: :desc).first
+
+    update_columns(
+      approved_tier: admin_review&.tier_override || tier,
+      approved_funding_cents: admin_review&.grant_override_cents || funding_needed_cents
+    )
+
+    upload_to_airtable!
   end
 
   def replace_local_images(content)
