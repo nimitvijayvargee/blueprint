@@ -1,8 +1,15 @@
 <section class="flex justify-center">
   <div class="w-full max-w-6xl space-y-4">
-    <div class="py-4 space-y-1">
-      <h1 class="text-5xl">Explore</h1>
-      <p class="text-xl">Here's what the community is up to</p>
+    <div class="flex items-end py-4 space-x-2">
+      <div class="space-y-1">
+        <h1 class="text-5xl">Explore</h1>
+        <p class="text-xl">Here's what the community is up to</p>
+      </div>
+      <div class="ml-auto space-x-2">
+        <%= link_to "For You", explore_path(sort: "you"), class: (params[:sort] == "you" ? "underline" : "hover:underline") %>
+        <%= link_to "Top", explore_path(sort: "top"), class: (params[:sort] == "top" ? "underline" : "hover:underline") %>
+        <%= link_to "New", explore_path(sort: "new"), class: (params[:sort] == "new" ? "underline" : "hover:underlines") %>
+      </div>
     </div>
     <div class="flex flex-col space-y-8">
       <%= render partial: 'explore_entry', collection: @journal_entries, as: :entry, cached: true %>

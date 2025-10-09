@@ -24,6 +24,7 @@ class RecommenderJob < ApplicationJob
         .count("journal_entries.id")
 
     top_recs = recommender.top_items(count: [ 1000, journal_entry_count ].min)
+    StoredRecommendation.find_or_create_by(key: "top_journal_entries").update(data: top_recs)
 
     # require "concurrent"
 

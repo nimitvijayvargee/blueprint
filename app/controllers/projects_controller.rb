@@ -8,7 +8,22 @@ class ProjectsController < ApplicationController
   end
 
   def explore
-    @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
+    params[:sort] ||= "you"
+    if params[:sort] == "new"
+      @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
+    elsif params[:sort] == "you"
+      @journal_entries = current_user.recommended_journal_entries.limit(20).includes(project: :user) if current_user.present?
+    elsif params[:sort] == "top"
+      top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
+      if top_entries.present?
+        entry_ids = top_entries.map { |item| item["item_id"] }.take(20)
+        @journal_entries = JournalEntry.where(id: entry_ids).joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{entry_ids.join(',')}], journal_entries.id::int)"))
+      end
+    else
+      redirect_to explore_path and return
+    end
+
+    render "explore", layout: "application"
   end
 
   def show
