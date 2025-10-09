@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
       if params[:sort] == "new"
         @projects = Project.where(is_deleted: false).includes(:banner_attachment).order(created_at: :desc).limit(21)
       elsif params[:sort] == "you"
-        @projects = current_user.recommended_projects.limit(21).includes(:banner_attachment) if current_user.present?
+        @projects = current_user.recommended_projects.where(is_deleted: false).limit(21).includes(:banner_attachment) if current_user.present?
         if @projects.nil? || @projects.count < 5
           redirect_to explore_path(type: "projects", sort: "top") and return
         end
@@ -40,6 +40,11 @@ class ProjectsController < ApplicationController
         if top_projects.present?
           project_ids = top_projects.map { |item| item["item_id"] }.take(21)
           @projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{project_ids.join(',')}], projects.id::int)"))
+
+          if @projects.count < 21
+            additional_projects = Project.where(is_deleted: false).where.not(id: @projects.pluck(:id)).includes(:banner_attachment).order(created_at: :desc).limit(21 - @projects.count)
+            @projects = (@projects.to_a + additional_projects.to_a).take(21)
+          end
         end
       else
         redirect_to explore_path(type: "projects") and return
