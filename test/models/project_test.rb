@@ -11,6 +11,7 @@
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
 #  needs_funding          :boolean          default(TRUE)
+#  print_legion           :boolean          default(FALSE), not null
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string

@@ -11,6 +11,7 @@
 #  hackatime_project_keys :string           default([]), is an Array
 #  is_deleted             :boolean          default(FALSE)
 #  needs_funding          :boolean          default(TRUE)
+#  print_legion           :boolean          default(FALSE), not null
 #  project_type           :string
 #  readme_link            :string
 #  repo_link              :string
@@ -72,6 +73,7 @@ class Project < ApplicationRecord
   validates :funding_needed_cents, numericality: { greater_than_or_equal_to: 0 }
   validate :funding_needed_within_tier_max
   has_one_attached :banner
+  has_many_attached :cart_screenshots
 
   has_paper_trail
   include PaperTrailHelper

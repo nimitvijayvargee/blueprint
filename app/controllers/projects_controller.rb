@@ -99,6 +99,19 @@ class ProjectsController < ApplicationController
       params[:project][:tier] = nil
     end
 
+    # Compute print_legion from radio inputs
+    if params.dig(:project, :has_3d_print).present? && params.dig(:project, :needs_3d_print_help).present?
+      has_3d = params[:project][:has_3d_print] == "yes"
+      needs_help = params[:project][:needs_3d_print_help] == "yes"
+      params[:project][:print_legion] = (has_3d && needs_help)
+    end
+
+    # Validate cart_screenshots if needed
+    if has_ship && @project.needs_funding? && !@project.cart_screenshots.attached? && Array(params.dig(:project, :cart_screenshots)).reject(&:blank?).empty?
+      @project.errors.add(:cart_screenshots, "are required when requesting funding")
+      render :ship, status: :unprocessable_entity and return
+    end
+
     if @project.update(project_params)
       if has_ship
         ahoy.track("project_ship", project_id: @project.id, user_id: current_user&.id)
@@ -227,7 +240,9 @@ class ProjectsController < ApplicationController
       :ysws,
       :ysws_other,
       :needs_funding,
-      :funding_needed_cents
+      :funding_needed_cents,
+      :print_legion,
+      cart_screenshots: []
     )
   end
 end

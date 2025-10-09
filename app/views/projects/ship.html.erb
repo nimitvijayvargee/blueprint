@@ -218,6 +218,77 @@
             </div>
           </div>
         <% end %>
+        <%= render "shared/card", class: "hidden", html_options: { data: { controller: "print-legion", paginate_target: "page" } } do %>
+          <div>
+            <p class="text-3xl">3D Printing</p>
+          </div>
+
+          <div class="space-y-6 pt-4">
+            <div class="space-y-2">
+              <p class="text-xl">Do you have a 3D print in your project?</p>
+              <div class="flex gap-4 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="project[has_3d_print]" value="yes" data-action="change->print-legion#update" class="hidden peer">
+                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                  <span>Yes</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="project[has_3d_print]" value="no" data-action="change->print-legion#update" class="hidden peer" checked>
+                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                  <span>No</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-2 hidden" data-print-legion-target="secondQuestion">
+              <p class="text-xl">Do you need help 3D printing it? (Print Legion)</p>
+              <div class="flex gap-4 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="project[needs_3d_print_help]" value="yes" data-action="change->print-legion#update" class="hidden peer">
+                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                  <span>Yes</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="project[needs_3d_print_help]" value="no" data-action="change->print-legion#update" class="hidden peer" checked>
+                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                  <span>No</span>
+                </label>
+              </div>
+            </div>
+
+            <%= f.hidden_field :print_legion, value: (@project.print_legion ? "true" : "false"), data: { print_legion_target: "hidden" } %>
+          </div>
+
+          <div class="flex items-center pt-2">
+            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <div class="grow"></div>
+            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
+          </div>
+        <% end %>
+        <%= render "shared/card", class: "hidden", html_options: { data: { controller: "cart-screenshots", paginate_target: "page", cart_screenshots_needs_funding_value: @project.needs_funding, cart_screenshots_has_existing_value: @project.cart_screenshots.attached? } } do %>
+          <div>
+            <p class="text-3xl">Cart screenshots</p>
+            <p class="text-lg">
+              Upload screenshots of your shopping cart (e.g., suppliers) so we can verify pricing.
+              <% if @project.needs_funding %><span class="text-bp-warning">At least one image is required.</span><% end %>
+            </p>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <%= f.label :cart_screenshots, "Upload images", class: "block text-xl font-medium" %>
+            <%= f.file_field :cart_screenshots, multiple: true, direct_upload: true, accept: "image/*", class: "input w-full space-x-2", data: { action: "change->cart-screenshots#filesChanged", cart_screenshots_target: "input" } %>
+            <p class="text-sm text-bp-danger hidden" data-cart-screenshots-target="error">
+              <% if @project.errors[:cart_screenshots].present? %><%= @project.errors[:cart_screenshots].first %><% end %>
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" data-cart-screenshots-target="previews"></div>
+          </div>
+
+          <div class="flex items-center pt-2">
+            <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <div class="grow"></div>
+            <%= render "shared/button", text: "Next", html_options: { data: { action: "click->cart-screenshots#handleNext" } } %>
+          </div>
+        <% end %>
         <%= render "shared/card", class: "hidden", html_options: { data: { controller: "ship-checks", paginate_target: "page" } } do %>
           <div>
             <p class="text-3xl">Final things before shipping</p>
