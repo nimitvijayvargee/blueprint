@@ -11,6 +11,9 @@ class ProjectsController < ApplicationController
     params[:sort] ||= "you"
     if params[:sort] == "new"
       @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
+      if @journal_entries.empty?
+        redirect_to explore_path(sort: "top") and return
+      end
     elsif params[:sort] == "you"
       @journal_entries = current_user.recommended_journal_entries.limit(20).includes(project: :user) if current_user.present?
     elsif params[:sort] == "top"
