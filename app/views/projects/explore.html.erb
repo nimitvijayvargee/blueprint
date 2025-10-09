@@ -12,7 +12,7 @@
         </div>
         <div class="space-x-2">
           <% if current_user %>
-            %= link_to "For You", explore_path(sort: "you", type: params[:type]), class: (params[:sort] == "you" || params[:sort].nil? ? "underline" : "hover:underline") %>
+            <%= link_to "For You", explore_path(sort: "you", type: params[:type]), class: (params[:sort] == "you" || params[:sort].nil? ? "underline" : "hover:underline") %>
           <% end %>
           <%= link_to "Top", explore_path(sort: "top", type: params[:type]), class: (params[:sort] == "top" ? "underline" : "hover:underline") %>
           <%= link_to "New", explore_path(sort: "new", type: params[:type]), class: (params[:sort] == "new" ? "underline" : "hover:underline") %>
