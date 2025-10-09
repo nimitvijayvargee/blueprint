@@ -276,6 +276,7 @@ class Project < ApplicationRecord
 
   def generate_journal(include_time)
     include_time ||= false
+    timezone = user.timezone_raw.presence || "UTC"
 
     contents =
     <<~EOS
@@ -295,11 +296,11 @@ class Project < ApplicationRecord
 
     journals = journal_entries.order(created_at: :asc)
 
-    day_counts = journals.group_by { |e| e.created_at.to_date }.transform_values(&:size)
-    hour_counts = journals.group_by { |e| [ e.created_at.to_date, e.created_at.hour ] }.transform_values(&:size)
+    day_counts = journals.group_by { |e| e.created_at.in_time_zone(timezone).to_date }.transform_values(&:size)
+    hour_counts = journals.group_by { |e| [ e.created_at.in_time_zone(timezone).to_date, e.created_at.in_time_zone(timezone).hour ] }.transform_values(&:size)
 
     journals.each do |entry|
-      t = entry.created_at
+      t = entry.created_at.in_time_zone(timezone)
       header_ts = if day_counts[t.to_date] && day_counts[t.to_date] > 1
         if hour_counts[[ t.to_date, t.hour ]] && hour_counts[[ t.to_date, t.hour ]] > 1
           t.strftime("%-m/%-d/%Y %-I:%M %p")
