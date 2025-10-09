@@ -106,6 +106,52 @@
             <%= render "shared/button", text: "Let's go!", html_options: { data: { action: "click->paginate#next" } } %>
           </div>
         <% end %>
+              <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
+          <div>
+            <p class="text-3xl">Running some checks...</p>
+            <p class="text-lg">Just making sure your project is ready for submission.</p>
+          </div>
+          <div class="space-y-8" 
+          data-controller="ship-bom" 
+          data-ship-bom-project-id-value="<%= @project.id %>"
+          data-ship-bom-base-ok-value="<%= @base_ok %>">
+            <div class="text-xl">
+              <ul class="space-y-2">
+                <% @checks.each do |c| %>
+                  <% met = c[:met] %>
+                  <% is_bom = c[:key] == "bom" %>
+                  <% is_readme = c[:key] == "readme" %>
+                  <li class="flex items-center space-x-4">
+                    <% if met.nil? %>
+                      <% if is_bom || is_readme %>
+                        <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
+                      <% else %>
+                        <div class="border-2 size-4 border-bp-muted"></div>
+                      <% end %>
+                    <% elsif met %>
+                      <div class="border-2 size-4 bg-bp-success border-bp-success" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
+                    <% else %>
+                      <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
+                    <% end %>
+                    <% if c[:url].present? %>
+                      <% is_external = c[:url].start_with?('http') %>
+                      <%= link_to c[:msg], c[:url], class: "underline underline-offset-2", 
+                          **( is_external ? { target: "_blank", rel: "noopener noreferrer" } : {} ) %>
+                    <% else %>
+                      <span><%= c[:msg] %></span>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="flex items-center pt-2">
+              <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+              <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
+              <div class="grow"></div>
+              <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next", ship_bom_target: "submit" } } %>
+            </div>
+          </div>
+        <% end %>
         <%= render "shared/card", class: "hidden", html_options: { data: { controller: "ysws", paginate_target: "page" } } do %>
           <div>
             <%= f.label :ysws, "Was this project from another program?", class: "text-3xl" %>
@@ -134,6 +180,7 @@
           </div>
           <div class="flex items-center pt-2">
             <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
             <div class="grow"></div>
             <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
           </div>
@@ -168,6 +215,7 @@
             </div>
             <div class="flex items-center pt-2">
               <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+              <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
               <div class="grow"></div>
               <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
             </div>
@@ -213,6 +261,7 @@
             </div>
             <div class="flex items-center pt-2">
               <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+              <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
               <div class="grow"></div>
               <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next", ship_bom_target: "submit" } } %>
             </div>
@@ -261,6 +310,7 @@
 
           <div class="flex items-center pt-2">
             <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
             <div class="grow"></div>
             <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next" } } %>
           </div>
@@ -285,6 +335,7 @@
 
           <div class="flex items-center pt-2">
             <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
+            <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
             <div class="grow"></div>
             <%= render "shared/button", text: "Next", html_options: { data: { action: "click->cart-screenshots#handleNext" } } %>
           </div>
@@ -316,6 +367,7 @@
           </div>
           <div class="flex items-center pt-2">
             <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->ship-checks#handlePrev" } } %>
+            <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
             <div class="grow"></div>
             <%= f.submit "Ship it!", class: "btn btn-primary", data: { ship_checks_target: "submitButton" } %>
           </div>

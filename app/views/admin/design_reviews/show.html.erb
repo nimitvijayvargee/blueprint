@@ -87,6 +87,25 @@
     </div>
   <% end %>
   <%= render "shared/card" do %>
+    <p class="text-3xl pb-4">Cart Screenshots</p>
+    <% if @project.cart_screenshots.attached? %>
+      <div class="flex flex-wrap gap-3 my-4">
+        <% @project.cart_screenshots.each do |img| %>
+          <div class="h-64 aspect-video overflow-hidden ">
+            <%= image_tag img, class: "rounded border border-bp-muted/40 w-full h-full object-contain" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-xl">No screenshots uploaded.</p>
+    <% end %>
+  <% end %>
+  <%= render "shared/card" do %>
+    <p class="text-3xl pb-4">Previous Reviews</p>
+    <% @project.design_reviews.order(created_at: :desc).each do |review| %>
+    <% end %>
+  <% end %>
+  <%= render "shared/card" do %>
     <p class="text-3xl pb-4">Submit Design Review</p>
     <%= form_with model: @design_review, url: admin_design_review_create_path(@project), method: :post, html: { class: "space-y-6" } do |f| %>
       <div>
