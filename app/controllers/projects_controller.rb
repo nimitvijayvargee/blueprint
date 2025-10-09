@@ -9,18 +9,40 @@ class ProjectsController < ApplicationController
 
   def explore
     params[:sort] ||= "you"
-    if params[:sort] == "new"
-      @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
-      if @journal_entries.empty?
-        redirect_to explore_path(sort: "top") and return
+    params[:type] ||= "journals"
+    if params[:type] == "journals"
+      if params[:sort] == "new"
+        @journal_entries = JournalEntry.joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(created_at: :desc).limit(20)
+      elsif params[:sort] == "you"
+        @journal_entries = current_user.recommended_journal_entries.limit(20).includes(project: :user) if current_user.present?
+        if @journal_entries.empty?
+          redirect_to explore_path(sort: "top") and return
+        end
+      elsif params[:sort] == "top"
+        top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
+        if top_entries.present?
+          entry_ids = top_entries.map { |item| item["item_id"] }.take(20)
+          @journal_entries = JournalEntry.where(id: entry_ids).joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{entry_ids.join(',')}], journal_entries.id::int)"))
+        end
+      else
+        redirect_to explore_path and return
       end
-    elsif params[:sort] == "you"
-      @journal_entries = current_user.recommended_journal_entries.limit(20).includes(project: :user) if current_user.present?
-    elsif params[:sort] == "top"
-      top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
-      if top_entries.present?
-        entry_ids = top_entries.map { |item| item["item_id"] }.take(20)
-        @journal_entries = JournalEntry.where(id: entry_ids).joins(:project).where(projects: { is_deleted: false }).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{entry_ids.join(',')}], journal_entries.id::int)"))
+    elsif params[:type] == "projects"
+      if params[:sort] == "new"
+        @projects = Project.where(is_deleted: false).includes(:banner_attachment).order(created_at: :desc).limit(21)
+      elsif params[:sort] == "you"
+        @projects = current_user.recommended_projects.limit(21).includes(:banner_attachment) if current_user.present?
+        if @projects.empty?
+          redirect_to explore_path(type: "projects", sort: "top") and return
+        end
+      elsif params[:sort] == "top"
+        top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
+        if top_projects.present?
+          project_ids = top_projects.map { |item| item["item_id"] }.take(21)
+          @projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{project_ids.join(',')}], projects.id::int)"))
+        end
+      else
+        redirect_to explore_path(type: "projects") and return
       end
     else
       redirect_to explore_path and return

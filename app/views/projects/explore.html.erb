@@ -5,14 +5,26 @@
         <h1 class="text-5xl">Explore</h1>
         <p class="text-xl">Here's what the community is up to</p>
       </div>
-      <div class="ml-auto space-x-2">
-        <%= link_to "For You", explore_path(sort: "you"), class: (params[:sort] == "you" ? "underline" : "hover:underline") %>
-        <%= link_to "Top", explore_path(sort: "top"), class: (params[:sort] == "top" ? "underline" : "hover:underline") %>
-        <%= link_to "New", explore_path(sort: "new"), class: (params[:sort] == "new" ? "underline" : "hover:underlines") %>
+      <div class="flex flex-col items-end ml-auto">
+        <div class="space-x-2">
+          <%= link_to "Journals", explore_path(type: "journals", sort: params[:sort]), class: (params[:type] == "journals" || params[:type].nil? ? "underline" : "hover:underline") %>
+          <%= link_to "Projects", explore_path(type: "projects", sort: params[:sort]), class: (params[:type] == "projects" ? "underline" : "hover:underline") %>
+        </div>
+        <div class="space-x-2">
+          <%= link_to "For You", explore_path(sort: "you", type: params[:type]), class: (params[:sort] == "you" || params[:sort].nil? ? "underline" : "hover:underline") %>
+          <%= link_to "Top", explore_path(sort: "top", type: params[:type]), class: (params[:sort] == "top" ? "underline" : "hover:underline") %>
+          <%= link_to "New", explore_path(sort: "new", type: params[:type]), class: (params[:sort] == "new" ? "underline" : "hover:underline") %>
+        </div>
       </div>
     </div>
-    <div class="flex flex-col space-y-8">
-      <%= render partial: 'explore_entry', collection: @journal_entries, as: :entry, cached: true %>
-    </div>
+    <% if params[:type] == "journals" || params[:type].nil? %>
+      <div class="flex flex-col space-y-8">
+        <%= render partial: 'explore_entry', collection: @journal_entries, as: :entry, cached: true %>
+      </div>
+    <% elsif params[:type] == "projects" %>
+      <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-3">
+        <%= render partial: 'explore_project', collection: @projects, as: :project, cached: true %>
+      </div>
+    <% end %>
   </div>
 </section>
