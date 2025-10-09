@@ -166,6 +166,7 @@ class AuthController < ApplicationController
     begin
       referrer_id = cookies[:referrer_id]&.to_i
       user = User.exchange_slack_token(params[:code], slack_callback_url, referrer_id: referrer_id)
+      user.refresh_profile! if user
       ahoy.track("slack_login", user_id: user&.id)
       session[:user_id] = user.id
 
@@ -180,7 +181,7 @@ class AuthController < ApplicationController
         }.to_json)
       end
 
-      redirect_to(post_login_redirect_path || home_path, notice: "Welcome back, #{user.display_name}!")
+      redirect_to(post_login_redirect_path || home_path, notice: "Welcome, #{user.display_name}!")
     rescue StandardError => e
       Rails.logger.tagged("Authentication") do
         Rails.logger.error({
