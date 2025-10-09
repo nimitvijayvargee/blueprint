@@ -459,7 +459,14 @@ class Project < ApplicationRecord
   end
 
   def upload_to_airtable!
-    idv_data = user&.fetch_idv || {}
+    begin
+      idv_data = user&.fetch_idv || {}
+    rescue StandardError => e
+      Rails.logger.tagged("Project##{id}Airtable") do
+        Rails.logger.error "Failed to fetch IDV data for user #{user&.id}: #{e.message}"
+      end
+      idv_data ||= {}
+    end
     addresses = idv_data.dig(:identity, :addresses) || []
     primary_address = addresses.find { |a| a[:primary] } || addresses.first || {}
 
