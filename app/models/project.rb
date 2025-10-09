@@ -33,6 +33,8 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Project < ApplicationRecord
+  include ActionView::Helpers::TextHelper
+
   belongs_to :user
   has_many :journal_entries, dependent: :destroy
   has_many :timeline_items, dependent: :destroy
