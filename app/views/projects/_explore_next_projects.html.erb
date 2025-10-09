@@ -1,0 +1,17 @@
+<% if @pagy.next %>
+  <%= turbo_frame_tag(
+        "explore-page-#{@pagy.next}",
+        loading: :lazy,
+        src: pagy_url_for(@pagy, @pagy.next),
+        target: "_top",
+        class: "grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-3"
+      ) do %>
+    <div class="flex justify-center col-span-3 py-4">
+      <span>Loading more...</span>
+    </div>
+  <% end %>
+<% else %>
+  <div class="flex justify-center py-8">
+    You've reached the end
+  </div>
+<% end %>

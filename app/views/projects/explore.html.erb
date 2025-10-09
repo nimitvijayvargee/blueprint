@@ -20,13 +20,9 @@
       </div>
     </div>
     <% if params[:type] == "journals" || params[:type].nil? %>
-      <div class="flex flex-col space-y-8">
-        <%= render partial: 'explore_entry', collection: @journal_entries, as: :entry, cached: true %>
-      </div>
+      <%= render "explore_entries" %>
     <% elsif params[:type] == "projects" %>
-      <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-3">
-        <%= render partial: 'explore_project', collection: @projects, as: :project, cached: true %>
-      </div>
+      <%= render "explore_projects" %>
     <% end %>
   </div>
 </section>

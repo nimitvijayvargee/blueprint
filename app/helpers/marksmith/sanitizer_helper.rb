@@ -8,20 +8,23 @@ module Marksmith
       # Replace external images with a callout linking to the original URL
       doc.css("img[src]").each do |img|
         src = img["src"].to_s
-        next unless external_link?(src)
 
-        wrapper = Nokogiri::XML::Node.new("div", doc)
-        wrapper["class"] = "external-image-callout"
-        wrapper.add_child(Nokogiri::XML::Text.new("Displaying external images is not supported. ", doc))
+        if external_link?(src)
+          wrapper = Nokogiri::XML::Node.new("div", doc)
+          wrapper["class"] = "external-image-callout"
+          wrapper.add_child(Nokogiri::XML::Text.new("Displaying external images is not supported. ", doc))
 
-        link = Nokogiri::XML::Node.new("a", doc)
-        link["href"] = src
-        link["rel"] = "nofollow noopener"
-        link["target"] = "_blank"
-        link.content = "See original"
+          link = Nokogiri::XML::Node.new("a", doc)
+          link["href"] = src
+          link["rel"] = "nofollow noopener"
+          link["target"] = "_blank"
+          link.content = "See original"
 
-        wrapper.add_child(link)
-        img.replace(wrapper)
+          wrapper.add_child(link)
+          img.replace(wrapper)
+        else
+          img["loading"] = "lazy"
+        end
       end
 
       # Normalize anchors: enforce rel, add target for external when missing
