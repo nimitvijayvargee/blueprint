@@ -49,7 +49,7 @@
             <%= (project.journal_entries.sum(:duration_seconds) / 3600).round(1)  || 0 %>
           </div>
           <div class="flex items-center col-span-1">
-            <%= project.view_count || 0 %>
+            <%= project.journal_entries.count %>
           </div>
           <div class="flex items-center col-span-1">
             <div class="flex items-center gap-2">
