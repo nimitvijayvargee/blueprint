@@ -1,8 +1,8 @@
-<section class="flex flex-col items-center grow space-y-6">
-  <div class="w-full max-w-3xl min-h-full flex flex-col m-8 space-y-8">
+<section class="flex flex-col items-center space-y-6 grow">
+  <div class="flex flex-col w-full max-w-3xl min-h-full m-8 space-y-8">
     <% unless Flipper.enabled?(:new_ship_flow_10_06, current_user) %>
       <%= render "shared/card", class: "flex flex-col space-y-6" do %>
-        <div class="space-y-2 -mt-4 -mx-6 p-6 pb-0">
+        <div class="p-6 pb-0 -mx-6 -mt-4 space-y-2">
           <p class="text-3xl">It's time to ship "<%= @project.title %>"</p>
           <p class="text-lg text-bp-muted">Complete these last steps before you can ship!</p>
         </div>
@@ -22,7 +22,7 @@
                 <%# Square checkbox, matching tasks style but with status colors %>
                   <% if met.nil? %>
                     <% if is_bom || is_readme %>
-                      <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
+                      <div class="border-2 border-dashed rounded-full size-4 border-bp-warning animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
                     <% else %>
                       <div class="border-2 size-4 border-bp-muted"></div>
                     <% end %>
@@ -49,25 +49,25 @@
             <% if @project.needs_funding %>
               <div class="space-y-2">
                 <%= f.label :tier, "What tier should this project be?", class: "block text-xl font-medium" %>
-                <div class="select w-full text-left text-white bg-bp-dark">
+                <div class="w-full text-left text-white select bg-bp-dark">
                   <%= f.select :tier, Project.tier_options, { include_blank: false, selected: 4 }, { data: { ship_bom_target: "select", funding_amount_target: "tierSelect", action: "change->funding-amount#tierChanged" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
                 </div>
               </div>
-              <p>If you don't know which tier your project should be, look <a href="/docs" class="text-bp-warning underline underline-offset-2 hover:text-bp-warning/80">here</a></p>
+              <p>If you don't know which tier your project should be, look <a href="/docs" class="underline text-bp-warning underline-offset-2 hover:text-bp-warning/80">here</a></p>
 
               <div class="space-y-2">
                 <%= f.label :funding_needed, "How much funding do you need?", class: "block text-xl font-medium" %>
                 <div class="relative">
-                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg">$</span>
+                  <span class="absolute text-lg -translate-y-1/2 left-3 top-1/2">$</span>
                   <input type="text" 
                     placeholder="0.00" 
                     data-funding-amount-target="input" 
                     data-action="input->funding-amount#formatInput"
-                    class="input w-full pl-8" 
+                    class="w-full pl-8 input" 
                     value="<%= @project.funding_needed_cents > 0 ? '%.2f' % (@project.funding_needed_cents / 100.0) : '' %>">
                   <%= f.hidden_field :funding_needed_cents, data: { funding_amount_target: "hidden" }, value: @project.funding_needed_cents %>
                 </div>
-                <p class="text-sm text-bp-danger hidden" data-funding-amount-target="error"></p>
+                <p class="hidden text-sm text-bp-danger" data-funding-amount-target="error"></p>
               </div>
             <% end %>
 
@@ -96,7 +96,7 @@
             </div>
           <% end %>
           <div class="text-lg">
-            <p>Before you continue, check the guide for <a href="/docs/submission-guidelines" class="text-bp-warning underline">submission requirements</a>, and check to make sure your project can count as <a href="/docs/shipping" class="text-bp-warning underline">shipped</a>.</p>
+            <p>Before you continue, check the guide for <a href="/docs/submission-guidelines" class="underline text-bp-warning">submission requirements</a>, and check to make sure your project can count as <a href="/docs/shipping" class="underline text-bp-warning">shipped</a>.</p>
           </div>
           <div class="flex items-center mt-4">
             <%= link_to project_path(@project), class: "btn btn-outline" do %>
@@ -124,7 +124,7 @@
                   <li class="flex items-center space-x-4">
                     <% if met.nil? %>
                       <% if is_bom || is_readme %>
-                        <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
+                        <div class="border-2 border-dashed rounded-full size-4 border-bp-warning animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
                       <% else %>
                         <div class="border-2 size-4 border-bp-muted"></div>
                       <% end %>
@@ -157,9 +157,9 @@
             <%= f.label :ysws, "Was this project from another program?", class: "text-3xl" %>
             <p class="text-lg">Did you work on or submit this project to another program?<br>Or, was this project originally meant for another program?</p>
           </div>
-          <div class="flex-flex-col space-y-10 pt-4">
+          <div class="pt-4 space-y-10 flex-flex-col">
             <div class="space-y-2">
-              <div class="select w-full text-left text-white bg-bp-dark">
+              <div class="w-full text-left text-white select bg-bp-dark">
                 <% ysws_options = [
                   ["Was not for another program", "none"],
                   ["Mini Midi Magic", "midi"],
@@ -191,9 +191,9 @@
               <%= f.label :tier, "What tier should this project be?", class: "text-3xl" %>
               <p class="text-lg">We may adjust this as we see fit.<br>If you're unsure what to pick, check the <a href="/docs" target="_blank" class="underline text-bp-warning">tier docs</a>.</p>
             </div>
-            <div class="flex-flex-col space-y-6 py-4">
+            <div class="py-4 space-y-6 flex-flex-col">
               <div class="space-y-2">
-                <div class="select w-full text-left text-white bg-bp-dark">
+                <div class="w-full text-left text-white select bg-bp-dark">
                   <%= f.select :tier, Project.tier_options, { include_blank: false, selected: @project.tier || 4 }, { data: { funding_amount_target: "tierSelect", action: "change->funding-amount#tierChanged" }, class: "text-white bg-bp-dark", style: "color: white; background-color: var(--color-bp-dark);" } %>
                 </div>
               </div>
@@ -201,16 +201,16 @@
                 <%= f.label :funding_needed, "How much funding do you need?", class: "block text-xl font-medium" %>
                 <p>This should match your BOM (Bill Of Materials)
                 <div class="relative">
-                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg">$</span>
+                  <span class="absolute text-lg -translate-y-1/2 left-3 top-1/2">$</span>
                   <input type="text" 
                     placeholder="0.00" 
                     data-funding-amount-target="input" 
                     data-action="input->funding-amount#formatInput"
-                    class="input w-full pl-8" 
+                    class="w-full pl-8 input" 
                     value="<%= @project.funding_needed_cents > 0 ? '%.2f' % (@project.funding_needed_cents / 100.0) : '' %>">
                   <%= f.hidden_field :funding_needed_cents, data: { funding_amount_target: "hidden" }, value: @project.funding_needed_cents %>
                 </div>
-                <p class="text-sm text-bp-danger hidden" data-funding-amount-target="error"></p>
+                <p class="hidden text-sm text-bp-danger" data-funding-amount-target="error"></p>
               </div>
             </div>
             <div class="flex items-center pt-2">
@@ -221,85 +221,39 @@
             </div>
           <% end %>
         <% end %>
-        <%= render "shared/card", class: "hidden", html_options: { data: { paginate_target: "page" } } do %>
-          <div>
-            <p class="text-3xl">Running some checks...</p>
-            <p class="text-lg">Just making sure your project is ready for submission.</p>
-          </div>
-          <div class="space-y-8" 
-          data-controller="ship-bom" 
-          data-ship-bom-project-id-value="<%= @project.id %>"
-          data-ship-bom-base-ok-value="<%= @base_ok %>">
-            <div class="text-xl">
-              <ul class="space-y-2">
-                <% @checks.each do |c| %>
-                  <% met = c[:met] %>
-                  <% is_bom = c[:key] == "bom" %>
-                  <% is_readme = c[:key] == "readme" %>
-                  <li class="flex items-center space-x-4">
-                    <% if met.nil? %>
-                      <% if is_bom || is_readme %>
-                        <div class="border-2 size-4 border-bp-warning rounded-full border-dashed animate-spin" data-ship-bom-target="box" data-check="<%= is_bom ? 'bom' : 'readme' %>"></div>
-                      <% else %>
-                        <div class="border-2 size-4 border-bp-muted"></div>
-                      <% end %>
-                    <% elsif met %>
-                      <div class="border-2 size-4 bg-bp-success border-bp-success" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
-                    <% else %>
-                      <div class="border-2 size-4 bg-bp-danger border-bp-danger" <%= (is_bom || is_readme) ? 'data-ship-bom-target="box"' : '' %> data-check="<%= is_bom ? 'bom' : (is_readme ? 'readme' : nil) %>"></div>
-                    <% end %>
-                    <% if c[:url].present? %>
-                      <% is_external = c[:url].start_with?('http') %>
-                      <%= link_to c[:msg], c[:url], class: "underline underline-offset-2", 
-                          **( is_external ? { target: "_blank", rel: "noopener noreferrer" } : {} ) %>
-                    <% else %>
-                      <span><%= c[:msg] %></span>
-                    <% end %>
-                  </li>
-                <% end %>
-              </ul>
-            </div>
-            <div class="flex items-center pt-2">
-              <%= render "shared/button", text: "Back", variant: :outline, html_options: { data: { action: "click->paginate#prev" } } %>
-              <%= link_to "Cancel", project_path(@project), class: "btn btn-outline ml-2" %>
-              <div class="grow"></div>
-              <%= render "shared/button", text: "Next", html_options: { data: { action: "click->paginate#next", ship_bom_target: "submit" } } %>
-            </div>
-          </div>
-        <% end %>
         <%= render "shared/card", class: "hidden", html_options: { data: { controller: "print-legion", paginate_target: "page" } } do %>
           <div>
             <p class="text-3xl">3D Printing</p>
           </div>
 
-          <div class="space-y-6 pt-4">
+          <div class="pt-4 space-y-6">
             <div class="space-y-2">
               <p class="text-xl">Do you have a 3D print in your project?</p>
               <div class="flex gap-4 mt-2">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="project[has_3d_print]" value="yes" data-action="change->print-legion#update" class="hidden peer">
-                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                <label class="flex items-center gap-2 cursor-pointer" for="has_3d_print_yes">
+                  <input type="radio" name="project[has_3d_print]" value="yes" data-action="change->print-legion#update" class="hidden peer" id="has_3d_print_yes">
+                  <div class="border-2 size-4 peer-checked:bg-white"></div>
                   <span>Yes</span>
                 </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="project[has_3d_print]" value="no" data-action="change->print-legion#update" class="hidden peer" checked>
-                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                <label class="flex items-center gap-2 cursor-pointer" for="has_3d_print_no">
+                  <input type="radio" name="project[has_3d_print]" value="no" data-action="change->print-legion#update" class="hidden peer" checked id="has_3d_print_no">
+                  <div class="border-2 size-4 peer-checked:bg-white"></div>
                   <span>No</span>
                 </label>
               </div>
             </div>
 
-            <div class="space-y-2 hidden" data-print-legion-target="secondQuestion">
+            <div class="hidden space-y-2" data-print-legion-target="secondQuestion">
               <p class="text-xl">Do you need help 3D printing it? (Print Legion)</p>
               <div class="flex gap-4 mt-2">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="project[needs_3d_print_help]" value="yes" data-action="change->print-legion#update" class="hidden peer">
-                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                <label class="flex items-center gap-2 cursor-pointer" for="needs_3d_print_help_yes">
+                  <input type="radio" name="project[needs_3d_print_help]" value="yes" data-action="change->print-legion#update" class="hidden peer" id="needs_3d_print_help_yes">
+                  <div class="border-2 size-4 peer-checked:bg-white"></div>
                   <span>Yes</span>
                 </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="project[needs_3d_print_help]" value="no" data-action="change->print-legion#update" class="hidden peer" checked>
-                  <div class="size-4 border-2 peer-checked:bg-white"></div>
+                <label class="flex items-center gap-2 cursor-pointer" for="needs_3d_print_help_no">
+                  <input type="radio" name="project[needs_3d_print_help]" value="no" data-action="change->print-legion#update" class="hidden peer" checked id="needs_3d_print_help_no">
+                  <div class="border-2 size-4 peer-checked:bg-white"></div>
                   <span>No</span>
                 </label>
               </div>
@@ -324,13 +278,13 @@
             </p>
           </div>
 
-          <div class="space-y-2 pt-2">
+          <div class="pt-2 space-y-2">
             <%= f.label :cart_screenshots, "Upload images", class: "block text-xl font-medium" %>
             <%= f.file_field :cart_screenshots, multiple: true, direct_upload: true, accept: "image/*", class: "input w-full space-x-2", data: { action: "change->cart-screenshots#filesChanged", cart_screenshots_target: "input" } %>
-            <p class="text-sm text-bp-danger hidden" data-cart-screenshots-target="error">
+            <p class="hidden text-sm text-bp-danger" data-cart-screenshots-target="error">
               <% if @project.errors[:cart_screenshots].present? %><%= @project.errors[:cart_screenshots].first %><% end %>
             </p>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" data-cart-screenshots-target="previews"></div>
+            <div class="grid grid-cols-2 gap-3 md:grid-cols-3" data-cart-screenshots-target="previews"></div>
           </div>
 
           <div class="flex items-center pt-2">
@@ -357,11 +311,11 @@
           <div>
             <% manual_checks.each do |key, msg| %>
               <div class="flex items-start space-x-3">
-                <label for="ship-<%= key %>" class="flex space-x-3 items-start">
+                <label for="ship-<%= key %>" class="flex items-start space-x-3 cursor-pointer">
                   <input type="checkbox" class="hidden peer" id="ship-<%= key %>" data-ship-checks-target="checkbox" data-action="change->ship-checks#validate">
-                  <div class="mt-1 size-4 shrink-0 border-2 peer-checked:bg-bp-success peer-checked:border-bp-success"></div>
+                  <div class="mt-1 border-2 size-4 shrink-0 peer-checked:bg-bp-success peer-checked:border-bp-success"></div>
+                  <p><%= msg %></p>
                 </label>
-                <p><%= msg %></p>
               </div>
             <% end %>
           </div>
