@@ -82,7 +82,7 @@ class Project < ApplicationRecord
 
   def display_banner
     return banner if banner.attached?
-    
+
     latest_entry = journal_entries.order(created_at: :desc).first
     if latest_entry&.content.present?
       image_match = latest_entry.content.match(/!\[[^\]]*\]\(([^)]+)\)/)
@@ -92,7 +92,7 @@ class Project < ApplicationRecord
         return ActiveStorage::Blob.find_signed(blob_match[1]) if blob_match
       end
     end
-    
+
     nil
   end
 
