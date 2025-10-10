@@ -396,7 +396,7 @@ class User < ApplicationRecord
     changes = {}
     changes[:username] = { from: username, to: new_username } if username != new_username
     changes[:email] = { from: email, to: new_email } if email != new_email
-    changes[:timezone] = { from: timezone, to: new_timezone } if timezone != new_timezone
+    changes[:timezone_raw] = { from: timezone, to: new_timezone } if timezone != new_timezone
     changes[:avatar] = { from: avatar, to: new_avatar } if avatar != new_avatar
     changes[:is_mcg] = { from: is_mcg, to: new_is_mcg } if is_mcg != new_is_mcg
 
@@ -413,7 +413,7 @@ class User < ApplicationRecord
       update!(
         username: new_username,
         email: new_email,
-        timezone: new_timezone,
+        timezone_raw: new_timezone,
         avatar: new_avatar,
         is_mcg: new_is_mcg
       )
