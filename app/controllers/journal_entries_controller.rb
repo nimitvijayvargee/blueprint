@@ -1,6 +1,6 @@
 class JournalEntriesController < ApplicationController
   before_action :set_project
-  before_action :set_journal_entry, only: [ :show, :destroy ]
+  before_action :set_journal_entry, only: [ :show, :destroy, :edit, :update ]
 
   def show
     ahoy.track "journal_entry_view", journal_entry_id: @journal_entry.id, user_id: current_user&.id, project_id: @project.id
@@ -18,6 +18,23 @@ class JournalEntriesController < ApplicationController
       redirect_to project_path(@project), notice: "Journal entry created."
     else
       redirect_to project_path(@project), alert: "Could not create journal entry."
+    end
+  end
+
+  def edit
+    not_found and return unless @journal_entry.user == current_user
+    not_found and return unless @project.can_edit?
+  end
+
+  def update
+    not_found and return unless @journal_entry.user == current_user
+    not_found and return unless @project.can_edit?
+
+    if @journal_entry.update(journal_entry_params)
+      ahoy.track("journal_entry_update", project_id: @project.id, user_id: current_user.id, journal_entry_id: @journal_entry.id)
+      redirect_to project_path(@project), notice: "Journal entry updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
