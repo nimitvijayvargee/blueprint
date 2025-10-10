@@ -31,7 +31,7 @@ class GithubJournalSyncJob < ApplicationJob
       put_response = user.fetch_github(
         "/repos/#{org}/#{repo}/contents/JOURNAL.md",
         method: :put,
-        data: { message: sha.present? ? "Update JOURNAL.md" : "Create JOURNAL.md", content: Base64.strict_encode64(content), sha: sha }.compact,
+        data: { message: "Update JOURNAL.md", content: Base64.strict_encode64(content), sha: sha }.compact,
         headers: { "Content-Type" => "application/json" }
       )
 
