@@ -106,7 +106,7 @@ class Project < ApplicationRecord
 
   before_validation :normalize_repo_link
   before_validation :set_funding_needed_cents_to_zero_if_no_funding
-  after_update_commit :sync_github_jourunal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
+  after_update_commit :sync_github_journal!, if: -> { saved_change_to_repo_link? && repo_link.present? }
   after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
   after_update :approve_design!, if: -> { saved_change_to_review_status? && design_approved? }
   after_update :dm_status!, if: -> { saved_change_to_review_status? }
@@ -337,7 +337,7 @@ class Project < ApplicationRecord
     contents
   end
 
-  def sync_github_jourunal!
+  def sync_github_journal!
     return unless user&.github_user? && repo_link.present?
     GithubJournalSyncJob.perform_later(id)
   end

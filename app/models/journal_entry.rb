@@ -65,6 +65,6 @@ class JournalEntry < ApplicationRecord
   end
 
   def sync_project_github_journal
-    project&.sync_github_jourunal!
+    project&.sync_github_journal!
   end
 end
