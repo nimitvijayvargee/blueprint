@@ -80,6 +80,22 @@ class Project < ApplicationRecord
   has_paper_trail
   include PaperTrailHelper
 
+  def display_banner
+    return banner if banner.attached?
+    
+    latest_entry = journal_entries.order(created_at: :desc).first
+    if latest_entry&.content.present?
+      image_match = latest_entry.content.match(/!\[[^\]]*\]\(([^)]+)\)/)
+      if image_match
+        image_url = image_match[1]
+        blob_match = image_url.match(/blobs\/[^\/]+\/([^\/\?]+)/)
+        return ActiveStorage::Blob.find_signed(blob_match[1]) if blob_match
+      end
+    end
+    
+    nil
+  end
+
   # Order projects by most recent journal entry; fall back to project creation
   scope :order_by_recent_journal, -> {
     left_joins(:journal_entries)
