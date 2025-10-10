@@ -4,7 +4,7 @@ class JournalEntriesController < ApplicationController
 
   def show
     ahoy.track "journal_entry_view", journal_entry_id: @journal_entry.id, user_id: current_user&.id, project_id: @project.id
-    redirect_to project_path(@journal_entry.project)
+    redirect_to project_path(@journal_entry.project, return_to: params[:return_to])
   end
 
   def create
