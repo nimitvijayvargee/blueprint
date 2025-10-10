@@ -81,7 +81,7 @@ class Project < ApplicationRecord
   include PaperTrailHelper
 
   def display_banner
-    return banner if banner.attached?
+    return banner.blob if banner.attached?
 
     latest_entry = journal_entries.order(created_at: :desc).first
     if latest_entry&.content.present?
