@@ -21,7 +21,8 @@
       <div class="col-span-1">ID</div>
       <div class="col-span-4">Title</div>
       <div class="col-span-2">Author</div>
-      <div class="col-span-2">Status</div>
+      <div class="col-span-1">Tier</div>
+      <div class="col-span-1">Cost</div>
       <div class="col-span-1">Hours</div>
       <div class="col-span-1">Entries</div>
       <div class="col-span-1">Actions</div>
@@ -42,8 +43,11 @@
               –
             <% end %>
           </div>
-          <div class="flex items-center col-span-2">
-            <%= project.review_status || "not_submitted" %>
+          <div class="flex items-center col-span-1">
+            <%= project.tier || "No grant" %>
+          </div>
+          <div class="flex items-center col-span-1">
+            <%= sprintf("%.2f", @project.funding_needed_cents / 100.0) %>
           </div>
           <div class="flex items-center col-span-1">
             <%= (project.journal_entries.sum(:duration_seconds) / 3600).round(1)  || 0 %>
