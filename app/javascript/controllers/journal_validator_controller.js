@@ -105,12 +105,11 @@ export default class extends Controller {
     const chars = normalized.length;
     const images = imageMatches.length;
 
-    // Hours validation (> 0, max 1 decimal place)
+    // Hours validation (> 0, any number of decimal places)
     const hoursRaw = this.hasHoursTarget ? (this.hoursTarget.value || "") : "";
     const hoursValue = this.hasHoursTarget ? Number(hoursRaw) : NaN;
-    const decimalsOk = !hoursRaw.includes(".") || ((hoursRaw.split(".")[1] || "").length <= 1);
     const okHours = this.hasHoursTarget
-      ? Number.isFinite(hoursValue) && hoursValue > 0 && hoursValue < 1000 && decimalsOk
+      ? Number.isFinite(hoursValue) && hoursValue > 0 && hoursValue < 1000
       : true;
 
     // Summary validation (required, <= 60 chars)
