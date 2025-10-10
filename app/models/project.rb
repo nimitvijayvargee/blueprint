@@ -43,7 +43,33 @@ class Project < ApplicationRecord
   has_many :design_reviews, dependent: :destroy
 
   def self.airtable_sync_table_id
-    "tblRH1aELwmy7rgEU"
+    "tblwQanyNgONPvBdL"
+  end
+
+  def self.airtable_sync_sync_id
+    "clZF1lJC"
+  end
+
+  def self.airtable_sync_field_mappings
+    {
+      "Project ID" => :id,
+      "Demo Link" => :demo_link,
+      "Description" => :description,
+      "Funding Needed Cents" => :funding_needed_cents,
+      "Is Deleted" => :is_deleted,
+      "Needs Funding" => :needs_funding,
+      "Print Legion" => :print_legion,
+      "Readme Link" => :readme_link,
+      "Review Status" => :review_status,
+      "Tier" => :tier,
+      "Title" => :title,
+      "Views" => :views_count,
+      "YSWS" => :ysws,
+      "Created At" => :created_at,
+      "Updated At" => :updated_at,
+      "User ID" => :user_id,
+      "Followers" => lambda { |project| project.followers.pluck(:id).join(",") }
+    }
   end
 
   # Enums
