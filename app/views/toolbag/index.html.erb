@@ -1,10 +1,26 @@
 <div class="p-8">
   <div class="max-w-6xl mx-auto">
+    
+
     <!-- Under Construction Banner -->
     <div class="text-center mb-16">
       <div class="bg-bp-warning text-bp-dark py-8 px-4 mb-8">
         <h1 class="text-6xl font-bold mb-4">UNDER CONSTRUCTION</h1>
         <p class="text-3xl font-bold">COMING SOON!</p>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-lg font-bold">Progress to shop release:</span>
+        <span class="text-lg font-bold text-bp-warning"><%= User.count %> / 2000</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-full h-6 bg-bp-dark border-2 border-white/25 overflow-hidden">
+          <div class="h-full bg-bp-warning transition-all duration-500" style="width: <%= (User.count.to_f / 2000 * 100).round(2) %>%;"></div>
+        </div>
+        <%= render "shared/button", text: "Refer", url: me_path, class: "min-h-[44px] flex-shrink-0" %>
       </div>
     </div>
     
@@ -22,113 +38,21 @@
     <!-- Tool Bag Items Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Item 1: Soldering Iron -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/soldering-iron.png", class: "max-w-full max-h-full object-contain" %>
+      <% 9.times do %>
+        <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
+          <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
+            <span class="text-white/30" style="font-size: 10rem;">?</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">???</h3>
+          <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Mystery item - stay tuned!</p>
+          <div class="mt-auto">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-lg font-bold text-bp-warning">??? tickets</span>
+            </div>
+            <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
+          </div>
         </div>
-        <h3 class="text-xl font-bold mb-2">Soldering Iron</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Professional temperature-controlled soldering iron for electronics</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 2: Solder -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/solder.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Solder Wire</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">High-quality rosin-core solder wire for electronics projects</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 3: Wire Strippers -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/wire-strippers.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Wire Strippers</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Precision wire strippers with multiple gauge settings</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 4: Multimeter -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/multimeter.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Digital Multimeter</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Auto-ranging digital multimeter for voltage, current, and resistance</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 5: Power Supply -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/power-supply.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Adjustable Power Supply</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Variable voltage and current-limited bench power supply</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 6: Flush Cutters -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/flush-cutters.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Flush Cutters</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Precision flush cutters for clean component lead trimming</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 7: Needle Nose Pliers -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/needle-nose.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Needle Nose Pliers</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Long-nose pliers for gripping small components and wires</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 8: Solder Wick -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/solder-wick.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Solder Wick</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">Desoldering braid for removing solder and correcting mistakes</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
-
-      <!-- Item 9: Bambu Lab 3D Printer -->
-      <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
-        <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-          <%= image_tag "shop/bambu-lab.png", class: "max-w-full max-h-full object-contain" %>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Bambu Lab A1 mini</h3>
-        <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);">High-speed 3D printer with automatic calibration and multicolor printing</p>
-        <div class="mt-auto">
-          <button class="w-full py-2 px-6 text-xl border-2 cursor-not-allowed" style="background-color: var(--color-bp-darker); border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.5);" disabled>Coming Soon</button>
-        </div>
-      </div>
+      <% end %>
 
     </div>
     
