@@ -105,7 +105,11 @@ class User < ApplicationRecord
     end
 
     slack_id = result["authed_user"]["id"]
-    user = User.find_by(slack_id: slack_id)
+
+    user_info = fetch_slack_user_info(slack_id)
+    slack_email = user_info.user.profile.email
+
+    user = User.find_by(slack_id: slack_id) || User.find_by(email: slack_email)
     if user.present?
       Rails.logger.tagged("UserCreation") do
         Rails.logger.info({
