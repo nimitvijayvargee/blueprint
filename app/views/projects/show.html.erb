@@ -24,7 +24,7 @@
                   <%= render "shared/button", text: "Delete", class: "py-1 px-6", html_options: { data: { controller: "modal", action: "click->modal#show", modal_target_id_value: "delete-project" } } %>
                 <% end %>
                 <% if @project.awaiting_idv? %>
-                  <%= render "shared/button", text: "Awaiting Identity Verification", class: "py-1 px-6", html_options: { disabled: true } %>
+                  <%= render "shared/button", text: "Awaiting Identity Verification", class: "py-1 px-6", url: idv_path %>
                 <% elsif @project.under_review? %>
                   <%= render "shared/button", text: "Under Review", class: "py-1 px-6", html_options: { disabled: true } %>
                 <% end %>
