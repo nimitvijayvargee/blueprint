@@ -16,6 +16,19 @@ class Rack::Attack
     req.ip if req.path == "/auth/track" && req.post?
   end
 
+  # Throttle OAuth callbacks by IP (20 requests per minute)
+  throttle("oauth/slack/callback/ip", limit: 20, period: 1.minute) do |req|
+    req.ip if req.path == "/auth/slack/callback" && req.get?
+  end
+
+  throttle("oauth/github/callback/ip", limit: 20, period: 1.minute) do |req|
+    req.ip if req.path == "/auth/github/callback" && req.get?
+  end
+
+  throttle("oauth/idv/callback/ip", limit: 20, period: 1.minute) do |req|
+    req.ip if req.path == "/idv_callback" && req.get?
+  end
+
   # Custom response for throttled requests
   self.throttled_responder = lambda do |env|
     [
