@@ -26,12 +26,14 @@ class ProjectsController < ApplicationController
         end
         entry_ids = all_entries.pluck(:id)
         @pagy, paginated_ids = pagy_array(entry_ids, items: 20)
-        @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{paginated_ids.join(',')}], journal_entries.id::int)"))
+        sanitized_ids = paginated_ids.map(&:to_i).join(',')
+        @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql("array_position(ARRAY[#{sanitized_ids}], journal_entries.id::int)"))
       elsif params[:sort] == "top"
         top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
         if top_entries.present?
           entry_ids = top_entries.map { |item| item["item_id"] }
-          all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql("array_position(ARRAY[#{entry_ids.join(',')}], journal_entries.id::int)"))
+          sanitized_ids = entry_ids.map(&:to_i).join(',')
+          all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql("array_position(ARRAY[#{sanitized_ids}], journal_entries.id::int)"))
           @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
         end
       else
@@ -47,12 +49,14 @@ class ProjectsController < ApplicationController
         end
         project_ids = all_projects.pluck(:id)
         @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
-        @projects = Project.where(id: paginated_ids).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{paginated_ids.join(',')}], projects.id::int)"))
+        sanitized_ids = paginated_ids.map(&:to_i).join(',')
+        @projects = Project.where(id: paginated_ids).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{sanitized_ids}], projects.id::int)"))
       elsif params[:sort] == "top"
         top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
         if top_projects.present?
           project_ids = top_projects.map { |item| item["item_id"] }
-          all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{project_ids.join(',')}], projects.id::int)"))
+          sanitized_ids = project_ids.map(&:to_i).join(',')
+          all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment).order(Arel.sql("array_position(ARRAY[#{sanitized_ids}], projects.id::int)"))
 
           @pagy, @projects = pagy_array(all_projects, limit: 21)
         end
