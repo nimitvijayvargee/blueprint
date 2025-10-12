@@ -32,8 +32,7 @@ class ShopItemsController < ApplicationController
       :desc,
       :one_per_person,
       :total_stock,
-      :image,
-      :type
+      :image
     )
   end
 end
