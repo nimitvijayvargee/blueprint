@@ -105,13 +105,7 @@ class User < ApplicationRecord
     end
 
     slack_id = result["authed_user"]["id"]
-
-    # Fetch Slack user info to get email
-    user_info = fetch_slack_user_info(slack_id)
-    email = user_info.user.profile.email
-
-    # Try to find user by slack_id OR email
-    user = User.find_by(slack_id: slack_id) || User.find_by(email: email)
+    user = User.find_by(slack_id: slack_id)
     if user.present?
       Rails.logger.tagged("UserCreation") do
         Rails.logger.info({
@@ -122,8 +116,6 @@ class User < ApplicationRecord
         }.to_json)
       end
 
-      # Update slack_id if it wasn't set
-      user.update!(slack_id: slack_id) if user.slack_id.blank?
       user.refresh_profile!
 
       unless AllowedEmail.allowed?(user.email)
@@ -179,8 +171,8 @@ class User < ApplicationRecord
       raise StandardError, "Slack ID #{slack_id} has an invalid email: #{email.inspect}"
     end
 
-    # Check if user with same email already exists (from OTP login)
-    existing_user = User.find_by(email: email)
+    # Check if user with same email already exists (from OTP login, case-insensitive)
+    existing_user = User.where("LOWER(email) = LOWER(?)", email).first
     if existing_user.present?
       Rails.logger.tagged("UserCreation") do
         Rails.logger.info({
@@ -249,12 +241,12 @@ class User < ApplicationRecord
     end
 
     slack_id = user_info.user.id
-    email = user_info.user.profile.email
+    slack_email = user_info.user.profile.email
     username_from_slack = user_info.user.profile.display_name.presence || user_info.user.profile.real_name
     timezone = user_info.user.tz
     avatar = user_info.user.profile.image_192 || user_info.user.profile.image_512
 
-    unless AllowedEmail.allowed?(email)
+    unless AllowedEmail.allowed?(slack_email)
       raise StandardError, "You do not have access."
     end
 
@@ -262,18 +254,18 @@ class User < ApplicationRecord
       Rails.logger.info({
         event: "slack_user_found",
         slack_id: slack_id,
-        email: email,
+        email: slack_email,
         username: username_from_slack,
         timezone: timezone,
         avatar: avatar
       }.to_json)
     end
 
-    if email.blank? || !(email =~ URI::MailTo::EMAIL_REGEXP)
+    if slack_email.blank? || !(slack_email =~ URI::MailTo::EMAIL_REGEXP)
       Rails.logger.warn({
         event: "slack_user_missing_or_invalid_email",
         slack_id: slack_id,
-        email: email,
+        email: slack_email,
         user_info: user_info.to_h
       }.to_json)
       # Honeybadger.notify("Slack email missing??", context: {
@@ -281,18 +273,18 @@ class User < ApplicationRecord
       #   email: email,
       #   user_info: user_info.to_h
       # })
-      raise StandardError, "Slack ID #{slack_id} has an invalid email: #{email.inspect}"
+      raise StandardError, "Slack ID #{slack_id} has an invalid email: #{slack_email.inspect}"
     end
 
     # Check if user with same slack ID already exists
-    existing_user = User.find_by(slack_id: slack_id)
+    existing_user = User.find_by(slack_id: slack_id) || User.find_by(email: slack_email)
     if existing_user.present?
       Rails.logger.tagged("UserCreation") do
         Rails.logger.info({
           event: "slack_user_already_exists",
           existing_user_id: existing_user.id,
           slack_id: slack_id,
-          email: email
+          email: slack_email
         }.to_json)
       end
 
@@ -309,7 +301,7 @@ class User < ApplicationRecord
     User.create!(
       slack_id: slack_id,
       username: username_from_slack,
-      email: email,
+      email: slack_email,
       timezone_raw: timezone,
       avatar: avatar,
       is_banned: false,
