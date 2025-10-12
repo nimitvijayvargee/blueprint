@@ -197,13 +197,9 @@ class AuthController < ApplicationController
 
   # GitHub auth start
   def github
-    if Rails.env.production?
-      state = SecureRandom.hex(16)
-      session[:github_state] = state
-      redirect_to "https://github.com/apps/blueprint-hackclub/installations/new?state=#{state}", allow_other_host: true
-    else
-      redirect_to "https://github.com/apps/blueprint-hackclub/installations/new", allow_other_host: true
-    end
+    state = SecureRandom.hex(16)
+    session[:github_state] = state
+    redirect_to "https://github.com/apps/blueprint-hackclub/installations/new?state=#{state}", allow_other_host: true
   end
 
   # GitHub auth callback
@@ -214,7 +210,7 @@ class AuthController < ApplicationController
         return
       end
 
-      if Rails.env.production? && (session[:github_state].blank? || session[:github_state] != params[:state])
+      if session[:github_state].blank? || session[:github_state] != params[:state]
         redirect_to home_path, alert: "Invalid GitHub linking session. Please try again."
         return
       end
