@@ -848,4 +848,18 @@ class User < ApplicationRecord
                                   :verification_status) == "verified" && idv_data.dig(:identity, :ysws_eligible)
     )
   end
+
+  def advance_projects_after_idv!
+    return unless ysws_verified
+
+    projects.where(review_status: "awaiting_idv").find_each do |project|
+      begin
+        project.passed_idv!
+      rescue => e
+        Sentry.capture_exception(e)
+      end
+    end
+  end
+
+  after_commit :advance_projects_after_idv!, on: :update, if: -> { previous_changes.key?("ysws_verified") && ysws_verified? }
 end

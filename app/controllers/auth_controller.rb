@@ -282,14 +282,6 @@ class AuthController < ApplicationController
       return redirect_to home_path, alert: "Couldn't link identity: #{e.message} (ask support about error ID #{event_id}?)"
     end
 
-    current_user.projects.where(review_status: "awaiting_idv").find_each do |project|
-      begin
-        project.passed_idv!
-      rescue => e
-        Sentry.capture_exception(e)
-      end
-    end
-
     redirect_to home_path, notice: "Successfully linked your identity."
   end
 
