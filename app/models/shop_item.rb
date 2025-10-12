@@ -17,6 +17,9 @@
 class ShopItem < ApplicationRecord
   has_one_attached :image
 
+  validates :image, content_type: [ "image/png", "image/jpeg", "image/webp", "image/gif" ],
+                    size: { less_than: 5.megabytes }
+
   def fulfill!(*args)
     # does nothing by default
   end

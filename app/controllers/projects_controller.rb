@@ -26,13 +26,13 @@ class ProjectsController < ApplicationController
         end
         entry_ids = all_entries.pluck(:id)
         @pagy, paginated_ids = pagy_array(entry_ids, items: 20)
-        order_clause = ApplicationRecord.sanitize_sql_array(["array_position(ARRAY[?], journal_entries.id::int)", paginated_ids.map(&:to_i)])
+        order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", paginated_ids.map(&:to_i) ])
         @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql(order_clause))
       elsif params[:sort] == "top"
         top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
         if top_entries.present?
           entry_ids = top_entries.map { |item| item["item_id"] }
-          order_clause = ApplicationRecord.sanitize_sql_array(["array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i)])
+          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
           all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql(order_clause))
           @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
         end
@@ -49,13 +49,13 @@ class ProjectsController < ApplicationController
         end
         project_ids = all_projects.pluck(:id)
         @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
-        order_clause = ApplicationRecord.sanitize_sql_array(["array_position(ARRAY[?], projects.id::int)", paginated_ids.map(&:to_i)])
+        order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", paginated_ids.map(&:to_i) ])
         @projects = Project.where(id: paginated_ids).includes(:banner_attachment).order(Arel.sql(order_clause))
       elsif params[:sort] == "top"
         top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
         if top_projects.present?
           project_ids = top_projects.map { |item| item["item_id"] }
-          order_clause = ApplicationRecord.sanitize_sql_array(["array_position(ARRAY[?], projects.id::int)", project_ids.map(&:to_i)])
+          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", project_ids.map(&:to_i) ])
           all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment).order(Arel.sql(order_clause))
 
           @pagy, @projects = pagy_array(all_projects, limit: 21)

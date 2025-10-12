@@ -103,6 +103,11 @@ class Project < ApplicationRecord
   has_one_attached :banner
   has_many_attached :cart_screenshots
 
+  validates :banner, content_type: [ "image/png", "image/jpeg", "image/webp", "image/gif" ],
+                     size: { less_than: 5.megabytes }
+  validates :cart_screenshots, content_type: [ "image/png", "image/jpeg", "image/webp", "image/gif" ],
+                               size: { less_than: 10.megabytes }
+
   has_paper_trail
   include PaperTrailHelper
 

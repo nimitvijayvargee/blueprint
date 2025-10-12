@@ -10,10 +10,11 @@ violations = []
 
 changed_files.each do |file|
   next unless File.exist?(file)
-  next unless file.end_with?('.erb', '.html', '.rb')
+  next if file == "config/pre-commit.rb"
+  next unless file.end_with?(".erb", ".html")
 
   content = File.read(file)
-  if content.include?('<%') && content.match?(/<%\s*console\s*%>/)
+  if content.match?(/<%\s*console\s*%>/)
     violations << file
   end
 end

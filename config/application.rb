@@ -28,5 +28,8 @@ module Blueprint
     config.mission_control.jobs.http_basic_auth_enabled = false
 
     config.flipper_features = config_for(:flipper_features)
+
+    # Enable Rack::Attack for rate limiting
+    config.middleware.use Rack::Attack
   end
 end

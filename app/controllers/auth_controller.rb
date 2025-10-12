@@ -74,12 +74,13 @@ class AuthController < ApplicationController
         referrer_id = cookies[:referrer_id]&.to_i
         user = User.find_or_create_from_email(email, referrer_id: referrer_id)
         ahoy.track("email_login", user_id: user&.id)
+        reset_session
         session[:user_id] = user.id
 
         # Clear the referrer cookie after successful signup
         cookies.delete(:referrer_id) if referrer_id
 
-        Rails.logger.info("OTP validated for email: #{email}, OTP: #{otp}")
+        Rails.logger.info("OTP validated for email: #{email}")
         redirect_target = post_login_redirect_path
         redirect_to(redirect_target || home_path)
       else
@@ -168,6 +169,7 @@ class AuthController < ApplicationController
       user = User.exchange_slack_token(params[:code], slack_callback_url, referrer_id: referrer_id)
       user.refresh_profile! if user
       ahoy.track("slack_login", user_id: user&.id)
+      reset_session
       session[:user_id] = user.id
 
       # Clear the referrer cookie after successful signup
@@ -195,7 +197,13 @@ class AuthController < ApplicationController
 
   # GitHub auth start
   def github
-    redirect_to "https://github.com/apps/blueprint-hackclub/installations/new", allow_other_host: true
+    if Rails.env.production?
+      state = SecureRandom.hex(16)
+      session[:github_state] = state
+      redirect_to "https://github.com/apps/blueprint-hackclub/installations/new?state=#{state}", allow_other_host: true
+    else
+      redirect_to "https://github.com/apps/blueprint-hackclub/installations/new", allow_other_host: true
+    end
   end
 
   # GitHub auth callback
@@ -206,6 +214,12 @@ class AuthController < ApplicationController
         return
       end
 
+      if Rails.env.production? && (session[:github_state].blank? || session[:github_state] != params[:state])
+        redirect_to home_path, alert: "Invalid GitHub linking session. Please try again."
+        return
+      end
+
+      session.delete(:github_state) if Rails.env.production?
       current_user.link_github_account(params[:installation_id])
 
       Rails.logger.tagged("Authentication") do

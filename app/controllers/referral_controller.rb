@@ -18,7 +18,9 @@ class ReferralController < ApplicationController
     cookies[:referrer_id] = {
       value: referrer_id,
       expires: 30.days.from_now,
-      httponly: true
+      httponly: true,
+      secure: Rails.env.production?,
+      same_site: :lax
     }
 
     ahoy.track "referral_click", {

@@ -28,6 +28,9 @@ class JournalEntry < ApplicationRecord
 
   has_one_attached :attachment
 
+  validates :attachment, content_type: [ "image/png", "image/jpeg", "image/webp", "image/gif", "application/pdf" ],
+                         size: { less_than: 10.megabytes }
+
   MIN_CHARS = 250
 
   validate :content_min_chars_excluding_images

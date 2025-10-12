@@ -10,4 +10,13 @@ module ApplicationHelper
   def tw(*classes)
     Tailwind.merge(*classes)
   end
+
+  def safe_path(url)
+    return nil if url.blank?
+    uri = URI.parse(url)
+    return nil unless uri.scheme.nil? && uri.host.nil? && uri.path.present? && uri.path.start_with?("/")
+    uri.path + (uri.query.present? ? "?#{uri.query}" : "")
+  rescue URI::InvalidURIError
+    nil
+  end
 end
