@@ -13,12 +13,13 @@ class IdentityVaultService
       }[env]
     end
 
-    def authorize_url(redirect_uri, sneaky_params = nil)
+    def authorize_url(redirect_uri, sneaky_params = nil, state: nil)
       params = {
         client_id: ENV["IDENTITY_VAULT_CLIENT_ID"],
         redirect_uri:,
         response_type: "code",
         scope: "basic_info address",
+        state:,
         stash_data: encode_sneaky_params(sneaky_params)
       }.compact_blank
 

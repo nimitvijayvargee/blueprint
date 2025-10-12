@@ -262,11 +262,20 @@ class AuthController < ApplicationController
   end
 
   def idv
+    state = SecureRandom.hex(24)
+    session[:idv_state] = state
+    @idv_link = current_user.identity_vault_oauth_link(idv_callback_url, state: state)
     render "projects/ship_idv", layout: "application"
   end
 
   def idv_callback
     begin
+      unless params[:state].present? && params[:state] == session[:idv_state]
+        redirect_to home_path, alert: "Invalid identity verification session. Please try again."
+        return
+      end
+
+      session.delete(:idv_state)
       current_user.link_identity_vault_callback(idv_callback_url, params[:code])
     rescue StandardError => e
       event_id = Sentry.capture_exception(e)
