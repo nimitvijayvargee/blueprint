@@ -105,7 +105,13 @@ class User < ApplicationRecord
     end
 
     slack_id = result["authed_user"]["id"]
-    user = User.find_by(slack_id: slack_id)
+
+    # Fetch Slack user info to get email
+    user_info = fetch_slack_user_info(slack_id)
+    email = user_info.user.profile.email
+
+    # Try to find user by slack_id OR email
+    user = User.find_by(slack_id: slack_id) || User.find_by(email: email)
     if user.present?
       Rails.logger.tagged("UserCreation") do
         Rails.logger.info({
@@ -116,6 +122,8 @@ class User < ApplicationRecord
         }.to_json)
       end
 
+      # Update slack_id if it wasn't set
+      user.update!(slack_id: slack_id) if user.slack_id.blank?
       user.refresh_profile!
 
       unless AllowedEmail.allowed?(user.email)
