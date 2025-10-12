@@ -127,7 +127,11 @@ group :development do
   # Live reload for Hotwire
   gem "hotwire-livereload", "~> 2.0"
 
+  gem "web-console"
+
   gem "pre-commit", require: false
+
+  gem "execjs", require: false
 end
 
 group :test do

@@ -1,0 +1,15 @@
+---
+:checks_remove: []
+:checks_add:
+- :white_space
+- :tabs
+- :ruby_symbol_hashrockets
+- :json
+- :rubocop
+- :jshint
+- :merge_conflict
+- :migrations
+- :local
+:warnings_remove: []
+:warnings_add:
+- :console_log
