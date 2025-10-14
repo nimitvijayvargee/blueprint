@@ -47,14 +47,14 @@ class AirtableSync < ApplicationRecord
 
     records = batch || sync_all ? all_records(klass, limit) : outdated_records(klass, limit)
 
-    airtable_record_ids = []
+    airtable_ids = []
 
     if batch
       batch_sync!(table_id, records, klass.airtable_sync_sync_id, field_mappings)
     else
       records.each do |record|
-        old_airtable_record_id = find_by(record_identifier: build_identifier(record))&.airtable_record_id
-        airtable_record_ids << individual_sync!(table_id, record, field_mappings, old_airtable_record_id)
+        old_airtable_id = find_by(record_identifier: build_identifier(record))&.airtable_id
+        airtable_ids << individual_sync!(table_id, record, field_mappings, old_airtable_id)
       end
     end
 
@@ -66,7 +66,7 @@ class AirtableSync < ApplicationRecord
         updated_at: Time.current
       }
       if !batch
-        data[:airtable_record_id] = airtable_record_ids.shift
+        data[:airtable_id] = airtable_ids.shift
       end
       data
     end
@@ -100,17 +100,17 @@ class AirtableSync < ApplicationRecord
     end
   end
 
-  def self.individual_sync!(table_id, record, mappings, old_airtable_record_id)
+  def self.individual_sync!(table_id, record, mappings, old_airtable_id)
     fields = build_airtable_fields(record, mappings)
     upload_or_create!(table_id, record, fields)
   end
 
   def self.upload_or_create!(table_id, object, fields)
-    old_airtable_record_id = find_by(record_identifier: build_identifier(object))&.airtable_record_id
+    old_airtable_id = find_by(record_identifier: build_identifier(object))&.airtable_id
 
-    if old_airtable_record_id.present?
+    if old_airtable_id.present?
       method = :patch
-      url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}/#{old_airtable_record_id}"
+      url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}/#{old_airtable_id}"
     else
       method = :post
       url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_BASE_ID']}/#{table_id}"
