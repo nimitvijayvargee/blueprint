@@ -4,11 +4,6 @@ class ReferralController < ApplicationController
   def show
     referrer_id = params[:id]
 
-    unless params[:ref] == "r"
-      redirect_to root_path, alert: "Invalid referral link"
-      return
-    end
-
     unless User.exists?(id: referrer_id)
       redirect_to root_path, alert: "Invalid referral link"
       return
