@@ -559,7 +559,7 @@ class Project < ApplicationRecord
     }
 
     AirtableSync.upload_or_create!(
-      Project.airtable_sync_table_id, self, fields
+      "tblRH1aELwmy7rgEU", self, fields
     )
   end
 
