@@ -39,9 +39,8 @@ We split grants into tiers, each tier has a:
 
 #### Tier 5: up to $25 and 0.8x ticket multiplier (5-8 hours)
 
-A super basic project which introduces you to hardware
+A super basic project which introduces you to hardware.
 - A 3d-printed phone stand
-- A Hackercard (This needs custom art to be approved)
 - A 3d printed trinket
 
 #### Tier 4: up to $50 and a 1.0x ticket multiplier (8-16 hours)
