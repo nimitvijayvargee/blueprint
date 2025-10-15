@@ -178,7 +178,13 @@ class ProjectsController < ApplicationController
         ahoy.track("project_ship", project_id: @project.id, user_id: current_user&.id)
 
         if Flipper.enabled?(:new_ship_flow_10_06, current_user)
-          current_user.refresh_idv_data!
+          begin
+            current_user.refresh_idv_data!
+          rescue StandardError => e
+            Rails.logger.error "Failed to refresh IDV data for user #{current_user.id}: #{e.message}"
+            Sentry.capture_exception(e)
+          end
+
           @project.ship!
 
           if current_user.idv_linked?
