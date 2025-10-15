@@ -1,5 +1,6 @@
 ---
-:checks_remove: []
+:checks_remove:
+- :jshint
 :checks_add:
 - :white_space
 - :tabs
