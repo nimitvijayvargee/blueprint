@@ -562,6 +562,12 @@ class Project < ApplicationRecord
       "Grant Amount" => grant ? (grant / 100.0) : nil,
       "Grant Tier" => tier,
       "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0,
+      "Checkout Screens" => (cart_screenshots.attached? ? cart_screenshots.map { |s|
+        {
+          "url" => Rails.application.routes.url_helpers.rails_blob_url(s, host: ENV.fetch("APPLICATION_HOST")),
+          "filename" => s.filename.to_s
+        }
+      } : nil),
       "BP Project ID" => id
     }
 
