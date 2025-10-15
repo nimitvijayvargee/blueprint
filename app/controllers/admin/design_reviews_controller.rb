@@ -1,6 +1,6 @@
 class Admin::DesignReviewsController < Admin::ApplicationController
   def index
-    @projects = Project.where(is_deleted: false, review_status: :design_pending).order(created_at: :asc)
+    @projects = Project.where(is_deleted: false, review_status: :design_pending).includes(:user, :journal_entries).order(created_at: :asc)
   end
 
   def show

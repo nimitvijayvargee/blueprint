@@ -50,10 +50,10 @@
             <%= sprintf("%.2f", project.funding_needed_cents / 100.0) %>
           </div>
           <div class="flex items-center col-span-1">
-            <%= (project.journal_entries.sum(:duration_seconds) / 3600).round(1)  || 0 %>
+            <%= (project.journal_entries.map(&:duration_seconds).sum / 3600.0).round(1) %>
           </div>
           <div class="flex items-center col-span-1">
-            <%= project.journal_entries.count %>
+            <%= project.journal_entries.size %>
           </div>
           <div class="flex items-center col-span-1">
             <div class="flex items-center gap-2">
