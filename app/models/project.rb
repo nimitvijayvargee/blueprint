@@ -562,7 +562,7 @@ class Project < ApplicationRecord
       "Grant Amount" => grant ? (grant / 100.0) : nil,
       "Grant Tier" => tier,
       "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0,
-      "BP Project" => [ id ]
+      "BP Project ID" => id
     }
 
     AirtableSync.upload_or_create!(
