@@ -54,6 +54,7 @@ class Project < ApplicationRecord
   def self.airtable_sync_field_mappings
     {
       "Project ID" => :id,
+      "Project Name" => :title,
       "Demo Link" => :demo_link,
       "Description" => :description,
       "Funding Needed Cents" => :funding_needed_cents,
@@ -560,7 +561,8 @@ class Project < ApplicationRecord
       "Project Name" => title,
       "Grant Amount" => grant ? (grant / 100.0) : nil,
       "Grant Tier" => tier,
-      "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0
+      "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0,
+      "Project Record" => id
     }
 
     AirtableSync.upload_or_create!(
