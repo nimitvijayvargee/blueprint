@@ -36,11 +36,15 @@ We split grants into tiers, each tier has a:
 - Estimate of how many hours it would take to reach this level of effort
 
 > <span class="text-bp-warning">The hour amounts are not hard requirements, they are just estimates of time needed for the average hacker to achieve the quality required.</span>
-#### Tier 5: up to $25 and 1.0x ticket multiplier (5-8 hours)
 
-A super basic project which introduces you to hardware.
+#### Tier 5: up to $25 and 0.8x ticket multiplier (5-8 hours)
 
-#### Tier 4: up to $50 and a 1.1x ticket multiplier (8-16 hours)
+A super basic project which introduces you to hardware
+- A 3d-printed phone stand
+- A Hackercard (This needs custom art to be approved)
+- A 3d printed trinket
+
+#### Tier 4: up to $50 and a 1.0x ticket multiplier (8-16 hours)
 
 A basic project that doesn’t require much time. This is a project that is cool but not very unique.
 
@@ -51,7 +55,7 @@ Examples include:
 - A custom LED lamp
 - A custom keyboard/macropad
 
-#### Tier 3: up to $100 and a 1.2x ticket multiplier (17-33 hours)
+#### Tier 3: up to $100 and a 1.1x ticket multiplier (17-33 hours)
 
 An intermediate custom project that has a bit more of that “flare”.
 
@@ -62,7 +66,7 @@ Examples include:
 - A custom game console
 - A custom RP2040 devoard (see guides)
 
-#### Tier 2: up to $200 and a limit of 1250 tickets (34-66 hours)
+#### Tier 2: up to $200 and a 1.25x ticket multiplier (34-66 hours)
 
 A fairly advanced project that you are very proud of.
 
@@ -72,7 +76,7 @@ Examples include:
 - A custom robot arm
 - A custom FPGA board
 
-#### Tier 1: up to $400 and up to 2500 tickets (67-131+ hours)
+#### Tier 1: up to $400 and a 1.5x ticket multiplier (67-131+ hours)
 
 A super advanced project that would be the cornerstone of your portfolio.
 
