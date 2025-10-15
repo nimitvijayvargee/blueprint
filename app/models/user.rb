@@ -800,6 +800,14 @@ class User < ApplicationRecord
     User.where(referrer_id: id).where.not(slack_id: [ nil, "" ]).where(is_mcg: false).count
   end
 
+  def eligible_referral_count_range(start_datetime, end_datetime)
+    User.where(referrer_id: id)
+        .where.not(slack_id: [ nil, "" ])
+        .where(is_mcg: false)
+        .where(created_at: start_datetime..end_datetime)
+        .count
+  end
+
   def identity_vault_oauth_link(callback_url, state: nil)
     IdentityVaultService.authorize_url(callback_url, {
                                          prefill: {

@@ -28,7 +28,7 @@
           <p>Share Blueprint with friends and get cool stuff!</p>
         </div>
         <div class="space-y-1">
-          <p>You have referred <%= pluralize(@user.eligible_referral_count, "user") %>.</p>
+          <p>You have <%= pluralize(@user.eligible_referral_count_range(Time.current.beginning_of_week, Time.current.end_of_week), "referral") %> this week. (Total: <%= pluralize(@user.eligible_referral_count, "referral") %>)</p>
           <div class="flex space-x-2 items-center">
             <p>Your referral link:</p>
             <% referral = "https://#{ENV['APPLICATION_HOST']}/r/#{@user.id}?ref=r" %>
@@ -36,10 +36,8 @@
           </div>
         </div>
         <div>
-          <p>Rewards:</p>
-          <ul class="list-disc list-inside">
-            <li>3 referrals: Blueprint-style profile picture <% if @user.eligible_referral_count >= 3 %>(<a class="underline" href="#">DM @CAN to claim</a>)<% end %></li>
-            <li>More coming soon!</li>
+          <p>We're giving out 5 Raspberry Pi Picos out every week!</p>
+          <p>For each week: Every referral is one ticket into the raffle.</p>
         </div>
         <div>
           <p>A referral is a new user who signs up with your link and finishes joining Slack (or is already on Slack).</p>
