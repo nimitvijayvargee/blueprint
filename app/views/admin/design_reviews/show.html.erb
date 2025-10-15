@@ -87,7 +87,10 @@
     </div>
   <% end %>
   <%= render "shared/card" do %>
-    <p class="text-3xl pb-4">Cart Screenshots</p>
+    <div>
+      <p class="text-3xl pb-4">Cart Screenshots</p>
+      <p class="text-xl">Requesting: $<%= sprintf("%.2f", @project.funding_needed_cents / 100.0) %></p>
+    </div>
     <% if @project.cart_screenshots.attached? %>
       <div class="flex flex-wrap gap-3 my-4">
         <% @project.cart_screenshots.each do |img| %>
