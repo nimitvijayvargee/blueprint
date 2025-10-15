@@ -1,7 +1,7 @@
 class ApiController < ApplicationController
-  allow_unauthenticated_access only: %i[ site stickers ]
-  skip_forgery_protection only: %i[ stickers ]
-  before_action :authenticate_api, only: %i[ stickers ]
+  allow_unauthenticated_access only: %i[ site stickers report_grant_given ]
+  skip_forgery_protection only: %i[ site stickers report_grant_given ]
+  before_action :authenticate_api, only: %i[ stickers report_grant_given ]
 
   def site
     render plain: "#{Project.where(is_deleted: false).count} projects made"
@@ -24,6 +24,26 @@ class ApiController < ApplicationController
 
     eligible = user.tasks.completed?
     render json: { ok: true, eligible: eligible }
+  end
+
+  def report_grant_given
+    project_id = params[:project_id]
+    amount_cents = params[:amount_cents]
+    tier = params[:tier]
+
+    unless project_id.present? && amount_cents.present? && tier.present?
+      render json: { ok: false, error: "Missing fields" }, status: :bad_request
+      return
+    end
+
+    project = Project.find_by(id: project_id).where(is_deleted: false)
+    unless project
+      render json: { ok: false, error: "Project not found" }, status: :not_found
+      return
+    end
+
+    project.report_grant_given!(amount_cents.to_i, tier)
+    render json: { ok: true }
   end
 
   private

@@ -41,6 +41,7 @@ class Project < ApplicationRecord
   has_many :follows, dependent: :destroy
   has_many :followers, through: :follows, source: :user
   has_many :design_reviews, dependent: :destroy
+  has_many :project_grants, dependent: :destroy
 
   def self.airtable_sync_table_id
     "tblwQanyNgONPvBdL"
@@ -394,7 +395,10 @@ class Project < ApplicationRecord
     Project.tier_max_cents[tier] || 0
   end
 
-
+  def report_grant_given!(amount_cents, tier)
+    ProjectGrant.create!(project: self, grant_cents: amount_cents, tier: tier)
+    update!(approved_funding_cents: amount_cents, approved_tier: tier)
+  end
 
   def ship!(design: nil)
     unless can_ship?

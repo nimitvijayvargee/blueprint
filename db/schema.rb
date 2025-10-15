@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_210827) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_194028) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -244,6 +244,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_210827) do
     t.datetime "updated_at", null: false
     t.string "email", null: false
     t.index ["email"], name: "index_one_time_passwords_on_email"
+  end
+
+  create_table "project_grants", force: :cascade do |t|
+    t.integer "tier"
+    t.integer "grant_cents"
+    t.bigint "project_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_grants_on_project_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -511,6 +520,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_210827) do
   add_foreign_key "follows", "users"
   add_foreign_key "journal_entries", "projects"
   add_foreign_key "journal_entries", "users"
+  add_foreign_key "project_grants", "projects"
   add_foreign_key "projects", "users"
   add_foreign_key "shop_orders", "shop_items"
   add_foreign_key "shop_orders", "users"
