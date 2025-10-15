@@ -1,5 +1,5 @@
 <%= link_to project_path(project, return_to: request.fullpath), data: { turbo_frame: "_top" } do %>
-  <%= render "shared/card", class: "space-y-6 hover:scale-105 hover:shadow-xl motion-safe:transition-all overflow-hidden" do %>
+  <%= render "shared/card", class: "space-y-4 hover:scale-105 hover:shadow-xl motion-safe:transition-all overflow-hidden" do %>
     <div class="h-48 -mx-8 -mt-6 bg-gray-200 bg-center bg-cover" style="background-image: url('<%= project.display_banner ? url_for(project.display_banner) : nil %>')">
     </div>
     <div class="relative h-48 overflow-hidden">
@@ -10,6 +10,14 @@
       <p class="overflow-hidden break-words line-clamp-3"><%= project.description.empty? ? "No description yet" : project.description %></p>
       </div>
       <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-b from-transparent to-bp-darker"></div>
+    </div>
+    <div class="flex items-center space-x-4 -mt-2">
+      <div class="flex items-center space-x-2">
+        <%= inline_svg "icons/micro-eye.svg", class: "size-4" %><p class=""><%= pluralize(project.view_count, "view") %></p>
+      </div>
+      <div class="flex items-center space-x-2">
+        <%= inline_svg "icons/micro-users.svg", class: "size-4" %><p class=""><%= pluralize(project.follower_count, "follower") %></p>
+      </div>
     </div>
   <% end %>
 <% end %>
