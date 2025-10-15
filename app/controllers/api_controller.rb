@@ -36,7 +36,7 @@ class ApiController < ApplicationController
       return
     end
 
-    project = Project.find_by(id: project_id).where(is_deleted: false)
+    project = Project.find_by(id: project_id, is_deleted: false)
     unless project
       render json: { ok: false, error: "Project not found" }, status: :not_found
       return
