@@ -1,5 +1,11 @@
 module Marksmith
   module SanitizerHelper
+    ALLOWED_IMAGE_HOSTS = [
+      "hc-cdn.hel1.your-objectstorage.com",
+      "github.com",
+      "raw.githubusercontent.com"
+    ].freeze
+
     def sanitize_marksmith_html(html)
       sanitized = sanitize(html.to_s, tags: allowed_marksmith_tags, attributes: allowed_marksmith_attributes)
 
@@ -9,7 +15,7 @@ module Marksmith
       doc.css("img[src]").each do |img|
         src = img["src"].to_s
 
-        if external_link?(src)
+        if external_link?(src) && !allowed_image_host?(src)
           wrapper = Nokogiri::XML::Node.new("div", doc)
           wrapper["class"] = "external-image-callout"
           wrapper.add_child(Nokogiri::XML::Text.new("Displaying external images is not supported. ", doc))
@@ -70,6 +76,17 @@ module Marksmith
 
     def default_port(scheme)
       scheme.to_s.downcase == "https" ? 443 : 80
+    end
+
+    def allowed_image_host?(href)
+      return false unless href =~ /\Ahttps?:\/\//i
+
+      begin
+        uri = URI.parse(href)
+        ALLOWED_IMAGE_HOSTS.include?(uri.host)
+      rescue URI::InvalidURIError
+        false
+      end
     end
   end
 end
