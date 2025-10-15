@@ -5,17 +5,27 @@
         <h1 class="text-5xl">Explore</h1>
         <p class="text-xl">Here's what the community is up to</p>
       </div>
-      <div class="flex flex-col items-end ml-auto">
-        <div class="space-x-2">
-          <%= link_to "Journals", explore_path(type: "journals", sort: params[:sort]), class: (params[:type] == "journals" || params[:type].nil? ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
-          <%= link_to "Projects", explore_path(type: "projects", sort: params[:sort]), class: (params[:type] == "projects" ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
+      <div class="flex flex-col items-center ml-auto space-y-3">
+        <div class="flex bg-bp-dark border-2 border-white/25 p-1">
+          <%= link_to "Journals", explore_path(type: "journals", sort: params[:sort]),
+            class: "px-6 py-2 font-bold transition-all #{(params[:type] == "journals" || params[:type].nil?) ? "bg-white text-bp-dark" : "text-white hover:bg-white/10"}",
+            data: { turbo_frame: "_top" } %>
+          <%= link_to "Projects", explore_path(type: "projects", sort: params[:sort]),
+            class: "px-6 py-2 font-bold transition-all #{params[:type] == "projects" ? "bg-white text-bp-dark" : "text-white hover:bg-white/10"}",
+            data: { turbo_frame: "_top" } %>
         </div>
-        <div class="space-x-2">
+        <div class="flex bg-bp-dark border-2 border-white/25 p-1">
           <% if current_user %>
-            <%= link_to "For You", explore_path(sort: "you", type: params[:type]), class: (params[:sort] == "you" || params[:sort].nil? ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
+            <%= link_to "For You", explore_path(sort: "you", type: params[:type]),
+              class: "px-4 py-1.5 text-sm font-bold transition-all #{(params[:sort] == "you" || params[:sort].nil?) ? "bg-white text-bp-dark" : "text-white hover:bg-white/10"}",
+              data: { turbo_frame: "_top" } %>
           <% end %>
-          <%= link_to "Top", explore_path(sort: "top", type: params[:type]), class: (params[:sort] == "top" ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
-          <%= link_to "New", explore_path(sort: "new", type: params[:type]), class: (params[:sort] == "new" ? "underline" : "hover:underline"), data: { turbo_frame: "_top" } %>
+          <%= link_to "Top", explore_path(sort: "top", type: params[:type]),
+            class: "px-4 py-1.5 text-sm font-bold transition-all #{params[:sort] == "top" ? "bg-white text-bp-dark" : "text-white hover:bg-white/10"}",
+            data: { turbo_frame: "_top" } %>
+          <%= link_to "New", explore_path(sort: "new", type: params[:type]),
+            class: "px-4 py-1.5 text-sm font-bold transition-all #{params[:sort] == "new" ? "bg-white text-bp-dark" : "text-white hover:bg-white/10"}",
+            data: { turbo_frame: "_top" } %>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 <!-- DEBUG: @projects.count = <%= @projects.count %> -->
-<%= turbo_frame_tag "explore-page-#{@pagy.page}", class: "flex flex-col gap-4 md:grid md:gap-6 md:grid-cols-3" do %>
+<%= turbo_frame_tag "explore-page-#{@pagy.page}", class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" do %>
     <%= render partial: 'explore_project', collection: @projects, as: :project, cached: false %>
-    <div class="col-span-3">
+    <div class="col-span-1 md:col-span-2 lg:col-span-3">
         <%= render partial: 'explore_next_projects', locals: { pagy: @pagy } if @pagy.present? && @pagy.pages > 1 %>
     </div>
 <% end %>
