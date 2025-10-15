@@ -132,8 +132,6 @@ group :development do
   gem "hotwire-livereload", "~> 2.1"
 
   gem "pre-commit", require: false
-
-  gem "execjs", require: false
 end
 
 group :test do

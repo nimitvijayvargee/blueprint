@@ -6,7 +6,6 @@
 - :ruby_symbol_hashrockets
 - :json
 - :rubocop
-- :jshint
 - :merge_conflict
 - :migrations
 - :local

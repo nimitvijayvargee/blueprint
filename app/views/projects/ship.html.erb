@@ -199,7 +199,7 @@
               </div>
               <div class="space-y-2">
                 <%= f.label :funding_needed, "How much funding do you need?", class: "block text-xl font-medium" %>
-                <p>This should match your BOM (Bill Of Materials)
+                <p>This should match your BOM (Bill Of Materials) and cart screenshots.</s>
                 <div class="relative">
                   <span class="absolute text-lg -translate-y-1/2 left-3 top-1/2">$</span>
                   <input type="text" 
@@ -273,7 +273,10 @@
           <div>
             <p class="text-3xl">Cart screenshots</p>
             <p class="text-lg">
-              Upload screenshots of your shopping cart (e.g., suppliers) so we can verify pricing.
+              Upload screenshots of your shopping cart (e.g., suppliers) so we can verify pricing.<br>
+              Make sure the screenshot shows the full cart with items, prices, and quantities.<br>
+              For screenshots of JLC, make sure your PCB options are visible.<br>
+              If the cart doesn't fit within one screenshot, upload multiple.<br>
               <% if @project.needs_funding %><span class="text-bp-warning">At least one image is required.</span><% end %>
             </p>
           </div>

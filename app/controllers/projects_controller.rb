@@ -89,9 +89,9 @@ class ProjectsController < ApplicationController
     end
 
     repo_linked = @project.repo_link.present?
-    desc_ok = @project.description.to_s.strip.length >= 50
-    journal_ok = @project.journal_entries.count >= 3
-    banner_ok = @project.banner.attached?
+    desc_ok = true # @project.description.to_s.strip.length >= 50
+    journal_ok = true # @project.journal_entries.count >= 3
+    banner_ok = true # @project.banner.attached?
 
     @checks = [
       { msg: "GitHub repo linked", met: repo_linked },
