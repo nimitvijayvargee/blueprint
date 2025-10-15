@@ -93,7 +93,8 @@ class Project < ApplicationRecord
     "1" => 1,
     "2" => 2,
     "3" => 3,
-    "4" => 4
+    "4" => 4,
+    "5" => 5
   }, prefix: true
 
   validates :title, presence: true
@@ -380,12 +381,12 @@ class Project < ApplicationRecord
   end
 
   def self.tier_options
-      tier_amounts = { 1 => "$400 max", 2 => "$200 max", 3 => "$100 max", 4 => "$50 max" }
+      tier_amounts = { 1 => "$400 max", 2 => "$200 max", 3 => "$100 max", 4 => "$50 max", 5 => "$25 max" }
       Project.tiers.map { |key, value| [ "Tier #{key} (#{tier_amounts[key.to_i]})", value ] }
   end
 
   def self.tier_max_cents
-    { 1 => 40000, 2 => 20000, 3 => 10000, 4 => 5000 }
+    { 1 => 40000, 2 => 20000, 3 => 10000, 4 => 5000, 5 => 2500 }
   end
 
   def tier_max_cents
