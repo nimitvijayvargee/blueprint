@@ -44,5 +44,15 @@
         </div>
       <% end %>
     <% end %>
+    <% if @projects.any? %>
+      <div class="space-y-4">
+        <div class="space-y-1">
+          <h2 class="text-3xl"><%= current_user == @user ? "Your Projects" : "#{@user.display_name}'s Projects" %></h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <%= render partial: 'projects/explore_project', collection: @projects, as: :project %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </section>

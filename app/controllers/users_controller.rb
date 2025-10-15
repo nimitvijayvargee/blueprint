@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find_by(id: params[:id])
     not_found unless @user
+    @projects = @user.projects.where(is_deleted: false).includes(:banner_attachment).order(created_at: :desc)
   end
 
   def me
