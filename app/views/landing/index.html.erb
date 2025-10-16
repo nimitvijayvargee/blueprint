@@ -84,6 +84,24 @@
             </div>
           </div>
         </div>
+        
+        <!-- Floating scroll down arrow -->
+        <style>
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+          }
+          .float-arrow {
+            animation: float 2s ease-in-out infinite;
+          }
+        </style>
+        <div class="absolute left-0 right-0 flex justify-center z-[999]" style="top: calc(100vh - 15vh);">
+          <div class="float-arrow">
+            <svg class="w-12 h-12 md:w-16 md:h-16 text-white drop-shadow-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
       </div>
 
   <div class="pb-12 mx-4 space-y-18 relative">
