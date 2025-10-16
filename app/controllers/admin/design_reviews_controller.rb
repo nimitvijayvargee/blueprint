@@ -1,6 +1,21 @@
 class Admin::DesignReviewsController < Admin::ApplicationController
   def index
-    @projects = Project.where(is_deleted: false, review_status: :design_pending).includes(:user, :journal_entries).order(created_at: :asc)
+    reviewed_ids = Project.joins(:design_reviews)
+                            .where(is_deleted: false, review_status: :design_pending)
+                            .where(design_reviews: { invalidated: false })
+                            .distinct
+                            .pluck(:id)
+    if current_user.admin?
+      @projects = Project.where(is_deleted: false, review_status: :design_pending)
+                        .includes(:user, :journal_entries)
+                        .select("projects.*, CASE WHEN projects.id IN (#{reviewed_ids.any? ? reviewed_ids.join(',') : 'NULL'}) THEN true ELSE false END AS pre_reviewed")
+                        .order(Arel.sql("CASE WHEN id IN (#{reviewed_ids.any? ? reviewed_ids.join(',') : 'NULL'}) THEN 0 ELSE 1 END, created_at ASC"))
+    elsif current_user.reviewer_perms?
+      @projects = Project.where(is_deleted: false, review_status: :design_pending)
+                        .where.not(id: reviewed_ids)
+                        .includes(:user, :journal_entries)
+                        .order(created_at: :asc)
+    end
   end
 
   def show
@@ -10,6 +25,19 @@ class Admin::DesignReviewsController < Admin::ApplicationController
   end
 
   def show_random
+    if current_user.admin?
+      reviewed_project_id = Project.joins(:design_reviews)
+                              .where(is_deleted: false, review_status: :design_pending)
+                              .where(design_reviews: { invalidated: false })
+                              .distinct
+                              .pluck(:id)
+                              .sample
+      if reviewed_project_id
+        redirect_to admin_design_review_path(reviewed_project_id)
+        return
+      end
+    end
+
     project = Project.where(is_deleted: false, review_status: :design_pending).order("RANDOM()").first
     if project
       redirect_to admin_design_review_path(project)
