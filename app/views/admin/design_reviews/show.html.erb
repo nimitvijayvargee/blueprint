@@ -107,26 +107,35 @@
     <p class="text-3xl pb-4">Previous Reviews</p>
     <div class="flex flex-col divide-y-2">
       <% @project.design_reviews.order(created_at: :desc).each do |review| %>
-        <div class="py-4 first:pt-0 last:pb-0">
-          <% if review.invalidated? %>
-            <p class="text-bp-danger">OUTDATED</p>
-          <% end %>
-          <p>Reviewed by: <%= render "shared/user_inline", user: User.find(review.reviewer_id), admin_view: true %></p>
-          <% if review.result == "approved" %>
-            <p>Result: <span class="text-bp-success">Approved</span></p>
-          <% elsif review.result == "returned" %>
-            <p>Result: <span class="text-bp-warning">Returned</span></p>
-          <% elsif review.result == "rejected" %>
-            <p>Result: <span class="text-bp-danger">Permanently Rejected</span></p>
-          <% else %>
-            <p>Result: <span>Unknown</span></p>
-          <% end %>
-          <p>Hours override: <%= review.hours_override || "N/A" %></p>
-          <p>Tier override: <%= review.tier_override || "N/A" %></p>
-          <p>Grant override: <%= review.grant_override_cents ? "$#{sprintf("%.2f", review.grant_override_cents / 100.0)}" : "N/A" %></p>
-          <p>Feedback: <%= review.feedback.present? ? review.feedback : "No feedback given" %></p>
-          <p>Reason: <%= review.reason.present? ? review.reason : "No reason given" %></p>
-          <p>Reviewed at: <%= review.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        <div class="py-4 first:pt-0 last:pb-0 flex space-x-4">
+          <div>
+            <% if review.invalidated? %>
+              <p class="text-bp-danger">OUTDATED</p>
+            <% end %>
+            <p>Reviewed by: <%= render "shared/user_inline", user: User.find(review.reviewer_id), admin_view: true %></p>
+            <% if review.result == "approved" %>
+              <p>Result: <span class="text-bp-success">Approved</span></p>
+            <% elsif review.result == "returned" %>
+              <p>Result: <span class="text-bp-warning">Returned</span></p>
+            <% elsif review.result == "rejected" %>
+              <p>Result: <span class="text-bp-danger">Permanently Rejected</span></p>
+            <% else %>
+              <p>Result: <span>Unknown</span></p>
+            <% end %>
+            <p>Hours override: <%= review.hours_override || "N/A" %></p>
+            <p>Tier override: <%= review.tier_override || "N/A" %></p>
+            <p>Grant override: <%= review.grant_override_cents ? "$#{sprintf("%.2f", review.grant_override_cents / 100.0)}" : "N/A" %></p>
+            <p>Feedback: <%= review.feedback.present? ? review.feedback : "No feedback given" %></p>
+            <p>Reason: <%= review.reason.present? ? review.reason : "No reason given" %></p>
+            <p>Reviewed at: <%= review.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+          </div>
+          <div>
+            <p>This was requested:</p>
+            <p>Funding: <%= review.frozen_funding_needed_cents.present? ? sprintf("%.2f", review.frozen_funding_needed_cents / 100.0) : "Unknown" %></p>
+            <p>Tier: <%= review.frozen_tier.present? ? review.frozen_tier : "Unknown" %></p>
+            <p>Hours: <%= review.frozen_duration_seconds.present? ? review.frozen_duration_seconds / 3600.0 : "Unknown" %></p>
+            <p>Journal entries: <%= review.frozen_entry_count.present? ? review.frozen_entry_count : "Unknown" %></p>
+          </div>
         </div>
       <% end %>
     </div>

@@ -4,19 +4,23 @@
 #
 # Table name: design_reviews
 #
-#  id                   :bigint           not null, primary key
-#  admin_review         :boolean
-#  feedback             :text
-#  grant_override_cents :integer
-#  hours_override       :float
-#  invalidated          :boolean          default(FALSE)
-#  reason               :string
-#  result               :integer
-#  tier_override        :integer
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  project_id           :bigint           not null
-#  reviewer_id          :bigint           not null
+#  id                          :bigint           not null, primary key
+#  admin_review                :boolean
+#  feedback                    :text
+#  frozen_duration_seconds     :integer
+#  frozen_entry_count          :integer
+#  frozen_funding_needed_cents :integer
+#  frozen_tier                 :integer
+#  grant_override_cents        :integer
+#  hours_override              :float
+#  invalidated                 :boolean          default(FALSE)
+#  reason                      :string
+#  result                      :integer
+#  tier_override               :integer
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  project_id                  :bigint           not null
+#  reviewer_id                 :bigint           not null
 #
 # Indexes
 #
