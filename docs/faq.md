@@ -50,3 +50,8 @@ The minimum complexity for a project depends on tiers. Check out [custom project
 ## What if my project does not reach the quality requirement for my tier, can I pay for the difference myself?
 
 Yes!
+
+
+## Can I use AI 
+
+Yes for code, no for Journals
