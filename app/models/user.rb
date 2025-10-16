@@ -52,6 +52,7 @@ class User < ApplicationRecord
 
   validates :role, presence: true
   validates :is_banned, inclusion: { in: [ true, false ] }
+  after_commit :advance_projects_after_idv!, on: :update, if: -> { previous_changes.key?("ysws_verified") && ysws_verified? }
 
   has_paper_trail
   has_recommended :projects
