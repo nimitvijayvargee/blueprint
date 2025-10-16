@@ -48,7 +48,7 @@ class User < ApplicationRecord
   # Simple referrer: a user may have one referrer (another User)
   belongs_to :referrer, class_name: "User", optional: true
 
-  enum :role, { user: 0, admin: 1 }
+  enum :role, { user: 0, admin: 1, reviewer: 2 }
 
   validates :role, presence: true
   validates :is_banned, inclusion: { in: [ true, false ] }
@@ -870,5 +870,11 @@ class User < ApplicationRecord
     end
   end
 
-  after_commit :advance_projects_after_idv!, on: :update, if: -> { previous_changes.key?("ysws_verified") && ysws_verified? }
+  def reviewer_perms?
+    role == "admin" || role == "reviewer"
+  end
+
+  def special_perms?
+    role == "admin" || role == "reviewer"
+  end
 end

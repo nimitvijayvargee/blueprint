@@ -9,10 +9,14 @@
       <div>
         <p>ID: <%= @user.id %></p>
         <p>Username: <%= @user.username || "-" %> (<%= @user.display_name %>)</p>
-        <p>Email: <a class="underline" href="mailto:<%= @user.email %>"><%= @user.email %></a></p>
+        <% if current_user.admin? %>
+          <p>Email: <a class="underline" href="mailto:<%= @user.email %>"><%= @user.email %></a></p>
+        <% end %>
         <p>Slack ID: <%= @user.slack_id %></p>
         <p>GitHub username: <a class="underline" href="https://github.com/<%= @user.github_username %>"><%= @user.github_username %></a></p>
-        <p>Timezone: <%= @user.timezone || "Not set" %></p>
+        <% if current_user.admin? %>
+          <p>Timezone: <%= @user.timezone || "Not set" %></p>
+        <% end %>
         <p>Joined: <%= @user.created_at %></p>
         <p>Last active: <%= @user.last_active || "Never" %></p>
         <p>Updated: <%= @user.updated_at %></p>
@@ -51,9 +55,11 @@
         </ul>
       </details>
     <% end %>
-    <%= render "shared/card", class: "space-y-2 col-span-2" do %>
-      <p class="text-2xl">Audit log</p>
-      <%= render "admin/audit_log", object: @user %>
+    <% if current_user.admin? %>
+      <%= render "shared/card", class: "space-y-2 col-span-2" do %>
+        <p class="text-2xl">Audit log</p>
+        <%= render "admin/audit_log", object: @user %>
+      <% end %>
     <% end %>
   </div>
 </section>

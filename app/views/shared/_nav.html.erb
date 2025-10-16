@@ -6,7 +6,7 @@
     "Guides" => guides_path,
     "Blueprint Docs" => docs_path,
     "FAQ" => faq_path,
-    "Admin" => current_user&.admin? ? admin_root_path : nil
+    "Admin" => current_user&.special_perms? ? admin_root_path : nil
 } %>
 
 <% normalize_path = ->(p) { p.to_s.sub(%r{/$}, "") } %>

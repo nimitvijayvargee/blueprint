@@ -31,31 +31,33 @@
         <p>Followers: <%= @project.follower_count %></p>
       </div>
     <% end %>
-    <%= render "shared/card", class: "space-y-4 col-span-2" do %>
-      <p class="text-2xl">Actions</p>
-      <div class="flex">
-        <% if @project.is_deleted %>
-          <%= render "shared/button",
-            variant: :danger,
-            text: "Bring back",
-            url: revive_admin_project_path(@project),
-            html_options: { data: { turbo_method: :post, turbo_confirm: "Are you sure you want to bring back this project?" } },
-            class: "bg-bp-danger"
-          %>
-        <% else %>
-          <%= render "shared/button",
-            variant: :danger,
-            text: "Soft delete",
-            url: delete_admin_project_path(@project),
-            html_options: { data: { turbo_method: :post, turbo_confirm: "Are you sure you want to delete this project?" } },
-            class: "bg-bp-danger"
-          %>
-        <% end %>
-      </div>
-    <% end %>
-    <%= render "shared/card", class: "space-y-2 col-span-2" do %>
-      <p class="text-2xl">Audit log</p>
-      <%= render "admin/audit_log", object: @project %>
+    <% if current_user.admin? %>
+      <%= render "shared/card", class: "space-y-4 col-span-2" do %>
+        <p class="text-2xl">Actions</p>
+        <div class="flex">
+          <% if @project.is_deleted %>
+            <%= render "shared/button",
+              variant: :danger,
+              text: "Bring back",
+              url: revive_admin_project_path(@project),
+              html_options: { data: { turbo_method: :post, turbo_confirm: "Are you sure you want to bring back this project?" } },
+              class: "bg-bp-danger"
+            %>
+          <% else %>
+            <%= render "shared/button",
+              variant: :danger,
+              text: "Soft delete",
+              url: delete_admin_project_path(@project),
+              html_options: { data: { turbo_method: :post, turbo_confirm: "Are you sure you want to delete this project?" } },
+              class: "bg-bp-danger"
+            %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "shared/card", class: "space-y-2 col-span-2" do %>
+        <p class="text-2xl">Audit log</p>
+        <%= render "admin/audit_log", object: @project %>
+      <% end %>
     <% end %>
   </div>
 </section>

@@ -30,10 +30,14 @@
             <%= link_to user.display_name, admin_user_path(user), class: "underline decoration-white/30 underline-offset-2 hover:decoration-white" %>
           </div>
           <div class="flex items-center col-span-4">
-            <% if user.email.present? %>
-              <a href="mailto:<%= h user.email %>" class="underline decoration-white/30 underline-offset-2 hover:decoration-white"><%= user.email %></a>
+            <% if current_user.admin? %>
+              <% if user.email.present? %>
+                <a href="mailto:<%= h user.email %>" class="underline decoration-white/30 underline-offset-2 hover:decoration-white"><%= user.email %></a>
+              <% else %>
+                <p>–</p>
+              <% end %>
             <% else %>
-              –
+              <p>[ Hidden ]</p>
             <% end %>
           </div>
           <div class="flex items-center col-span-2"><%= user.last_active ? time_ago_in_words(user.last_active) : "Never" %></div>

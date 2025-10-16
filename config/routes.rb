@@ -39,6 +39,15 @@ class AdminConstraint
   end
 end
 
+class ReviewerConstraint
+  def self.matches?(request)
+    return false unless request.session[:user_id]
+
+    user = User.find_by(id: request.session[:user_id])
+    user&.reviewer_perms?
+  end
+end
+
 Rails.application.routes.draw do
   resources :shop_items, only: [ :new, :create ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -115,19 +124,23 @@ Rails.application.routes.draw do
       mount Flipper::UI.app(Flipper), at: "flipper"
       mount Blazer::Engine, at: "blazer"
 
-      get "/" => "static_pages#index", as: :root
-
-      resources :users, only: [ :index, :show ]
       resources :projects, only: [ :index, :show ] do
         post :delete, on: :member
         post :revive, on: :member
       end
       resources :allowed_emails, only: [ :index, :create, :destroy ]
+    end
+
+    constraints ReviewerConstraint do
+      get "/" => "static_pages#index", as: :root
 
       get "design_reviews", to: "design_reviews#index", as: :design_reviews
       get "design_reviews/random", to: "design_reviews#show_random", as: :random_design_review
       get "design_reviews/:id", to: "design_reviews#show", as: :design_review
       post "design_reviews/:id", to: "design_reviews#create", as: :design_review_create
+
+      resources :projects, only: [ :index, :show ]
+      resources :users, only: [ :index, :show ]
     end
   end
 end
