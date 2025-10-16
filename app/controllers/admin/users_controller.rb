@@ -1,4 +1,7 @@
 class Admin::UsersController < Admin::ApplicationController
+  skip_before_action :require_admin!, only: [ :index, :show ]
+  before_action :require_reviewer_perms!, only: [ :index, :show ]
+
   def index
     @q = params[:q].to_s.strip
 
@@ -18,5 +21,25 @@ class Admin::UsersController < Admin::ApplicationController
   def show
     @user = User.find(params[:id])
     not_found unless @user
+  end
+
+  def grant_reviewer
+    @user = User.find(params[:id])
+    @user.update!(role: "reviewer")
+    redirect_to admin_user_path(@user), notice: "User granted reviewer role"
+  end
+
+  def revoke_to_user
+    @user = User.find(params[:id])
+    @user.update!(role: "user")
+    redirect_to admin_user_path(@user), notice: "User role revoked to user"
+  end
+
+  private
+
+  def require_reviewer_perms!
+    unless current_user&.reviewer_perms?
+      redirect_to main_app.root_path, alert: "You are not authorized to access this page."
+    end
   end
 end

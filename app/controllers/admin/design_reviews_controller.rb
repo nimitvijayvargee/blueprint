@@ -1,4 +1,7 @@
 class Admin::DesignReviewsController < Admin::ApplicationController
+  skip_before_action :require_admin!, only: [ :index, :show, :show_random, :create ]
+  before_action :require_reviewer_perms!, only: [ :index, :show, :show_random, :create ]
+
   def index
     reviewed_ids = Project.joins(:design_reviews)
                             .where(is_deleted: false, review_status: :design_pending)
@@ -81,6 +84,12 @@ class Admin::DesignReviewsController < Admin::ApplicationController
       if valid_approvals.count >= 2 || admin_approvals.exists?
         project.update!(review_status: :design_approved)
       end
+    end
+  end
+
+  def require_reviewer_perms!
+    unless current_user&.reviewer_perms?
+      redirect_to main_app.root_path, alert: "You are not authorized to access this page."
     end
   end
 end

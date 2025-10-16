@@ -1,4 +1,7 @@
 class Admin::ProjectsController < Admin::ApplicationController
+  skip_before_action :require_admin!, only: [ :index, :show ]
+  before_action :require_reviewer_perms!, only: [ :index, :show ]
+
   def index
     @q = params[:q].to_s.strip
 
@@ -36,5 +39,13 @@ class Admin::ProjectsController < Admin::ApplicationController
 
     @project.update!(is_deleted: false)
     redirect_to admin_project_path(@project), notice: "Project revived."
+  end
+
+  private
+
+  def require_reviewer_perms!
+    unless current_user&.reviewer_perms?
+      redirect_to root_path, alert: "You are not authorized to access this page."
+    end
   end
 end

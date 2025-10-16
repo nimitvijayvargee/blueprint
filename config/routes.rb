@@ -140,7 +140,9 @@ Rails.application.routes.draw do
       post "design_reviews/:id", to: "design_reviews#create", as: :design_review_create
 
       resources :projects, only: [ :index, :show ]
-      resources :users, only: [ :index, :show ]
+      resources :users, only: [ :index, :show ] do
+        post :grant_reviewer, on: :member
+      end
     end
   end
 end

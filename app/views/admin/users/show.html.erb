@@ -44,6 +44,20 @@
         <p>Referred: <%= @user.eligible_referral_count %></p>
       </div>
     <% end %>
+    <% if current_user.admin? %>
+      <%= render "shared/card", class: "space-y-4 col-span-2" do %>
+        <p class="text-2xl">Actions</p>
+        <div class="flex">
+          <%= render "shared/button",
+                variant: :none,
+                text: "Grant reviewer",
+                url: grant_reviewer_admin_user_path(@user),
+                html_options: { data: { turbo_method: :post, turbo_confirm: "Are you sure you want to change them to a reviewer?" } },
+                class: "btn border-bp-warning bg-bp-warning cursor-pointer text-bp-dark"
+              %>
+        </div>
+      <% end %>
+    <% end %>
     <%= render "shared/card", class: "space-y-2 col-span-2" do %>
       <p class="text-2xl">Projects</p>
       <details>
