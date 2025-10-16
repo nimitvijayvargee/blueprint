@@ -82,3 +82,11 @@ There is no one thing that makes a Journal "Good" but a follow the suggestions a
 
 
 Once you meet all of the requirements, your project is good to submit!
+
+### 5) Cost Optimized
+
+Of course you should always aim to make your project as cheap as possible but there are some specific requirements for cost: 
+
+- Always get the minimum quantity of your project. We are funding your project to learn not to mass-produce things like merch. On JLCPCB for example, this means only 5 PCB's, or 2 PCBA's. 
+
+- JLCPCB Specific: Always choose parts for your PCB which allow you to use economic assembly rather than standard. Try and keep your PCB under 100x100mm if possible and choose Global Standard Direct shipping when you can.
