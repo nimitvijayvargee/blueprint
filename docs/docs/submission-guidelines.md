@@ -63,7 +63,9 @@ For EasyEDA, you will need your:
 
 
 
-For projects with 3d models, you will also need the `.obj` or `.step` files for each part along with the project assembly.
+Add `.step` files for any CAD and assemblies. Add `.obj` or `.stl` files for any other 3d models. Bonus if you have all three.
+
+You can additional link to your Onshape document.
 
 All projects should also have 
   - Some pictures of the design (hopefully you have some cool renders)
