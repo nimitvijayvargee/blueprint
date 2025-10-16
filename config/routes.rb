@@ -129,6 +129,11 @@ Rails.application.routes.draw do
         post :revive, on: :member
       end
       resources :allowed_emails, only: [ :index, :create, :destroy ]
+
+      resources :users, only: [ :index, :show ] do
+        post :grant_reviewer, on: :member
+        post :revoke_to_user, on: :member
+      end
     end
 
     constraints ReviewerConstraint do
@@ -140,9 +145,7 @@ Rails.application.routes.draw do
       post "design_reviews/:id", to: "design_reviews#create", as: :design_review_create
 
       resources :projects, only: [ :index, :show ]
-      resources :users, only: [ :index, :show ] do
-        post :grant_reviewer, on: :member
-      end
+      resources :users, only: [ :index, :show ]
     end
   end
 end
