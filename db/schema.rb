@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_192813) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_17_213106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -257,6 +257,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_192813) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_project_grants_on_project_id"
+  end
+
+  create_table "project_user_views", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "first_viewed_at", default: -> { "now()" }, null: false
+    t.index ["project_id", "user_id"], name: "index_puv_on_project_id_user_id", unique: true
+    t.index ["user_id"], name: "index_project_user_views_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -526,6 +534,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_192813) do
   add_foreign_key "journal_entries", "projects"
   add_foreign_key "journal_entries", "users"
   add_foreign_key "project_grants", "projects"
+  add_foreign_key "project_user_views", "projects"
+  add_foreign_key "project_user_views", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "shop_orders", "shop_items"
   add_foreign_key "shop_orders", "users"

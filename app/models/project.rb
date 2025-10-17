@@ -35,6 +35,8 @@
 class Project < ApplicationRecord
   include ActionView::Helpers::TextHelper
 
+  attr_accessor :preloaded_view_count, :preloaded_follower_count
+
   belongs_to :user
   has_many :journal_entries, dependent: :destroy
   has_one :latest_journal_entry, -> { order(created_at: :desc) }, class_name: "JournalEntry"
@@ -453,13 +455,29 @@ class Project < ApplicationRecord
   end
 
   def follower_count
+    return preloaded_follower_count unless preloaded_follower_count.nil?
     followers.count
   end
 
   def view_count
+    return preloaded_view_count unless preloaded_view_count.nil?
     Ahoy::Event.where(name: "project_view")
       .where("properties @> ?", { project_id: id }.to_json)
       .count("DISTINCT ((properties->>'user_id')::bigint)")
+  end
+
+  def self.view_counts_for(project_ids)
+    return {} if project_ids.blank?
+    Ahoy::Event.where(name: "project_view")
+      .where("properties->>'project_id' IN (?)", project_ids.map(&:to_s))
+      .group("properties->>'project_id'")
+      .count("DISTINCT ((properties->>'user_id')::bigint)")
+      .transform_keys(&:to_i)
+  end
+
+  def self.follower_counts_for(project_ids)
+    return {} if project_ids.blank?
+    Follow.where(project_id: project_ids).group(:project_id).count
   end
 
   def dm_status!

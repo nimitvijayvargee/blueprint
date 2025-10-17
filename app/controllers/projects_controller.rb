@@ -42,6 +42,7 @@ class ProjectsController < ApplicationController
     elsif params[:type] == "projects"
       if params[:sort] == "new"
         @pagy, @projects = pagy(Project.where(is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(created_at: :desc), limit: 21)
+        preload_project_metrics(@projects)
       elsif params[:sort] == "you"
         all_projects = current_user.recommended_projects.where(is_deleted: false) if current_user.present?
         if all_projects.nil? || all_projects.count < 5
@@ -51,6 +52,7 @@ class ProjectsController < ApplicationController
         @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
         order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", paginated_ids.map(&:to_i) ])
         @projects = Project.where(id: paginated_ids).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
+        preload_project_metrics(@projects)
       elsif params[:sort] == "top"
         top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
         if top_projects.present?
@@ -59,6 +61,7 @@ class ProjectsController < ApplicationController
           all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
 
           @pagy, @projects = pagy_array(all_projects, limit: 21)
+          preload_project_metrics(@projects)
         end
       else
         redirect_to explore_path(type: "projects") and return
@@ -292,6 +295,17 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def preload_project_metrics(projects)
+    return if projects.blank?
+    ids = Array(projects).map(&:id)
+    view_counts = Project.view_counts_for(ids)
+    follower_counts = Project.follower_counts_for(ids)
+    Array(projects).each do |p|
+      p.preloaded_view_count = view_counts[p.id].to_i
+      p.preloaded_follower_count = follower_counts[p.id].to_i
+    end
+  end
 
   def project_params
     params.require(:project).permit(
