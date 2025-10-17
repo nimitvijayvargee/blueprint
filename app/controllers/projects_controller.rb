@@ -80,6 +80,15 @@ class ProjectsController < ApplicationController
     not_found and return unless @project
 
     ahoy.track("project_view", project_id: @project.id, user_id: current_user&.id)
+
+    if current_user.present?
+      begin
+        UniqueProjectViewTracker.record(project_id: @project.id, user_id: current_user.id)
+      rescue => e
+        Rails.logger.error("UniqueProjectViewTracker failed: #{e.class}: #{e.message}")
+        Sentry.capture_exception(e) if defined?(Sentry)
+      end
+    end
   end
 
   def ship

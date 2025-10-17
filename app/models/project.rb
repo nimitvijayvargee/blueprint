@@ -461,18 +461,12 @@ class Project < ApplicationRecord
 
   def view_count
     return preloaded_view_count unless preloaded_view_count.nil?
-    Ahoy::Event.where(name: "project_view")
-      .where("properties @> ?", { project_id: id }.to_json)
-      .count("DISTINCT ((properties->>'user_id')::bigint)")
+    views_count
   end
 
   def self.view_counts_for(project_ids)
     return {} if project_ids.blank?
-    Ahoy::Event.where(name: "project_view")
-      .where("properties->>'project_id' IN (?)", project_ids.map(&:to_s))
-      .group("properties->>'project_id'")
-      .count("DISTINCT ((properties->>'user_id')::bigint)")
-      .transform_keys(&:to_i)
+    Project.where(id: project_ids).pluck(:id, :views_count).to_h
   end
 
   def self.follower_counts_for(project_ids)
