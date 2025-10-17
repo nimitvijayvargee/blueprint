@@ -35,6 +35,9 @@
             <% if review.invalidated? %>
               <p class="text-bp-danger">OUTDATED</p>
             <% end %>
+            <% if review.admin_review? %>
+              <p class="text-bp-warning">ADMIN</p>
+            <% end %>
             <p>Reviewed by: <%= render "shared/user_inline", user: User.find(review.reviewer_id), admin_view: true %></p>
             <% if review.result == "approved" %>
               <p>Result: <span class="text-bp-success">Approved</span></p>
@@ -53,7 +56,7 @@
             <p>Reviewed at: <%= review.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
           </div>
           <div>
-            <p>This was requested:</p>
+            <p>Frozen data:</p>
             <p>Funding: <%= review.frozen_funding_needed_cents.present? ? sprintf("%.2f", review.frozen_funding_needed_cents / 100.0) : "Unknown" %></p>
             <p>Tier: <%= review.frozen_tier.present? ? review.frozen_tier : "Unknown" %></p>
             <p>Hours: <%= review.frozen_duration_seconds.present? ? review.frozen_duration_seconds / 3600.0 : "Unknown" %></p>

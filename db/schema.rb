@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_170535) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_16_192813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -501,6 +501,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_170535) do
     t.string "identity_vault_access_token"
     t.string "identity_vault_id"
     t.boolean "ysws_verified"
+    t.text "internal_notes"
     t.index ["referrer_id"], name: "index_users_on_referrer_id"
   end
 

@@ -130,7 +130,7 @@ Rails.application.routes.draw do
       end
       resources :allowed_emails, only: [ :index, :create, :destroy ]
 
-      resources :users, only: [ :index, :show ] do
+      resources :users, only: [ :index, :show, :update ] do
         post :grant_reviewer, on: :member
         post :revoke_to_user, on: :member
       end
@@ -145,7 +145,7 @@ Rails.application.routes.draw do
       post "design_reviews/:id", to: "design_reviews#create", as: :design_review_create
 
       resources :projects, only: [ :index, :show ]
-      resources :users, only: [ :index, :show ]
+      resources :users, only: [ :index, :show, :update ]
     end
   end
 end

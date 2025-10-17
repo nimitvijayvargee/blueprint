@@ -35,7 +35,20 @@ class Admin::UsersController < Admin::ApplicationController
     redirect_to admin_user_path(@user), notice: "User role revoked to user"
   end
 
+  def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      redirect_to admin_user_path(@user), notice: "Internal notes updated successfully"
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   private
+
+  def user_params
+    params.require(:user).permit(:internal_notes)
+  end
 
   def require_reviewer_perms!
     unless current_user&.reviewer_perms?
