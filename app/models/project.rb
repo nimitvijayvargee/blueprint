@@ -37,6 +37,7 @@ class Project < ApplicationRecord
 
   belongs_to :user
   has_many :journal_entries, dependent: :destroy
+  has_one :latest_journal_entry, -> { order(created_at: :desc) }, class_name: "JournalEntry"
   has_many :timeline_items, dependent: :destroy
   has_many :follows, dependent: :destroy
   has_many :followers, through: :follows, source: :user
@@ -117,9 +118,8 @@ class Project < ApplicationRecord
   def display_banner
     return banner.blob if banner.attached?
 
-    latest_entry = journal_entries.order(created_at: :desc).first
-    if latest_entry&.content.present?
-      image_match = latest_entry.content.match(/!\[[^\]]*\]\(([^)]+)\)/)
+    if latest_journal_entry&.content.present?
+      image_match = latest_journal_entry.content.match(/!\[[^\]]*\]\(([^)]+)\)/)
       if image_match
         image_url = image_match[1]
         blob_match = image_url.match(/blobs\/[^\/]+\/([^\/\?]+)/)

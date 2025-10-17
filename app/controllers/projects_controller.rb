@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
       end
     elsif params[:type] == "projects"
       if params[:sort] == "new"
-        @pagy, @projects = pagy(Project.where(is_deleted: false).includes(:banner_attachment).order(created_at: :desc), limit: 21)
+        @pagy, @projects = pagy(Project.where(is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(created_at: :desc), limit: 21)
       elsif params[:sort] == "you"
         all_projects = current_user.recommended_projects.where(is_deleted: false) if current_user.present?
         if all_projects.nil? || all_projects.count < 5
@@ -50,13 +50,13 @@ class ProjectsController < ApplicationController
         project_ids = all_projects.pluck(:id)
         @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
         order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", paginated_ids.map(&:to_i) ])
-        @projects = Project.where(id: paginated_ids).includes(:banner_attachment).order(Arel.sql(order_clause))
+        @projects = Project.where(id: paginated_ids).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
       elsif params[:sort] == "top"
         top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
         if top_projects.present?
           project_ids = top_projects.map { |item| item["item_id"] }
           order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", project_ids.map(&:to_i) ])
-          all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment).order(Arel.sql(order_clause))
+          all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
 
           @pagy, @projects = pagy_array(all_projects, limit: 21)
         end
