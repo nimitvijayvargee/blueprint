@@ -39,13 +39,14 @@
     <main>
       <div class="flex items-center justify-center min-h-screen">
         <%= render "shared/card", class: "flex flex-col items-center justify-center min-h-screen px-4 space-y-12 md:p-12 md:min-h-auto" do %>
-          <div class="space-y-2 text-center">
-            <h1 class="text-4xl">Hey! Welcome to Blueprint!</h1>
+          <div class="text-center">
+            <h1 class="text-4xl pb-2">Hey! Welcome to Blueprint!</h1>
             <% if params[:email].present? %>
               <p>Join to get free stickers!<p>
             <% else %>
               <p>If you don't already have an account, we'll make one for you<p>
             <% end %>
+            <p>Blueprint is for teenagers 18 and younger only.
           </div>
           <div class="flex flex-col items-center space-y-4 w-full">
             <% unless params[:email].present? %>
