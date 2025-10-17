@@ -1,12 +1,10 @@
 <% timeline = project.generate_timeline.reverse %>
 
-<% cache [project, "timeline", project.updated_at, project.journal_entries.maximum(:updated_at), project.design_reviews.maximum(:updated_at)] do %>
-  <div class="flex flex-col space-y-8">
-      <p class="text-4xl border-b border-white/20 pb-1">Timeline</p>
-      <div class="flex flex-col">
-          <% timeline.each do |event| %>
-              <%= render "projects/timeline_event", project: project, event: event %>
-          <% end %>
-      </div>
-  </div>
-<% end %>
+<div class="flex flex-col space-y-8">
+    <p class="text-4xl border-b border-white/20 pb-1">Timeline</p>
+    <div class="flex flex-col">
+        <% timeline.each do |event| %>
+            <%= render "projects/timeline_event", project: project, event: event %>
+        <% end %>
+    </div>
+</div>
