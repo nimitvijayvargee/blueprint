@@ -80,7 +80,7 @@
                 <%= render "shared/button", text: "Cancel", variant: :outline, class: "w-full", html_options: { data: { controller: "modal", action: "click->modal#hide", modal_target_id_value: "delete-project" } } %>
               </div>
               <div class="w-full">
-                <%= render "shared/button", text: "Delete", class: "w-full bg-bp-danger border-bp-danger hover:bg-bp-danger-darker hover:border-bp-danger-darker", url: project_path(@project), html_options: { data: { turbo_method: :delete } } %>
+                <%= render "shared/button", text: "Delete", as: :link, class: "w-full bg-bp-danger border-bp-danger hover:bg-bp-danger-darker hover:border-bp-danger-darker", url: project_path(@project), html_options: { data: { turbo_method: :delete } } %>
               </div>
             </div>
           </div>
