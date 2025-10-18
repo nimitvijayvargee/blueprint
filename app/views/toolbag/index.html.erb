@@ -6,21 +6,7 @@
     <div class="text-center mb-16">
       <div class="bg-bp-warning text-bp-dark py-8 px-4 mb-8">
         <h1 class="text-6xl font-bold mb-4">UNDER CONSTRUCTION</h1>
-        <p class="text-3xl font-bold">COMING SOON!</p>
-      </div>
-    </div>
-
-    <!-- Progress Bar -->
-    <div class="mb-12">
-      <div class="flex justify-between items-center mb-2">
-        <span class="text-lg font-bold">Progress to shop release:</span>
-        <span class="text-lg font-bold text-bp-warning"><%= User.count %> / 2000 signups</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="w-full h-6 bg-bp-dark border-2 border-white/25 overflow-hidden">
-          <div class="h-full bg-bp-warning transition-all duration-500" style="width: <%= (User.count.to_f / 2000 * 100).round(2) %>%;"></div>
-        </div>
-        <%= render "shared/button", text: "Refer", url: me_path, class: "min-h-[44px] flex-shrink-0" %>
+        <p class="text-3xl font-bold">OPENING LATER TODAY!</p>
       </div>
     </div>
     
