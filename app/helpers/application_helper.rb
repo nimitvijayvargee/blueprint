@@ -19,4 +19,11 @@ module ApplicationHelper
   rescue URI::InvalidURIError
     nil
   end
+
+  def c_time_ago_in_words(time, include_seconds: false)
+    data_attrs = { controller: "time-ago" }
+    data_attrs[:"time-ago-include-seconds-value"] = true if include_seconds
+
+    content_tag :time, time.strftime("%-m/%-d/%Y at %-I:%M %p"), datetime: time.iso8601, data: data_attrs
+  end
 end

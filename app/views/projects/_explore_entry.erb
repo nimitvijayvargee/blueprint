@@ -2,7 +2,7 @@
 
 <%= render "shared/card", class: "relative" do %>
  <div class="flex space-x-4">
-    <p class="grow"><%= render "shared/user_inline", user: project.user %> published an update to <a href="<%= project_path(project) %>" class="underline" data-turbo-frame="_top"><%= project.title %></a> <time datetime="<%= entry.created_at.iso8601 %>" data-time-ago><%= time_ago_in_words(entry.created_at) %> ago</time></p>
+    <p class="grow"><%= render "shared/user_inline", user: project.user %> published an update to <a href="<%= project_path(project) %>" class="underline" data-turbo-frame="_top"><%= project.title %></a> <%= c_time_ago_in_words(entry.created_at) %> ago</p>
   </div>
   <div class="overflow-hidden markdown timeline-journal max-h-[28rem]">
     <h1><%= entry.summary %></h1>
