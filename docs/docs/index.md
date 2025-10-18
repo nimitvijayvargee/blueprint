@@ -42,6 +42,7 @@ We split grants into tiers, each tier has a:
 A super basic project which introduces you to hardware.
 - A 3d-printed phone stand
 - A 3d printed trinket
+- A PCB Fidget toy
 
 #### Tier 4: up to $50 and a 1.0x ticket multiplier (8-16 hours)
 
@@ -50,9 +51,9 @@ A basic project that doesn’t require much time. This is a project that is cool
 Examples include:
 
 - A drone (that doesn't have many custom parts)
-- A custom ubikey
+- A custom Yubikey
 - A custom LED lamp
-- A custom keyboard/macropad
+- A custom macropad (see [Hackpad](https://hackpad.hackclub.com/))
 
 #### Tier 3: up to $100 and a 1.1x ticket multiplier (17-33 hours)
 
@@ -60,10 +61,9 @@ An intermediate custom project that has a bit more of that “flare”.
 
 Examples include:
 
-- A full **split** keyboard (see guides)
-- A MIDI (see guides)
+- A MIDI keyboard (see guides)
 - A custom game console
-- A custom RP2040 devoard (see guides)
+- A custom devboard (see guides)
 
 #### Tier 2: up to $200 and a 1.25x ticket multiplier (34-66 hours)
 
@@ -71,6 +71,7 @@ A fairly advanced project that you are very proud of.
 
 Examples include:
 
+- A full size keyboard
 - A Fairy weight battle Bot
 - A custom robot arm
 - A custom FPGA board
@@ -81,7 +82,7 @@ A super advanced project that would be the cornerstone of your portfolio.
 
 Examples include:
 
-- A 3d Printer
+- A 3D Printer
 - A CNC mill/router
 - A custom robot dog
 - A custom FPGA board
