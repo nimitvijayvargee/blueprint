@@ -1,7 +1,7 @@
 <%= render "timeline_event_basic", icon: "icons/ship.svg" do %>
   <% if event[:user] %>
-    <p><%= render "shared/user_inline", user: event[:user] %> submitted <%= project.title %> for review <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+    <p><%= render "shared/user_inline", user: event[:user] %> submitted <%= project.title %> for review <span title="<%= event[:date] %>"><%= c_time_ago_in_words(event[:date]) %> ago</span></p>
   <% else %>
-  <p><%= project.title %> was submitted for review <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span></p>
+  <p><%= project.title %> was submitted for review <span title="<%= event[:date] %>"><%= c_time_ago_in_words(event[:date]) %> ago</span></p>
   <% end %>
 <% end %>

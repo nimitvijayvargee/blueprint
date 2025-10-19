@@ -7,7 +7,7 @@
     <div class="flex space-x-4">
       <p class="grow">
         <%= reviews.map { |r| render("shared/user_inline", user: r[:user]) }.join(" and ").html_safe %>
-        approved <%= project.title %> <%= time_ago_in_words(event[:date]) %> ago
+        approved <%= project.title %> <%= c_time_ago_in_words(event[:date]) %> ago
       </p>
     </div>
     <div class="timeline-journal">
@@ -30,7 +30,7 @@
   <%= render "timeline_event_basic", icon: "icons/approve.svg" do %>
     <p>
       <%= reviews.map { |r| render("shared/user_inline", user: r[:user]) }.join(" and ").html_safe %>
-      approved <%= project.title %> <span title="<%= event[:date] %>"><%= time_ago_in_words(event[:date]) %> ago</span>
+      approved <%= project.title %> <span title="<%= event[:date] %>"><%= c_time_ago_in_words(event[:date]) %> ago</span>
     </p>
   <% end %>
 <% end %>
