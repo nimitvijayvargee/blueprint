@@ -158,46 +158,42 @@
   <p class="text-center   ">Read the guide -> design your own!</p>
   <div class="max-w-6xl mx-auto px-4">
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-3">
-
-<!-- MIDI Project -->
-<div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
-  <a href="/guides/midi" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
-    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/b34e09477abd07dbe65fc9a924eff8096ce2cbb4_controller__1_.png" alt="MIDI Project" class="w-full h-40 object-cover">
-    <p class="text-lg font-bold md:text-2xl">MIDI</p>
-    <p class="flex items-center justify-center text-sm grow md:text-base text-center">Create your own MIDI controller</p>
-    <p class="text-xs text-white/50 text-center mt-2">Guide by @nimit</p>
-  </a>
-  <a href="/guides/midi" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
-    See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-  </a>
-</div>
-
-<!-- Custom Devboard Project -->
-<div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
-  <a href="/guides/devboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
-    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/7e71607a3622394d974c0d35dd3e2d6526bb9543_render2.png" alt="Custom Devboard Project" class="w-full h-40 object-cover">
-    <p class="text-lg font-bold md:text-2xl">Custom Devboard</p>
-    <p class="flex items-center justify-center text-sm grow md:text-base text-center">Design your own Raspberry PI</p>
-    <p class="text-xs text-white/50 text-center mt-2">Guide by @Kai Pereira</p>
-  </a>
-  <a href="/guides/devboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
-    See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-  </a>
-</div>
-
-<!-- Split Keyboard Project -->
-<div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
-  <a href="/guides/split-keyboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
-    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/3627c8d4c1d2a94c2391bc842dddc940ec59acb0_PXL_20251004_163402527.jpg" alt="Split Keyboard Project" class="w-full h-40 object-cover">
-    <p class="text-lg font-bold md:text-2xl">Split Keyboard</p>
-    <p class="flex items-center justify-center text-sm grow md:text-base text-center">Build a wireless split keyboard</p>
-    <p class="text-xs text-white/50 text-center mt-2">Guide by @koeg</p>
-  </a>
-  <a href="/guides/split-keyboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
-    See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-  </a>
-</div>
-
+      <!-- MIDI Project -->
+      <div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
+        <a href="/guides/midi" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
+          <img src="<%= image_path("landing/midi.webp") %>" alt="MIDI Project" class="w-full h-40 object-cover">
+          <p class="text-lg font-bold md:text-2xl">MIDI</p>
+          <p class="flex items-center justify-center text-sm grow md:text-base text-center">Create your own MIDI controller</p>
+          <p class="text-xs text-white/50 text-center mt-2">Guide by @nimit</p>
+        </a>
+        <a href="/guides/midi" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
+          See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+      <!-- Custom Devboard Project -->
+      <div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
+        <a href="/guides/devboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
+          <img src="<%= image_path("landing/custom-devboard.webp") %>" alt="Custom Devboard Project" class="w-full h-40 object-cover">
+          <p class="text-lg font-bold md:text-2xl">Custom Devboard</p>
+          <p class="flex items-center justify-center text-sm grow md:text-base text-center">Design your own Raspberry PI</p>
+          <p class="text-xs text-white/50 text-center mt-2">Guide by @Kai Pereira</p>
+        </a>
+        <a href="/guides/devboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
+          See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+      <!-- Split Keyboard Project -->
+      <div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
+        <a href="/guides/split-keyboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
+          <img src="<%= image_path("landing/split-keyboard.webp") %>" alt="Split Keyboard Project" class="w-full h-40 object-cover">
+          <p class="text-lg font-bold md:text-2xl">Split Keyboard</p>
+          <p class="flex items-center justify-center text-sm grow md:text-base text-center">Build a wireless split keyboard</p>
+          <p class="text-xs text-white/50 text-center mt-2">Guide by @koeg</p>
+        </a>
+        <a href="/guides/split-keyboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
+          See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -212,7 +208,7 @@
           <div class="flex h-64 space-x-8 space-y-8 carousel md:h-84">
             <% @featured_projects.shuffle.each do |project| %>
               <a href="<%= project[:url] %>" target="_blank" rel="noopener noreferrer" class="flex flex-col w-40 h-full md:w-72 shrink-0 bg-bp-darker" data-carousel-target="item">
-                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url('<%= project[:image] %>')"></div>
+                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url('<%= image_path(project[:image]) %>')"></div>
                 <div class="flex flex-col p-2 space-y-2 md:p-4 grow">
                   <p class="text-base font-bold md:text-xl"><%= project[:title] %> <span class="text-xs">by <%= project[:author] %></span></p>
                   <p class="text-xs md:text-base"><%= project[:description] %></p>
