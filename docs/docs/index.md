@@ -40,6 +40,7 @@ We split grants into tiers, each tier has a:
 #### Tier 5: up to $25 and 0.8x ticket multiplier (5-8 hours)
 
 A super basic project which introduces you to hardware.
+
 - A 3d-printed phone stand
 - A 3d printed trinket
 - A PCB Fidget toy
@@ -97,7 +98,7 @@ Examples include:
 
 Tickets reward you for the effort spent on building the project.
 
-<span class="text-bp-warning">You get 10 tickets per hour of building.</span>
+<span class="text-bp-warning">You get 10 tickets per hour of work after you get your grant. (If you don't need a grant, it's the full time!)</span>
 
 Your building time must be accurately logged in your journal. And we may adjust your ticket amount based on the quality of your final build.
 
