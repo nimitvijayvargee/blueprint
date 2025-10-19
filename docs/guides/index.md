@@ -21,6 +21,8 @@ These are general resources provided by the community. PR's open!
 <li><a href="/guides/qmk">QMK for keybaords</a></li>
 <li><a href="/docs/jlc-ordering">How to order from JLCPCB</a></li>
 <li><a href="/docs/parts-sourcing">How to cost effectively source parts</a></li>
+<li><a href="/docs/parts/bom">How to make a Bill of Materials</a></li>
+
 
 
 
