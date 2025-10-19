@@ -98,7 +98,7 @@ Examples include:
 
 Tickets reward you for the effort spent on building the project.
 
-<span class="text-bp-warning">You get 10 tickets per hour of work after you get your grant. (If you don't need a grant, it's the full time!)</span>
+<span class="text-bp-warning">You get 10 tickets per hour of hands-on work after you get your grant. This could be assembling, fixing cad, etc. (If you don't need a grant, it's the full time!)</span>
 
 Your building time must be accurately logged in your journal. And we may adjust your ticket amount based on the quality of your final build.
 
