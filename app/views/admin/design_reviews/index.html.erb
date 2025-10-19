@@ -29,6 +29,7 @@
       <div class="col-span-1">Tier</div>
       <div class="col-span-1">Cost</div>
       <div class="col-span-1">Hours</div>
+      <div class="col-span-1">CPH</div>
       <div class="col-span-1">Entries</div>
       <div class="col-span-1">Actions</div>
     </div>
@@ -59,7 +60,16 @@
             <%= sprintf("%.2f", project.funding_needed_cents / 100.0) %>
           </div>
           <div class="flex items-center col-span-1">
-            <%= (project.journal_entries.map(&:duration_seconds).sum / 3600.0).round(1) %>
+            <% hours = (project.journal_entries.map(&:duration_seconds).sum / 3600.0).round(1) %>
+            <%= hours %>
+          </div>
+          <div class="flex items-center col-span-1">
+            <% cost = project.funding_needed_cents / 100.0 %>
+            <% if hours > 0 %>
+              <%= sprintf("%.2f", cost / hours) %>
+            <% else %>
+              –
+            <% end %>
           </div>
           <div class="flex items-center col-span-1">
             <%= project.journal_entries.size %>
