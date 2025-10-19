@@ -18,7 +18,7 @@
       <% @items.each do |item| %>
         <div class="flex flex-col border-2 border-white/25 bg-hatch p-6 transition-colors" style="border-color: rgba(255, 255, 255, 0.25);">
           <div class="w-full h-48 mb-4 flex items-center justify-center" style="background-color: var(--color-bp-darker);">
-            <img src="<%= item["image_url"] %>" alt="<%= item["name"] %>" class="max-h-full max-w-full object-contain" />
+            <img src="<%= image_path(item["image_url"]) %>" alt="<%= item["name"] %>" class="max-h-full max-w-full object-contain" />
           </div>
           <h3 class="text-xl font-bold mb-2"><%= item["name"] %></h3>
           <p class="text-sm mb-4" style="color: rgba(255, 255, 255, 0.8);"><%= item["description"] %></p>
