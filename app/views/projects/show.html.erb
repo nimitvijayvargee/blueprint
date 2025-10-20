@@ -53,6 +53,11 @@
           <div class="flex items-center space-x-2">
             <%= inline_svg "icons/micro-users.svg", class: "size-4" %><p class=""><%= pluralize(@project.follower_count, "follower") %></p>
           </div>
+          <% if current_user.present? && current_user == @project.user %>
+            <div class="flex items-center space-x-2">
+              <%= inline_svg "icons/micro-clock.svg", class: "size-4" %><p class=""><%= pluralize((@project.journal_entries.sum(:duration_seconds) / 3600.0).round(2), "hour") %></p>
+            </div>
+          <% end %>
         </div>
       </div>
       <div class="flex space-x-6">
