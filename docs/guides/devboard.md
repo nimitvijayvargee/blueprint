@@ -7,7 +7,7 @@
 
 Today, we're going to be designing our own dev board, using one of the most popular and beginner friendly SoC's, the RP2040. This guide doesn't serve as just a tutorial, but also as an opportunity to learn what everything on the PCB fundamentally does, and what every single component on your PCB is actually for!
 
-All the source files for this tutorial can be [found here](https://github.com/KaiPereira/build-a-devboard), so if you need any help, feel free to resort to the repository!
+This tutorial is brought to you by [KaiPereira™](https://github.com/KaiPereira). All the source files for this tutorial can be [found here](https://github.com/KaiPereira/build-a-devboard), so if you need any help, feel free to resort to the repository, and give it a star if you want to see more like it :D
 
 ![Pasted image 20250930162537.png](https://hc-cdn.hel1.your-objectstorage.com/s/v3/4aa981745bdc07db1128bace017adfc69241c2ee_render.png)
 
