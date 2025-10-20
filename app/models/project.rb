@@ -340,10 +340,6 @@ class Project < ApplicationRecord
       ==================================================================
     -->
 
-    This is my journal of the design and building process of **#{title}**.#{'  '}
-    You can view this journal in more detail on **Hack Club Blueprint** [here](https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}).
-
-
     EOS
 
     journals = journal_entries.order(created_at: :asc)
@@ -455,23 +451,13 @@ class Project < ApplicationRecord
   end
 
   def follower_count
-    return preloaded_follower_count unless preloaded_follower_count.nil?
     followers.count
   end
 
   def view_count
-    return preloaded_view_count unless preloaded_view_count.nil?
-    views_count
-  end
-
-  def self.view_counts_for(project_ids)
-    return {} if project_ids.blank?
-    Project.where(id: project_ids).pluck(:id, :views_count).to_h
-  end
-
-  def self.follower_counts_for(project_ids)
-    return {} if project_ids.blank?
-    Follow.where(project_id: project_ids).group(:project_id).count
+    Ahoy::Event.where(name: "project_view")
+      .where("properties @> ?", { project_id: id }.to_json)
+      .count("DISTINCT ((properties->>'user_id')::bigint)")
   end
 
   def dm_status!
