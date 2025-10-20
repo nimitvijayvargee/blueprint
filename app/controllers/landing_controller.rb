@@ -19,6 +19,10 @@ class LandingController < ApplicationController
     render "landing/index", layout: false
   end
 
+  def utm_source
+    redirect_to root_path
+  end
+
   private
 
   def set_featured_projects

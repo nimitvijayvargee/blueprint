@@ -79,6 +79,9 @@ Rails.application.routes.draw do
   get "auth/idv" => "auth#idv", as: :idv
   get "idv_callback" => "auth#idv_callback", as: :idv_callback
 
+  get "/utm_source" => "landing#utm_source", as: :utm_source
+  get "/utm_source=feedback-email" => "landing#utm_source", as: :utm_source_feedback_email
+
   get "home" => "home#index", as: :home
 
   get "api/site" => "api#site", as: :api_site
