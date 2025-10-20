@@ -10,13 +10,13 @@ Currently, the end-date of Blueprint is December 1st
 
 ## How can I earn tickets?
 
-Project grants are awarded on quality rather than hours spent. However, if you track your time building your project, you will be awarded with tickets which can be redeemed at the [toolbag](/toolbag). If your project doesn't have a lot of in-person build time, you will have fewer tickets awarded. One way to get more tickets for example is to get PCB + Components and hand-solder rather than just getting PCBA.
+Project grants are awarded on quality rather than hours spent. However, if you track your time building your project after getting your grant (or all the time if you don't need a grant), you will be awarded with tickets which can be redeemed at the [toolbag](/toolbag). If your project doesn't have a lot of in-person build time, you will have fewer tickets awarded. One way to get more tickets for example is to get PCB + Components and hand-solder rather than just getting PCBA.
 
 Tickets are rewarded based on the effort you spent BUILDING your project, not the time spent DESIGNING it!
 
-## How many projects can I make? 
+## How many projects can I make?
 
-As many as you like! We just ask that you only do one of each starter project. 
+As many as you like! We just ask that you only do one of each starter project.
 
 ## What can I make
 
@@ -65,7 +65,7 @@ Yes!
 
 DM Kashsuks!
 
-## Can I use AI 
+## Can I use AI
 
 Yes for code, no for Journals
 
@@ -83,8 +83,8 @@ You're free to use it to experiment with layouts and make design decisions, but 
 
 ## Can I journal research?
 
-Yes! 
+Yes!
 
-## Can people get tickets after December first? 
+## Can people get tickets after December first?
 
 Yes! The submission is due December 1st, but there's going to be time after to build & spend tickets.
