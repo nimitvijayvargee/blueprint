@@ -460,6 +460,20 @@ class Project < ApplicationRecord
       .count("DISTINCT ((properties->>'user_id')::bigint)")
   end
 
+  def self.view_counts_for(project_ids)
+    return {} if project_ids.blank?
+    Ahoy::Event.where(name: "project_view")
+      .where("properties->>'project_id' IN (?)", project_ids.map(&:to_s))
+      .group("properties->>'project_id'")
+      .count("DISTINCT ((properties->>'user_id')::bigint)")
+      .transform_keys(&:to_i)
+  end
+
+  def self.follower_counts_for(project_ids)
+    return {} if project_ids.blank?
+    Follow.where(project_id: project_ids).group(:project_id).count
+  end
+
   def dm_status!
     unless user&.slack_id.present?
       Rails.logger.tagged("Project##{id}DM") do
