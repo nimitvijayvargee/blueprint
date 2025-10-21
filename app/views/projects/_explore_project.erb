@@ -1,4 +1,4 @@
-<%= link_to project_path(project, return_to: request.fullpath), data: { turbo_frame: "_top", turbo_preload: false } do %>
+<%= link_to project_path(project, return_to: request.fullpath), data: { turbo_frame: "_top", turbo_prefetch: false } do %>
   <%= render "shared/card", class: "space-y-4 hover:scale-105 hover:shadow-xl motion-safe:transition-all overflow-hidden" do %>
     <div class="h-48 -mx-8 -mt-6 bg-gray-200 bg-center bg-cover" style="background-image: url('<%= project.display_banner ? url_for(project.display_banner) : nil %>')">
     </div>

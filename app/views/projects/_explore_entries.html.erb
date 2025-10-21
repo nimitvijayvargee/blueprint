@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "explore-page-#{@pagy.page}", class: "flex flex-col space-y-8" do %>
+<%= turbo_frame_tag "explore-page-#{@pagy.page}", class: "flex flex-col space-y-8", data: { controller: "entry-view-tracker" } do %>
   <%= render partial: 'explore_entry', collection: @journal_entries, as: :entry, cached: true %>
   <%= render partial: 'explore_next_entries', locals: { pagy: @pagy } if @pagy.present? && @pagy.pages > 1 %>
 <% end %>

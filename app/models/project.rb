@@ -148,6 +148,7 @@ class Project < ApplicationRecord
   after_update :dm_status!, if: -> { saved_change_to_review_status? }
   after_commit :sync_to_gorse, on: [ :create, :update ]
   after_commit :delete_from_gorse, on: :destroy
+  after_commit :sync_journal_entries_to_gorse, if: -> { saved_change_to_is_deleted? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -599,6 +600,12 @@ class Project < ApplicationRecord
   rescue => e
     Rails.logger.error("Failed to delete project #{id} from Gorse: #{e.message}")
     Sentry.capture_exception(e)
+  end
+
+  def sync_journal_entries_to_gorse
+    journal_entries.find_each do |entry|
+      GorseSyncJournalEntryJob.perform_later(entry.id)
+    end
   end
 
   private
