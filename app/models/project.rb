@@ -590,6 +590,17 @@ class Project < ApplicationRecord
     )
   end
 
+  def sync_to_gorse
+    GorseSyncProjectJob.perform_later(id)
+  end
+
+  def delete_from_gorse
+    GorseService.delete_item(self)
+  rescue => e
+    Rails.logger.error("Failed to delete project #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
+  end
+
   private
 
   def normalize_repo_link
@@ -640,16 +651,5 @@ class Project < ApplicationRecord
     content.gsub!(/src=["'](\/user-attachments\/.*?)(?=["'])/, "src=\"https://#{host}\\1\"")
 
     content
-  end
-
-  def sync_to_gorse
-    GorseSyncProjectJob.perform_later(id)
-  end
-
-  def delete_from_gorse
-    GorseService.delete_item(self)
-  rescue => e
-    Rails.logger.error("Failed to delete project #{id} from Gorse: #{e.message}")
-    Sentry.capture_exception(e)
   end
 end
