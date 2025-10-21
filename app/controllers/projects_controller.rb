@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
       if params[:sort] == "new"
         @pagy, @journal_entries = pagy(JournalEntry.includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(created_at: :desc), items: 20)
       elsif params[:sort] == "you"
-        if Flipper.enabled?(:gorse_journal_recommendations, current_user)
+        if Flipper.enabled?(:gorse_recommendations, current_user)
           page = params[:page].present? ? params[:page].to_i : 1
           entry_ids = GorseService.get_user_recommendation(current_user.id, page, 20, type: :entry)
 
