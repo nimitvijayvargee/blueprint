@@ -76,7 +76,7 @@ class ToolbagController < ApplicationController
       {
         "name" => "Bench power supply",
         "description" => "Adjustable 30V 10A bench power supply for testing circuits with precise voltage control.",
-        "price_tickets" => 120,
+        "price_tickets" => 200,
         "image_url" => "shop/bench-power-supply.webp"
       },
       {
