@@ -10,6 +10,7 @@ ARG GORSE_ADMIN_API_KEY
 RUN envsubst < /tmp/gorse.toml.template > /tmp/gorse.toml
 
 FROM zhenghaoz/gorse-in-one
+RUN apk add --no-cache curl
 WORKDIR /app
 COPY --from=envsubst /tmp/gorse.toml /app/config/gorse.toml
 CMD ["gorse-in-one", "-c", "/app/config/gorse.toml"]
