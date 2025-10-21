@@ -1,0 +1,10 @@
+FROM zhenghaoz/gorse-in-one
+
+RUN apk add --no-cache gettext
+
+WORKDIR /app
+
+COPY config/gorse.toml /app/config/gorse.toml.template
+
+CMD envsubst < /app/config/gorse.toml.template > /app/config/gorse.toml && \
+    gorse-in-one -c /app/config/gorse.toml

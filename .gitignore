@@ -44,3 +44,5 @@
 logs/
 
 *.csv
+
+*.sql
