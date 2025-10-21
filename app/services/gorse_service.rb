@@ -90,6 +90,20 @@ class GorseService
       handle_response(response, "delete feedback #{feedback_type} user=#{user_id} item=#{item_id}")
     end
 
+    def get_user_recommendation(user_id, page = 1, per_page = 21)
+      offset = (page - 1) * per_page
+
+      response = with_retry do
+        connection.get("/api/recommend/#{user_id}") do |req|
+          req.headers["X-API-KEY"] = api_key
+          req.params["n"] = per_page
+          req.params["offset"] = offset
+        end
+      end
+
+      handle_response(response, "get recommendations for user #{user_id}")
+    end
+
     private
 
     def base_url
