@@ -146,6 +146,8 @@ class Project < ApplicationRecord
   after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
   after_update :approve_design!, if: -> { saved_change_to_review_status? && design_approved? }
   after_update :dm_status!, if: -> { saved_change_to_review_status? }
+  after_commit :sync_to_gorse, on: [ :create, :update ]
+  after_commit :delete_from_gorse, on: :destroy
 
   def self.parse_repo(repo)
     # Supports:
@@ -638,5 +640,16 @@ class Project < ApplicationRecord
     content.gsub!(/src=["'](\/user-attachments\/.*?)(?=["'])/, "src=\"https://#{host}\\1\"")
 
     content
+  end
+
+  def sync_to_gorse
+    GorseSyncProjectJob.perform_later(id)
+  end
+
+  def delete_from_gorse
+    GorseService.delete_item(self)
+  rescue => e
+    Rails.logger.error("Failed to delete project #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
   end
 end

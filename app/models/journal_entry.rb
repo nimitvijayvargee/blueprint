@@ -38,6 +38,7 @@ class JournalEntry < ApplicationRecord
   validates :summary, presence: true, length: { maximum: 60 }
 
   after_commit :sync_project_github_journal, on: %i[create update destroy]
+  after_commit :sync_project_to_gorse, on: %i[create update destroy]
 
   def rendered_html
     return "" if content.blank?
@@ -69,5 +70,9 @@ class JournalEntry < ApplicationRecord
 
   def sync_project_github_journal
     project&.sync_github_journal!
+  end
+
+  def sync_project_to_gorse
+    project&.sync_to_gorse
   end
 end

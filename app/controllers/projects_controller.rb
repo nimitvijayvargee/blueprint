@@ -76,6 +76,8 @@ class ProjectsController < ApplicationController
     ahoy.track("project_view", project_id: @project.id, user_id: current_user&.id)
 
     if current_user.present?
+      GorseSyncFeedbackJob.perform_later("view", current_user.id, @project.id, Time.current)
+
       begin
         UniqueProjectViewTracker.record(project_id: @project.id, user_id: current_user.id)
       rescue => e

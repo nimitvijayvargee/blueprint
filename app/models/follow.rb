@@ -26,11 +26,25 @@ class Follow < ApplicationRecord
   validates :user_id, uniqueness: { scope: :project_id, message: "already follows this project" }
   validate :cannot_follow_own_project
 
+  after_commit :sync_to_gorse, on: :create
+  after_commit :delete_from_gorse, on: :destroy
+
   private
 
   def cannot_follow_own_project
     return unless user_id == project.user_id
 
     errors.add(:user_id, "You cannot follow your own project")
+  end
+
+  def sync_to_gorse
+    GorseSyncFollowJob.perform_later(id)
+  end
+
+  def delete_from_gorse
+    GorseService.delete_feedback("follow", user_id, project_id)
+  rescue => e
+    Rails.logger.error("Failed to delete follow #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
   end
 end
