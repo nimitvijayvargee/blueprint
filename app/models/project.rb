@@ -509,7 +509,7 @@ class Project < ApplicationRecord
         msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       end
     elsif design_approved?
-      msg += "Your Blueprint project *#{title}* has passed the design review! You should receive an email from HCB about your grant soon.\n\n"
+      msg += "Your Blueprint project *#{title}* has passed the design review! You should receive an email from HCB about your grant in a few business days.\n\n"
 
       msg += "*Grant approved:* $#{'%.2f' % (approved_funding_cents / 100.0)}\n\n" if approved_funding_cents.present?
       msg += "*Tier approved:* #{approved_tier}\n\n" if approved_tier.present?
