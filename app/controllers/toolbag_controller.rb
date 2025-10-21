@@ -110,6 +110,12 @@ class ToolbagController < ApplicationController
         "image_url" => "shop/bambu-lab-a1-mini.webp"
       },
       {
+        "name" => "CNC Router",
+        "description" => "Precision desktop CNC router for cutting, engraving, and milling wood, plastic, and aluminum.",
+        "price_tickets" => 1400,
+        "image_url" => "shop/cnc-router.webp"
+      },
+      {
         "name" => "Bambu Lab P1S",
         "description" => "High-performance enclosed 3D printer designed for speed, reliability, and multi-material support.",
         "price_tickets" => 1700,
@@ -120,12 +126,6 @@ class ToolbagController < ApplicationController
         "description" => "Flagship high-end 3D printer offering industrial-grade precision and advanced automation.",
         "price_tickets" => 6000,
         "image_url" => "shop/bambu-lab-h2d-base.webp"
-      },
-      {
-        "name" => "CNC Router",
-        "description" => "Precision desktop CNC router for cutting, engraving, and milling wood, plastic, and aluminum.",
-        "price_tickets" => 1400,
-        "image_url" => "shop/cnc-router.webp"
       }
     ]
   end
