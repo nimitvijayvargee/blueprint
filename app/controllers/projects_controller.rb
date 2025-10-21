@@ -54,15 +54,9 @@ class ProjectsController < ApplicationController
         @projects = Project.where(id: paginated_ids).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
         preload_project_metrics(@projects)
       elsif params[:sort] == "top"
-        top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
-        if top_projects.present?
-          project_ids = top_projects.map { |item| item["item_id"] }
-          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", project_ids.map(&:to_i) ])
-          all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
-
-          @pagy, @projects = pagy_array(all_projects, limit: 21)
-          preload_project_metrics(@projects)
-        end
+        all_projects = Project.where(is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(views_count: :desc)
+        @pagy, @projects = pagy(all_projects, limit: 21)
+        preload_project_metrics(@projects)
       else
         redirect_to explore_path(type: "projects") and return
       end
