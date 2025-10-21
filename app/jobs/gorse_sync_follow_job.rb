@@ -3,7 +3,8 @@ class GorseSyncFollowJob < ApplicationJob
 
   def perform(follow_id)
     follow = Follow.find(follow_id)
-    GorseSyncFeedbackJob.perform_later("follow", follow.user_id, follow.project_id, follow.created_at)
+    project = Project.find(follow.project_id)
+    GorseService.sync_feedback("follow", follow.user_id, project, follow.created_at)
   rescue => e
     Rails.logger.error("Failed to sync follow #{follow_id} to Gorse: #{e.message}")
     Sentry.capture_exception(e)

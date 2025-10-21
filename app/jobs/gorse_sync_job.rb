@@ -46,11 +46,22 @@ class GorseSyncJob < ApplicationJob
         last_updated = [ project.updated_at, project.latest_journal_update ].compact.max
 
         csv << [
-          project.id,
+          GorseService.project_item_id(project),
           project.is_deleted || false,
-          "",
+          "project",
           last_updated.iso8601,
           project.tier || "",
+          ""
+        ]
+      end
+
+      JournalEntry.includes(:project).find_each do |entry|
+        csv << [
+          GorseService.entry_item_id(entry),
+          entry.project.is_deleted || false,
+          "entry",
+          entry.updated_at.iso8601,
+          entry.project&.tier || "",
           ""
         ]
       end
@@ -63,12 +74,13 @@ class GorseSyncJob < ApplicationJob
 
       Ahoy::Event.where(name: "project_view").find_each do |event|
         user_id = event.properties["user_id"]
-        next if user_id.blank?
+        project_id = event.properties["project_id"]
+        next if user_id.blank? || project_id.blank?
 
         csv << [
           "view",
           user_id,
-          event.properties["project_id"],
+          GorseService.project_item_id(project_id),
           event.time.iso8601
         ]
       end
@@ -77,7 +89,7 @@ class GorseSyncJob < ApplicationJob
         csv << [
           "follow",
           follow.user_id,
-          follow.project_id,
+          GorseService.project_item_id(follow.project_id),
           follow.created_at.iso8601
         ]
       end

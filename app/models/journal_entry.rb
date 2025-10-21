@@ -39,6 +39,8 @@ class JournalEntry < ApplicationRecord
 
   after_commit :sync_project_github_journal, on: %i[create update destroy]
   after_commit :sync_project_to_gorse, on: %i[create update destroy]
+  after_commit :sync_entry_to_gorse, on: %i[create update]
+  after_commit :delete_entry_from_gorse, on: :destroy
 
   def rendered_html
     return "" if content.blank?
@@ -74,5 +76,16 @@ class JournalEntry < ApplicationRecord
 
   def sync_project_to_gorse
     project&.sync_to_gorse
+  end
+
+  def sync_entry_to_gorse
+    GorseSyncJournalEntryJob.perform_later(id)
+  end
+
+  def delete_entry_from_gorse
+    GorseService.delete_item(self)
+  rescue => e
+    Rails.logger.error("Failed to delete journal entry #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
   end
 end

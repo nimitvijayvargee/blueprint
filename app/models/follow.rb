@@ -42,7 +42,7 @@ class Follow < ApplicationRecord
   end
 
   def delete_from_gorse
-    GorseService.delete_feedback("follow", user_id, project_id)
+    GorseService.delete_feedback("follow", user_id, GorseService.project_item_id(project_id))
   rescue => e
     Rails.logger.error("Failed to delete follow #{id} from Gorse: #{e.message}")
     Sentry.capture_exception(e)
