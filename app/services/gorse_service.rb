@@ -82,6 +82,73 @@ class GorseService
       handle_response(response, "delete item #{item_id}")
     end
 
+    def sync_feedback(feedback_type, user_id, item, timestamp)
+      events = []
+
+      prefixed_id = case item
+      when Project
+                      project_item_id(item)
+      when JournalEntry
+                      entry_item_id(item)
+      when String
+                      if item =~ /\A\d+\z/
+                        project_item_id(item)
+                      else
+                        item
+                      end
+      else
+                      project_item_id(item.to_s)
+      end
+
+      events << {
+        FeedbackType: feedback_type,
+        UserId: user_id.to_s,
+        ItemId: prefixed_id,
+        Timestamp: timestamp.iso8601
+      }
+
+      response = with_retry do
+        connection.post("/api/feedback") do |req|
+          req.headers["X-API-KEY"] = api_key
+          req.headers["Content-Type"] = "application/json"
+          req.body = events.to_json
+        end
+      end
+
+      handle_response(response, "sync feedback #{feedback_type} user=#{user_id} item=#{prefixed_id}")
+    end
+
+    def delete_feedback(feedback_type, user_id, item_id)
+      response = with_retry do
+        connection.delete("/api/feedback/#{CGI.escape(feedback_type.to_s)}/#{CGI.escape(user_id.to_s)}/#{CGI.escape(item_id.to_s)}") do |req|
+          req.headers["X-API-KEY"] = api_key
+        end
+      end
+
+      handle_response(response, "delete feedback #{feedback_type} user=#{user_id} item=#{item_id}")
+    end
+
+    def get_user_recommendation(user_id, page = 1, per_page = 21, type: :project)
+      offset = (page - 1) * per_page
+
+      response = with_retry do
+        category = type == :entry ? "entry" : "project"
+        connection.get("/api/recommend/#{CGI.escape(user_id.to_s)}/#{category}") do |req|
+          req.headers["X-API-KEY"] = api_key
+          req.params["n"] = per_page * 3
+          req.params["offset"] = offset
+        end
+      end
+
+      item_ids = handle_response(response, "get recommendations for user #{user_id}")
+
+      prefix = type == :entry ? ENTRY_PREFIX : PROJECT_PREFIX
+      filtered = item_ids.select { |id| id.to_s.start_with?(prefix) }
+      ids = filtered.map { |id| parse_item_id(id)[1] }
+
+      ids.first(per_page)
+    end
+
     private
 
     def sync_project_item(project)
@@ -157,75 +224,6 @@ class GorseService
 
       handle_response(response, "delete entry #{item_id}")
     end
-
-    def sync_feedback(feedback_type, user_id, item, timestamp)
-      events = []
-
-      prefixed_id = case item
-      when Project
-                      project_item_id(item)
-      when JournalEntry
-                      entry_item_id(item)
-      when String
-                      if item =~ /\A\d+\z/
-                        project_item_id(item)
-                      else
-                        item
-                      end
-      else
-                      project_item_id(item.to_s)
-      end
-
-      events << {
-        FeedbackType: feedback_type,
-        UserId: user_id.to_s,
-        ItemId: prefixed_id,
-        Timestamp: timestamp.iso8601
-      }
-
-      response = with_retry do
-        connection.post("/api/feedback") do |req|
-          req.headers["X-API-KEY"] = api_key
-          req.headers["Content-Type"] = "application/json"
-          req.body = events.to_json
-        end
-      end
-
-      handle_response(response, "sync feedback #{feedback_type} user=#{user_id} item=#{prefixed_id}")
-    end
-
-    def delete_feedback(feedback_type, user_id, item_id)
-      response = with_retry do
-        connection.delete("/api/feedback/#{CGI.escape(feedback_type.to_s)}/#{CGI.escape(user_id.to_s)}/#{CGI.escape(item_id.to_s)}") do |req|
-          req.headers["X-API-KEY"] = api_key
-        end
-      end
-
-      handle_response(response, "delete feedback #{feedback_type} user=#{user_id} item=#{item_id}")
-    end
-
-    def get_user_recommendation(user_id, page = 1, per_page = 21, type: :project)
-      offset = (page - 1) * per_page
-
-      response = with_retry do
-        category = type == :entry ? "entry" : "project"
-        connection.get("/api/recommend/#{CGI.escape(user_id.to_s)}/#{category}") do |req|
-          req.headers["X-API-KEY"] = api_key
-          req.params["n"] = per_page * 3
-          req.params["offset"] = offset
-        end
-      end
-
-      item_ids = handle_response(response, "get recommendations for user #{user_id}")
-
-      prefix = type == :entry ? ENTRY_PREFIX : PROJECT_PREFIX
-      filtered = item_ids.select { |id| id.to_s.start_with?(prefix) }
-      ids = filtered.map { |id| parse_item_id(id)[1] }
-
-      ids.first(per_page)
-    end
-
-    private
 
     def base_url
       ENV.fetch("GORSE_API_URL", "https://gorse.blueprint.a.selfhosted.hackclub.com")
