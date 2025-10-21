@@ -48,12 +48,31 @@ class ProjectsController < ApplicationController
           @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql(order_clause))
         end
       elsif params[:sort] == "top"
-        top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
-        if top_entries.present?
-          entry_ids = top_entries.map { |item| item["item_id"] }
-          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
-          all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql(order_clause))
-          @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
+        if Flipper.enabled?(:gorse_journal_recommendations, current_user)
+          page = params[:page].present? ? params[:page].to_i : 1
+          entry_ids = GorseService.get_popular_items(page, 20, type: :entry)
+
+          # Calculate count: if empty, we've reached the end
+          count = entry_ids.empty? ? (page - 1) * 20 : page * 20 + 1
+
+          # Create manual pagy object for navigation
+          @pagy = Pagy.new(count: count, page: page, items: 20)
+
+          # Load entries maintaining Gorse order
+          if entry_ids.any?
+            order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
+            @journal_entries = JournalEntry.where(id: entry_ids).includes(project: :user).order(Arel.sql(order_clause))
+          else
+            @journal_entries = []
+          end
+        else
+          top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
+          if top_entries.present?
+            entry_ids = top_entries.map { |item| item["item_id"] }
+            order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
+            all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql(order_clause))
+            @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
+          end
         end
       else
         redirect_to explore_path and return

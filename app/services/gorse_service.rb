@@ -149,6 +149,24 @@ class GorseService
       ids.first(per_page)
     end
 
+    def get_popular_items(page = 1, per_page = 21, type: :project)
+      offset = (page - 1) * per_page
+      category = type == :entry ? "entry" : "project"
+
+      response = with_retry do
+        connection.get("/api/popular/#{category}") do |req|
+          req.headers["X-API-KEY"] = api_key
+          req.params["n"] = per_page
+          req.params["offset"] = offset
+        end
+      end
+
+      items = handle_response(response, "get popular #{category} items")
+
+      prefix = type == :entry ? ENTRY_PREFIX : PROJECT_PREFIX
+      items.map { |item| parse_item_id(item["Id"])[1] }
+    end
+
     private
 
     def sync_project_item(project)
