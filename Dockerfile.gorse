@@ -9,8 +9,11 @@ ARG GORSE_API_KEY
 ARG GORSE_ADMIN_API_KEY
 RUN envsubst < /tmp/gorse.toml.template > /tmp/gorse.toml
 
-FROM zhenghaoz/gorse-in-one
-RUN apk add --no-cache curl
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates curl
 WORKDIR /app
+COPY --from=zhenghaoz/gorse-in-one:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=zhenghaoz/gorse-in-one:latest /usr/bin/gorse-in-one /usr/bin/gorse-in-one
 COPY --from=envsubst /tmp/gorse.toml /app/config/gorse.toml
+ENV USER=root
 CMD ["gorse-in-one", "-c", "/app/config/gorse.toml"]
