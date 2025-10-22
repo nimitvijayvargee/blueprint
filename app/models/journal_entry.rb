@@ -41,6 +41,7 @@ class JournalEntry < ApplicationRecord
   after_commit :sync_project_to_gorse, on: %i[create update destroy]
   after_commit :sync_entry_to_gorse, on: %i[create update]
   after_commit :delete_entry_from_gorse, on: :destroy
+  after_commit :notify_followers, on: :create
 
   def rendered_html
     return "" if content.blank?
@@ -86,6 +87,32 @@ class JournalEntry < ApplicationRecord
     GorseService.delete_item(self)
   rescue => e
     Rails.logger.error("Failed to delete journal entry #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
+  end
+
+  def notify_followers
+    host = ENV.fetch("APPLICATION_HOST", "blueprint.hackclub.com")
+    url_helpers = Rails.application.routes.url_helpers
+
+    author_name = if user.slack_id.present?
+      "<@#{user.slack_id}>"
+    else
+      user_url = url_helpers.user_url(user, host: host)
+      display_name = user.display_name || user.username || "Someone"
+      "<#{user_url}|#{display_name}>"
+    end
+
+    project_url = url_helpers.project_url(project, host: host)
+    project_link = "<#{project_url}|#{project.title}>"
+
+    entry_url = url_helpers.project_journal_entry_url(project, self, host: host)
+    message = "#{author_name} posted a new journal entry on #{project_link}: <#{entry_url}|#{summary}>"
+
+    project.followers.where.not(slack_id: nil).find_each do |follower|
+      SlackDmJob.perform_later(follower.slack_id, message)
+    end
+  rescue => e
+    Rails.logger.error("Failed to send follower notifications for journal entry #{id}: #{e.message}")
     Sentry.capture_exception(e)
   end
 end

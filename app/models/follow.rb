@@ -28,6 +28,7 @@ class Follow < ApplicationRecord
 
   after_commit :sync_to_gorse, on: :create
   after_commit :delete_from_gorse, on: :destroy
+  after_commit :notify_project_owner, on: :create
 
   private
 
@@ -45,6 +46,31 @@ class Follow < ApplicationRecord
     GorseService.delete_feedback("follow", user_id, GorseService.project_item_id(project_id))
   rescue => e
     Rails.logger.error("Failed to delete follow #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
+  end
+
+  def notify_project_owner
+    return unless project.user.slack_id.present?
+
+    host = ENV.fetch("APPLICATION_HOST", "blueprint.hackclub.com")
+    url_helpers = Rails.application.routes.url_helpers
+
+    follower_name = if user.slack_id.present?
+      "<@#{user.slack_id}>"
+    else
+      user_url = url_helpers.user_url(user, host: host)
+      display_name = user.display_name || user.username || "Someone"
+      "<#{user_url}|#{display_name}>"
+    end
+
+    project_url = url_helpers.project_url(project, host: host)
+    project_link = "<#{project_url}|#{project.title}>"
+
+    message = "#{follower_name} just followed your project #{project_link}! 🎉"
+
+    SlackDmJob.perform_later(project.user.slack_id, message)
+  rescue => e
+    Rails.logger.error("Failed to send follower notification for follow #{id}: #{e.message}")
     Sentry.capture_exception(e)
   end
 end
