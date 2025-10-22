@@ -202,7 +202,7 @@ class Project < ApplicationRecord
     "https://github.com/#{org}/#{repo}"
   end
 
-  def generate_timeline
+  def generate_timeline(reverse: false)
     timeline = []
 
     timeline << { type: :creation, date: created_at }
@@ -267,7 +267,8 @@ class Project < ApplicationRecord
       timeline << { type: :approve_design, date: group[:date], reviews: reviews_with_users }
     end
 
-    timeline.sort_by { |e| e[:date] }
+    sorted_timeline = timeline.sort_by { |e| e[:date] }
+    reverse ? sorted_timeline.reverse : sorted_timeline
   end
 
   def bom_file_url
