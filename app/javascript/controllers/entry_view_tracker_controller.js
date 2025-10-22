@@ -99,13 +99,13 @@ export default class extends Controller {
     // Mark as tracked to prevent duplicate tracking
     this.markAsTracked(entry)
 
-    // Make GET request to track the view
+    // Make GET request to track the view (response will be a redirect)
     fetch(url, {
       method: 'GET',
       headers: {
-        'Accept': 'text/vnd.turbo-stream.html',
         'X-Requested-With': 'XMLHttpRequest'
-      }
+      },
+      redirect: 'manual'
     }).catch(error => {
       console.error('Failed to track entry view:', error)
     })
