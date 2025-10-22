@@ -233,7 +233,7 @@
 
   /* Images */
   img {
-    @apply w-auto h-auto max-w-[min(100%,64rem)] max-h-[80vh] my-4 block mx-auto rounded-lg border border-white/10 print:border-black/10;
+    @apply w-auto h-auto max-w-[min(100%,64rem)] max-h-[80vh] my-4 block mx-auto;
   }
 
   @media print {
