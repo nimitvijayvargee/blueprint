@@ -19,6 +19,10 @@ Blueprint is a You Ship, We Ship program open to all teenagers 13-18 (inclusive)
 
 _Alternatively, if you don't need a grant, you can earn extra tickets for the [toolbag](/toolbag) by logging your project._
 
+Here's a very detailed look of how it all works:
+
+![blueprint flow detailed](https://hc-cdn.hel1.your-objectstorage.com/s/v3/273d33190afc8ceb623d5ca98334ace237ea76f5_how-to.webp)
+
 ## What can I build?
 
 Anything! From as simple as a 3D print, to full robots with PCBs. You can create new designs, or build off of existing creations. Work in groups if you want. We really want to see what you can cook up!
