@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_213106) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_183324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -239,6 +239,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_213106) do
     t.bigint "views", default: [], null: false, array: true
     t.index ["project_id"], name: "index_journal_entries_on_project_id"
     t.index ["user_id"], name: "index_journal_entries_on_user_id"
+  end
+
+  create_table "kudos", force: :cascade do |t|
+    t.text "content"
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_kudos_on_project_id"
+    t.index ["user_id"], name: "index_kudos_on_user_id"
   end
 
   create_table "one_time_passwords", force: :cascade do |t|
@@ -533,6 +543,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_213106) do
   add_foreign_key "follows", "users"
   add_foreign_key "journal_entries", "projects"
   add_foreign_key "journal_entries", "users"
+  add_foreign_key "kudos", "projects"
+  add_foreign_key "kudos", "users"
   add_foreign_key "project_grants", "projects"
   add_foreign_key "project_user_views", "projects"
   add_foreign_key "project_user_views", "users"

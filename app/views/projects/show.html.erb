@@ -67,6 +67,10 @@
     <% end %>
     <% if current_user.present? && current_user == @project.user %>
       <%= render "journal_form", project: @project %>
+    <% elsif current_user.present? %>
+      <%= render 'shared/card' do %>
+        <%= render 'kudos/kudos_form', project: @project %>
+      <% end %>
     <% end %>
     <%= render "timeline", project: @project %>
   </div>

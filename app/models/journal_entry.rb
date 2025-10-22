@@ -91,6 +91,9 @@ class JournalEntry < ApplicationRecord
   end
 
   def notify_followers
+    follower_slack_ids = project.followers.where.not(slack_id: nil).pluck(:slack_id)
+    return if follower_slack_ids.empty?
+
     host = ENV.fetch("APPLICATION_HOST", "blueprint.hackclub.com")
     url_helpers = Rails.application.routes.url_helpers
 
@@ -108,8 +111,8 @@ class JournalEntry < ApplicationRecord
     entry_url = url_helpers.project_journal_entry_url(project, self, host: host)
     message = "#{author_name} posted a new journal entry on #{project_link}: <#{entry_url}|#{summary}>"
 
-    project.followers.where.not(slack_id: nil).find_each do |follower|
-      SlackDmJob.perform_later(follower.slack_id, message)
+    follower_slack_ids.each do |slack_id|
+      SlackDmJob.perform_later(slack_id, message)
     end
   rescue => e
     Rails.logger.error("Failed to send follower notifications for journal entry #{id}: #{e.message}")

@@ -45,6 +45,7 @@ class Project < ApplicationRecord
   has_many :followers, through: :follows, source: :user
   has_many :design_reviews, dependent: :destroy
   has_many :project_grants, dependent: :destroy
+  has_many :kudos, dependent: :destroy
 
   def self.airtable_sync_table_id
     "tblwQanyNgONPvBdL"
@@ -210,8 +211,13 @@ class Project < ApplicationRecord
       timeline << { type: :journal, date: entry.created_at, entry: entry }
     end
 
+    kudos.order(created_at: :asc).each do |kudo|
+      timeline << { type: :kudo, date: kudo.created_at, kudo: kudo }
+    end
+
     ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
     user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
+    user_ids += kudos.pluck(:user_id).map(&:to_s)
 
     all_reviews = design_reviews.where(result: %w[returned rejected approved]).order(created_at: :asc)
     return_design_events = []
@@ -236,6 +242,7 @@ class Project < ApplicationRecord
       previous_result = review.result
     end
 
+    user_ids.uniq!
     users = User.where(id: user_ids).index_by { |u| u.id.to_s }
 
     ship_design_events.each do |event|
