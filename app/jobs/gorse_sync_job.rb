@@ -99,7 +99,7 @@ class GorseSyncJob < ApplicationJob
   def upload_to_gorse(type, csv_data)
     base_url = ENV.fetch("GORSE_API_URL", "https://gorse.blueprint.a.selfhosted.hackclub.com")
     url = "#{base_url}/api/bulk/#{type}"
-    admin_key = ENV.fetch("GORSE_ADMIN_API_KEY")
+    admin_key = ENV.fetch("GORSE_ADMIN_API_KEY", "")
 
     io = StringIO.new(csv_data)
 

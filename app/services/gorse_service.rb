@@ -248,7 +248,7 @@ class GorseService
     end
 
     def api_key
-      ENV.fetch("GORSE_ADMIN_API_KEY")
+      ENV.fetch("GORSE_ADMIN_API_KEY", "")
     end
 
     def connection
@@ -259,7 +259,10 @@ class GorseService
 
     def handle_response(response, action)
       unless response.success?
-        raise "Failed to #{action}: #{response.status} - #{response.body}"
+        # sentry capture
+        Rails.logger.error("Gorse request failed to #{action}: #{response.status} - #{response.body}")
+        Sentry.capture_message("Gorse request failed to #{action}: #{response.status} - #{response.body}")
+        return {}
       end
 
       JSON.parse(response.body)
