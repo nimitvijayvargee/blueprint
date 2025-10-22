@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
       if params[:sort] == "new"
         @pagy, @journal_entries = pagy(JournalEntry.includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(created_at: :desc), items: 20)
       elsif params[:sort] == "you"
-        if Flipper.enabled?(:gorse_recommendations, current_user)
+        if current_user && Flipper.enabled?(:gorse_recommendations, current_user)
           page = params[:page].present? ? params[:page].to_i : 1
           entry_ids = GorseService.get_user_recommendation(current_user.id, page, 20, type: :entry)
 
@@ -82,7 +82,7 @@ class ProjectsController < ApplicationController
         @pagy, @projects = pagy(Project.where(is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(created_at: :desc), limit: 21)
         preload_project_metrics(@projects)
       elsif params[:sort] == "you"
-        if Flipper.enabled?(:gorse_recommendations, current_user)
+        if current_user && Flipper.enabled?(:gorse_recommendations, current_user)
           page = params[:page].present? ? params[:page].to_i : 1
           project_ids = GorseService.get_user_recommendation(current_user.id, page, 21, type: :project)
 
