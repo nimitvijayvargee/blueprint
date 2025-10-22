@@ -24,11 +24,16 @@ class ProjectsController < ApplicationController
           page = params[:page].present? ? params[:page].to_i : 1
           entry_ids = GorseService.get_user_recommendation(current_user.id, page, 20, type: :entry)
 
+          # Redirect new users with no recommendations to top
+          if page == 1 && entry_ids.empty?
+            redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
+          end
+
           # Calculate count: if empty, we've reached the end
           count = entry_ids.empty? ? (page - 1) * 20 : page * 20 + 1
 
           # Create manual pagy object for navigation
-          @pagy = Pagy.new(count: count, page: page, items: 20)
+          @pagy = Pagy.new(count: count, page: page, items: 20, overflow: :last_page)
 
           # Load entries maintaining Gorse order
           if entry_ids.any?
@@ -56,7 +61,7 @@ class ProjectsController < ApplicationController
           count = entry_ids.empty? ? (page - 1) * 20 : page * 20 + 1
 
           # Create manual pagy object for navigation
-          @pagy = Pagy.new(count: count, page: page, items: 20)
+          @pagy = Pagy.new(count: count, page: page, items: 20, overflow: :last_page)
 
           # Load entries maintaining Gorse order
           if entry_ids.any?
@@ -86,11 +91,16 @@ class ProjectsController < ApplicationController
           page = params[:page].present? ? params[:page].to_i : 1
           project_ids = GorseService.get_user_recommendation(current_user.id, page, 21, type: :project)
 
+          # Redirect new users with no recommendations to top
+          if page == 1 && project_ids.empty?
+            redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
+          end
+
           # Calculate count: if empty, we've reached the end
           count = project_ids.empty? ? (page - 1) * 21 : page * 21 + 1
 
           # Create manual pagy object for navigation
-          @pagy = Pagy.new(count: count, page: page, items: 21)
+          @pagy = Pagy.new(count: count, page: page, items: 21, overflow: :last_page)
 
           # Load projects maintaining Gorse order
           if project_ids.any?
