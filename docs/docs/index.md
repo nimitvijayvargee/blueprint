@@ -19,7 +19,7 @@ Blueprint is a You Ship, We Ship program open to all teenagers 13-18 (inclusive)
 
 _Alternatively, if you don't need a grant, you can earn extra tickets for the [toolbag](/toolbag) by logging your project._
 
-Here's a more detailed look of how it all works:
+Here's a more detailed look at how it all works:
 
 ![blueprint how to](https://hc-cdn.hel1.your-objectstorage.com/s/v3/309b8b95c9b370c89f44dc346212a72c120c4e7e_how-to.svg)
 
