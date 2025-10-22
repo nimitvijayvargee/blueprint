@@ -8,8 +8,8 @@ class ProjectsController < ApplicationController
   end
 
   def explore
-    params[:sort] ||= "you"
-    params[:type] ||= "journals"
+    params[:sort] ||= "top"
+    params[:type] ||= "projects"
 
     # Ensure valid page number
     if params[:page].present?
