@@ -13,7 +13,9 @@
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/webp" sizes="32x32" href="/favicon-32x32.webp">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/webp" sizes="16x16" href="/favicon-16x16.webp">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 
@@ -48,21 +50,21 @@
       <!-- Hero bg -->
       <div class="absolute top-0 left-0 right-0 bg-bottom bg-no-repeat bg-cover pointer-events-none select-none bg-bp-dark" data-landing-target="overlay"
            style="mask-image: linear-gradient(170deg, rgba(0,0,0,1) 100%, rgba(0,0,0,0) 100%);">
-        <img src="<%= image_path('hero.png') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
+        <img src="<%= image_path('hero.webp') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
       </div>
       <div class="absolute top-0 left-0 right-0 bg-bottom bg-no-repeat bg-cover pointer-events-none select-none" data-landing-target="hero"
-           style="background-image: url('<%= image_path('hero.png') %>'); mask-image: linear-gradient(170deg, rgba(0,0,0,0.5) 100%, rgba(0,0,0,0) 100%);">
-        <img src="<%= image_path('hero.png') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
+           style="background-image: url('<%= image_path('hero.webp') %>'); mask-image: linear-gradient(170deg, rgba(0,0,0,0.5) 100%, rgba(0,0,0,0) 100%);">
+        <img src="<%= image_path('hero.webp') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
       </div>
 
       <div class="absolute top-0 left-0 right-0 bg-bottom bg-no-repeat bg-cover pointer-events-none select-none -z-10" data-landing-target="heroOutline"
            style="background-image: url('<%= image_path('hero-outline.jpg') %>'); mask-image: linear-gradient(170deg, rgba(0,0,0,0) 100%, rgba(0,0,0,1) 100%);">
-        <img src="<%= image_path('hero.png') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
+        <img src="<%= image_path('hero.webp') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
       </div>
 
     
       <div class="relative w-full">
-        <img src="<%= image_path('hero.png') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
+        <img src="<%= image_path('hero.webp') %>" aria-hidden="true" class="top-0 left-0 right-0 min-h-screen opacity-0">
         
         <!-- Hero title -->
         <div class="absolute top-0 left-0 right-0 flex flex-col items-center justify-center min-h-screen space-y-20" data-landing-target="heroContent">
@@ -156,165 +158,57 @@
   <p class="text-center   ">Read the guide -> design your own!</p>
   <div class="max-w-6xl mx-auto px-4">
     <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-3">
-
-<!-- MIDI Project -->
-<div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
-  <a href="/guides/midi" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
-    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/b34e09477abd07dbe65fc9a924eff8096ce2cbb4_controller__1_.png" alt="MIDI Project" class="w-full h-40 object-cover">
-    <p class="text-lg font-bold md:text-2xl">MIDI</p>
-    <p class="flex items-center justify-center text-sm grow md:text-base text-center">Create your own MIDI controller</p>
-    <p class="text-xs text-white/50 text-center mt-2">Guide by @nimit</p>
-  </a>
-  <a href="/guides/midi" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
-    See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-  </a>
-</div>
-
-<!-- Custom Devboard Project -->
-<div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
-  <a href="/guides/devboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
-    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/7e71607a3622394d974c0d35dd3e2d6526bb9543_render2.png" alt="Custom Devboard Project" class="w-full h-40 object-cover">
-    <p class="text-lg font-bold md:text-2xl">Custom Devboard</p>
-    <p class="flex items-center justify-center text-sm grow md:text-base text-center">Design your own Raspberry PI</p>
-    <p class="text-xs text-white/50 text-center mt-2">Guide by @Kai Pereira</p>
-  </a>
-  <a href="/guides/devboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
-    See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-  </a>
-</div>
-
-<!-- Split Keyboard Project -->
-<div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
-  <a href="/guides/split-keyboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
-    <img src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/3627c8d4c1d2a94c2391bc842dddc940ec59acb0_PXL_20251004_163402527.jpg" alt="Split Keyboard Project" class="w-full h-40 object-cover">
-    <p class="text-lg font-bold md:text-2xl">Split Keyboard</p>
-    <p class="flex items-center justify-center text-sm grow md:text-base text-center">Build a wireless split keyboard</p>
-    <p class="text-xs text-white/50 text-center mt-2">Guide by @koeg</p>
-  </a>
-  <a href="/guides/split-keyboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
-    See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-  </a>
-</div>
-
+      <!-- MIDI Project -->
+      <div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
+        <a href="/guides/midi" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
+          <img src="<%= image_path("landing/midi.webp") %>" alt="MIDI Project" class="w-full h-40 object-cover">
+          <p class="text-lg font-bold md:text-2xl">MIDI</p>
+          <p class="flex items-center justify-center text-sm grow md:text-base text-center">Create your own MIDI controller</p>
+          <p class="text-xs text-white/50 text-center mt-2">Guide by @nimit</p>
+        </a>
+        <a href="/guides/midi" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
+          See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+      <!-- Custom Devboard Project -->
+      <div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
+        <a href="/guides/devboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
+          <img src="<%= image_path("landing/custom-devboard.webp") %>" alt="Custom Devboard Project" class="w-full h-40 object-cover">
+          <p class="text-lg font-bold md:text-2xl">Custom Devboard</p>
+          <p class="flex items-center justify-center text-sm grow md:text-base text-center">Design your own Raspberry PI</p>
+          <p class="text-xs text-white/50 text-center mt-2">Guide by @Kai Pereira</p>
+        </a>
+        <a href="/guides/devboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
+          See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+      <!-- Split Keyboard Project -->
+      <div class="flex flex-col border-2 bg-bp-dark/70 transition-all duration-200 transform hover:-translate-y-1 overflow-hidden">
+        <a href="/guides/split-keyboard" class="flex flex-col p-4 space-y-4 md:p-8 hover:bg-bp-dark/50 active:bg-bp-dark/30">
+          <img src="<%= image_path("landing/split-keyboard.webp") %>" alt="Split Keyboard Project" class="w-full h-40 object-cover">
+          <p class="text-lg font-bold md:text-2xl">Split Keyboard</p>
+          <p class="flex items-center justify-center text-sm grow md:text-base text-center">Build a wireless split keyboard</p>
+          <p class="text-xs text-white/50 text-center mt-2">Guide by @koeg</p>
+        </a>
+        <a href="/guides/split-keyboard" class="group block bg-white text-bp-dark text-center py-3 md:py-4 font-bold text-sm md:text-base hover:bg-white/90 transition-colors border-t-2 border-white/20">
+          See Full Guide <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>
-
-
-
-      <% featured_projects = [
-        {
-          title: "Serenity",
-          url: "https://github.com/The-UnknownHacker/Serenity",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/83cea4e7008db1f618e6f33b12a19d25924259c9_image.png",
-          description: "Touch-based drumpad with ESP32-S3, copper PCB sensing, microSD storage, and configurable sound layers",
-          author: "The-UnknownHacker"
-        },
-        {
-          title: "CyberTrust",
-          url: "https://github.com/Aahil78/CyberTrust",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/625db8d60acaa7cdf3406308dedd19f21e35954f_image.png",
-          description: "RP2350A-based USB security key with user presence button and neopixel",
-          author: "Aahil78",
-        },
-        {
-          title: "Nexo-BT",
-          url: "https://github.com/Arrow-07/NexoBT",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/aaaa4a0cdd5f4ae02713865f04ad86aa1edd7bcb_image.png",
-          description: "Wireless music receiver with balanced XLR outputs using ESP32 and PCM5102APWR DAC",
-          author: "Arrow-07",
-        },
-        {
-          title: "KeyDeck",
-          url: "https://github.com/CJBrandi/KeyDeck/",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/98560ad52d04e91c453043c0c68692ae78a5f209_image.png",
-          description: "Simple macropad with 2 status LEDs, each button runs a different shortcut",
-          author: "CJBrandi",
-        },
-        {
-          title: "bop",
-          url: "https://github.com/ShuchirJ/bop",
-          image: "https://raw.githubusercontent.com/ShuchirJ/bop/main/render.png",
-          description: "Bluetooth audio receiver with line level and headphone level outputs",
-          author: "ShuchirJ"
-        },
-        {
-          title: "Fulmen",
-          url: "https://github.com/AethelVeritas/Fulmen/tree/main",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/826c1fc2c73606fe19d470a00726393d26af5777_image.png",
-          description: "Small ergonomic low-profile wireless keyboard, reversible design",
-          author: "AethelVeritas"
-        },
-        {
-          title: "Bicolor Matrix Board",
-          url: "https://github.com/picafe/bicolor-matrix",
-          image: "https://raw.githubusercontent.com/picafe/bicolor-matrix/main/assets/kicad_k9HAfz9kqA.png",
-          description: "Red and green 32x8 LED matrix with HT16K33A IC",
-          author: "picafe"
-        },
-        {
-          title: "Quaero",
-          url: "https://github.com/AethelVeritas/Quaero/tree/main",
-          image: "https://raw.githubusercontent.com/AethelVeritas/Quaero/refs/heads/main/pics/pic_16.png",
-          description: "Low-profile split ergo keyboard with splay, removable column/number row, and trackpad support",
-          author: "AethelVeritas"
-        },
-        {
-          title: "WASP",
-          url: "https://github.com/justhar/WASP-OPSI",
-          image: "https://raw.githubusercontent.com/justhar/WASP-OPSI/main/WASP.png",
-          description: "Wi-Fi sensing platform with 8 synchronized ESP32 nodes for AoA, localization, and gesture recognition",
-          author: "justhar"
-        },
-        {
-          title: "Athena",
-          url: "https://github.com/NotARoomba/Athena",
-          image: "https://raw.githubusercontent.com/NotARoomba/Athena/main/assets/board_front.png",
-          description: "Advanced flight controller with triple MCU architecture",
-          author: "NotARoomba"
-        },
-        {
-          title: "wake",
-          url: "https://github.com/JavaScythe/wake/",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/9fa7d0bf0d3d7f7041138a8fbcee0b6e9a18b987_image.png",
-          description: "Advanced alarm clock with 35 neopixels, ESP32 wifi, speaker, buzzer, and projector",
-          author: "JavaScythe"
-        },
-        {
-          title: "Automatic Toilet Paper Folder V2",
-          url: "https://github.com/Synaptic-Odyssey/AutomaticToiletPaperFolder_V2",
-          image: "https://raw.githubusercontent.com/Synaptic-Odyssey/AutomaticToiletPaperFolder_V2/refs/heads/main/Images/ATPF_poster.png",
-          description: "Streamlined product version of the 1st place Highway to Undercity project",
-          author: "Synaptic-Odyssey"
-        },
-        {
-          title: "PR Mini Bot",
-          url: "https://github.com/tobycm/pr-mini-bot",
-          image: "https://raw.githubusercontent.com/tobycm/pr-mini-bot/refs/heads/main/images/3d.png",
-          description: "Miniature bot mimicking 8339 2025 FRC bot with solar panel and supercaps for power harvesting",
-          author: "tobycm"
-        },
-        {
-          title: "VikramSatv0 Electrical Power Sub-system",
-          url: "https://github.com/Rishaan2202/VikramSat_Electrical-Power-Sub-System",
-          image: "https://hc-cdn.hel1.your-objectstorage.com/s/v3/8a126694bd272e8df76d3cdfee6883ce0abde398_image.png",
-          description: "Fully functional EPS for 2U CubeSat project by 14-year-old maker",
-          author: "Rishaan2202"
-        }
-      ] %>
-
       <!-- Divider Image -->
       <div class="w-full py-16">
-        <%= image_tag "divider2.png", class: "w-full h-auto" %>
+        <%= image_tag "divider2.webp", class: "w-full h-auto" %>
       </div>
 
       <div class="space-y-12">
         <p class="text-xl text-center md:text-3xl">Here's what others are working on</p>
         <div class="overflow-hidden">
           <div class="flex h-64 space-x-8 space-y-8 carousel md:h-84">
-            <% featured_projects.shuffle.each do |project| %>
+            <% @featured_projects.shuffle.each do |project| %>
               <a href="<%= project[:url] %>" target="_blank" rel="noopener noreferrer" class="flex flex-col w-40 h-full md:w-72 shrink-0 bg-bp-darker" data-carousel-target="item">
-                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url('<%= project[:image] %>')"></div>
+                <div class="h-20 bg-gray-200 bg-center bg-no-repeat bg-cover md:h-40" style="background-image: url('<%= image_path(project[:image]) %>')"></div>
                 <div class="flex flex-col p-2 space-y-2 md:p-4 grow">
                   <p class="text-base font-bold md:text-xl"><%= project[:title] %> <span class="text-xs">by <%= project[:author] %></span></p>
                   <p class="text-xs md:text-base"><%= project[:description] %></p>
@@ -332,7 +226,7 @@
     
       <!-- Divider Image -->
       <div class="w-full py-16">
-        <%= image_tag "divider2.png", class: "w-full h-auto" %>
+        <%= image_tag "divider2.webp", class: "w-full h-auto" %>
       </div>
     
     <div class="flex flex-col items-center w-full px-8">

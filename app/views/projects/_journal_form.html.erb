@@ -1,5 +1,5 @@
 <%= render "shared/card" do %>
-  <%= form_with model: [@project, (@journal_entry || JournalEntry.new)], class: "space-y-4 dark", data: { controller: "journal-validator journal-draft", "journal-validator-min-chars-value": 250, "journal-validator-image-required-value": true, "journal-draft-project-id-value": @project.id } do |f| %>
+  <%= form_with model: [@project, (@journal_entry || JournalEntry.new)], class: "space-y-4 dark", data: { controller: "journal-validator journal-draft", "journal-validator-min-chars-value": 150, "journal-validator-image-required-value": true, "journal-draft-project-id-value": @project.id } do |f| %>
     <div class="flex flex-col space-y-6">
       <div>
         <p class="block text-3xl"><%= @journal_entry&.persisted? ? "Edit journal entry" : "Write a new journal entry" %></p>
@@ -27,7 +27,7 @@
               classes: "min-h-80 text-base" %>
       <div class="flex gap-4 text-xs">
           <p class="grow"><span data-journal-draft-target="status" hidden>Draft Saved Locally</span></p>
-          <p>Min characters: <span data-journal-validator-target="charCount" class="font-medium">0/250</span></p>
+          <p>Min characters: <span data-journal-validator-target="charCount" class="font-medium">0/150</span></p>
           <p>Min images: <span data-journal-validator-target="imageCount" class="font-medium">0/1</span></p>
         </div>
       </div>

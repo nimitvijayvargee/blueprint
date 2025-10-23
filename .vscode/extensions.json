@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "eyalhl.restore-terminals-with-presets",
+        "streetsidesoftware.code-spell-checker",
+        "heybourn.headwind",
+        "ecmel.vscode-html-css",
+        "esbenp.prettier-vscode",
+        "jemmyw.rails-fast-nav",
+        "aki77.rails-routes",
+        "shopify.ruby-lsp",
+        "marcoroth.stimulus-lsp",
+        "bradlc.vscode-tailwindcss",
+        "marcoroth.turbo-lsp"
+    ]
+}

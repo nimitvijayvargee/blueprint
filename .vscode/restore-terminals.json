@@ -1,0 +1,30 @@
+{
+  "terminals": {
+    "rails": [
+      {
+        "splitTerminals": [
+          {
+            "name": "server",
+            "commands": ["bundle install", "bin/dev"]
+          }
+        ]
+      },
+      {
+        "splitTerminals": [
+          {
+            "name": "console",
+            "commands": ["bundle install", "bin/rails console"]
+          }
+        ]
+      },
+      {
+        "splitTerminals": [
+          {
+            "name": "",
+            "commands": []
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -8,8 +8,8 @@ class ProjectsController < ApplicationController
   end
 
   def explore
-    params[:sort] ||= "you"
-    params[:type] ||= "journals"
+    params[:sort] ||= "top"
+    params[:type] ||= "projects"
 
     # Ensure valid page number
     if params[:page].present?
@@ -20,21 +20,64 @@ class ProjectsController < ApplicationController
       if params[:sort] == "new"
         @pagy, @journal_entries = pagy(JournalEntry.includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(created_at: :desc), items: 20)
       elsif params[:sort] == "you"
-        all_entries = current_user.recommended_journal_entries if current_user.present?
-        if all_entries.nil? || all_entries.count < 5
-          redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
+        if current_user && Flipper.enabled?(:gorse_recommendations, current_user)
+          page = params[:page].present? ? params[:page].to_i : 1
+          entry_ids = GorseService.get_user_recommendation(current_user.id, page, 20, type: :entry)
+
+          # Redirect new users with no recommendations to top
+          if page == 1 && entry_ids.empty?
+            redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
+          end
+
+          # Calculate count: if empty, we've reached the end
+          count = entry_ids.empty? ? (page - 1) * 20 : page * 20 + 1
+
+          # Create manual pagy object for navigation
+          @pagy = Pagy.new(count: count, page: page, items: 20, overflow: :last_page)
+
+          # Load entries maintaining Gorse order
+          if entry_ids.any?
+            order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
+            @journal_entries = JournalEntry.where(id: entry_ids).includes(project: :user).order(Arel.sql(order_clause))
+          else
+            @journal_entries = []
+          end
+        else
+          all_entries = current_user.recommended_journal_entries if current_user.present?
+          if all_entries.nil? || all_entries.count < 5
+            redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
+          end
+          entry_ids = all_entries.pluck(:id)
+          @pagy, paginated_ids = pagy_array(entry_ids, items: 20)
+          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", paginated_ids.map(&:to_i) ])
+          @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql(order_clause))
         end
-        entry_ids = all_entries.pluck(:id)
-        @pagy, paginated_ids = pagy_array(entry_ids, items: 20)
-        order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", paginated_ids.map(&:to_i) ])
-        @journal_entries = JournalEntry.where(id: paginated_ids).includes(project: :user).order(Arel.sql(order_clause))
       elsif params[:sort] == "top"
-        top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
-        if top_entries.present?
-          entry_ids = top_entries.map { |item| item["item_id"] }
-          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
-          all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql(order_clause))
-          @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
+        if Flipper.enabled?(:gorse_journal_recommendations, current_user)
+          page = params[:page].present? ? params[:page].to_i : 1
+          entry_ids = GorseService.get_popular_items(page, 20, type: :entry)
+
+          # Calculate count: if empty, we've reached the end
+          count = entry_ids.empty? ? (page - 1) * 20 : page * 20 + 1
+
+          # Create manual pagy object for navigation
+          @pagy = Pagy.new(count: count, page: page, items: 20, overflow: :last_page)
+
+          # Load entries maintaining Gorse order
+          if entry_ids.any?
+            order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
+            @journal_entries = JournalEntry.where(id: entry_ids).includes(project: :user).order(Arel.sql(order_clause))
+          else
+            @journal_entries = []
+          end
+        else
+          top_entries = StoredRecommendation.find_by(key: "top_journal_entries")&.data
+          if top_entries.present?
+            entry_ids = top_entries.map { |item| item["item_id"] }
+            order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], journal_entries.id::int)", entry_ids.map(&:to_i) ])
+            all_entries = JournalEntry.where(id: entry_ids).includes(project: :user).where(projects: { is_deleted: false }).references(:projects).order(Arel.sql(order_clause))
+            @pagy, @journal_entries = pagy_array(all_entries.to_a, items: 20)
+          end
         end
       else
         redirect_to explore_path and return
@@ -44,25 +87,44 @@ class ProjectsController < ApplicationController
         @pagy, @projects = pagy(Project.where(is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(created_at: :desc), limit: 21)
         preload_project_metrics(@projects)
       elsif params[:sort] == "you"
-        all_projects = current_user.recommended_projects.where(is_deleted: false) if current_user.present?
-        if all_projects.nil? || all_projects.count < 5
-          redirect_to explore_path(type: "projects", sort: "top", page: params[:page]) and return
-        end
-        project_ids = all_projects.pluck(:id)
-        @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
-        order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", paginated_ids.map(&:to_i) ])
-        @projects = Project.where(id: paginated_ids).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
-        preload_project_metrics(@projects)
-      elsif params[:sort] == "top"
-        top_projects = StoredRecommendation.find_by(key: "top_project_entries")&.data
-        if top_projects.present?
-          project_ids = top_projects.map { |item| item["item_id"] }
-          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", project_ids.map(&:to_i) ])
-          all_projects = Project.where(id: project_ids, is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
+        if current_user && Flipper.enabled?(:gorse_recommendations, current_user)
+          page = params[:page].present? ? params[:page].to_i : 1
+          project_ids = GorseService.get_user_recommendation(current_user.id, page, 21, type: :project)
 
-          @pagy, @projects = pagy_array(all_projects, limit: 21)
+          # Redirect new users with no recommendations to top
+          if page == 1 && project_ids.empty?
+            redirect_to explore_path(sort: "top", page: params[:page], type: params[:type]) and return
+          end
+
+          # Calculate count: if empty, we've reached the end
+          count = project_ids.empty? ? (page - 1) * 21 : page * 21 + 1
+
+          # Create manual pagy object for navigation
+          @pagy = Pagy.new(count: count, page: page, items: 21, overflow: :last_page)
+
+          # Load projects maintaining Gorse order
+          if project_ids.any?
+            order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", project_ids.map(&:to_i) ])
+            @projects = Project.where(id: project_ids).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
+            preload_project_metrics(@projects)
+          else
+            @projects = []
+          end
+        else
+          all_projects = current_user.recommended_projects.where(is_deleted: false) if current_user.present?
+          if all_projects.nil? || all_projects.count < 5
+            redirect_to explore_path(type: "projects", sort: "top", page: params[:page]) and return
+          end
+          project_ids = all_projects.pluck(:id)
+          @pagy, paginated_ids = pagy_array(project_ids, limit: 21)
+          order_clause = ApplicationRecord.sanitize_sql_array([ "array_position(ARRAY[?], projects.id::int)", paginated_ids.map(&:to_i) ])
+          @projects = Project.where(id: paginated_ids).includes(:banner_attachment, :latest_journal_entry).order(Arel.sql(order_clause))
           preload_project_metrics(@projects)
         end
+      elsif params[:sort] == "top"
+        all_projects = Project.where(is_deleted: false).includes(:banner_attachment, :latest_journal_entry).order(views_count: :desc)
+        @pagy, @projects = pagy(all_projects, limit: 21)
+        preload_project_metrics(@projects)
       else
         redirect_to explore_path(type: "projects") and return
       end
@@ -82,6 +144,8 @@ class ProjectsController < ApplicationController
     ahoy.track("project_view", project_id: @project.id, user_id: current_user&.id)
 
     if current_user.present?
+      GorseSyncViewJob.perform_later(current_user.id, @project.id, Time.current)
+
       begin
         UniqueProjectViewTracker.record(project_id: @project.id, user_id: current_user.id)
       rescue => e

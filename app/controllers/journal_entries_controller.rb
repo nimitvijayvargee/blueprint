@@ -4,6 +4,11 @@ class JournalEntriesController < ApplicationController
 
   def show
     ahoy.track "journal_entry_view", journal_entry_id: @journal_entry.id, user_id: current_user&.id, project_id: @project.id
+
+    if current_user.present?
+      GorseSyncViewJob.perform_later(current_user.id, @journal_entry.id, Time.current, item_type: "JournalEntry")
+    end
+
     redirect_to project_path(@journal_entry.project, return_to: params[:return_to])
   end
 

@@ -19,6 +19,10 @@ Blueprint is a You Ship, We Ship program open to all teenagers 13-18 (inclusive)
 
 _Alternatively, if you don't need a grant, you can earn extra tickets for the [toolbag](/toolbag) by logging your project._
 
+Here's a more detailed look at how it all works:
+
+![blueprint how to](https://hc-cdn.hel1.your-objectstorage.com/s/v3/309b8b95c9b370c89f44dc346212a72c120c4e7e_how-to.svg)
+
 ## What can I build?
 
 Anything! From as simple as a 3D print, to full robots with PCBs. You can create new designs, or build off of existing creations. Work in groups if you want. We really want to see what you can cook up!
@@ -40,6 +44,7 @@ We split grants into tiers, each tier has a:
 #### Tier 5: up to $25 and 0.8x ticket multiplier (5-8 hours)
 
 A super basic project which introduces you to hardware.
+
 - A 3d-printed phone stand
 - A 3d printed trinket
 - A PCB Fidget toy
@@ -97,7 +102,7 @@ Examples include:
 
 Tickets reward you for the effort spent on building the project.
 
-<span class="text-bp-warning">You get 10 tickets per hour of building.</span>
+<span class="text-bp-warning">You get 10 tickets per hour of hands-on work after you get your grant. This could be assembling, fixing cad, etc. (If you don't need a grant, it's the full time!)</span>
 
 Your building time must be accurately logged in your journal. And we may adjust your ticket amount based on the quality of your final build.
 

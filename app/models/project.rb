@@ -45,6 +45,7 @@ class Project < ApplicationRecord
   has_many :followers, through: :follows, source: :user
   has_many :design_reviews, dependent: :destroy
   has_many :project_grants, dependent: :destroy
+  has_many :kudos, dependent: :destroy
 
   def self.airtable_sync_table_id
     "tblwQanyNgONPvBdL"
@@ -146,6 +147,9 @@ class Project < ApplicationRecord
   after_update :invalidate_design_reviews_on_resubmit, if: -> { saved_change_to_review_status? && design_pending? }
   after_update :approve_design!, if: -> { saved_change_to_review_status? && design_approved? }
   after_update :dm_status!, if: -> { saved_change_to_review_status? }
+  after_commit :sync_to_gorse, on: [ :create, :update ]
+  after_commit :delete_from_gorse, on: :destroy
+  after_commit :sync_journal_entries_to_gorse, if: -> { saved_change_to_is_deleted? }
 
   def self.parse_repo(repo)
     # Supports:
@@ -198,7 +202,7 @@ class Project < ApplicationRecord
     "https://github.com/#{org}/#{repo}"
   end
 
-  def generate_timeline
+  def generate_timeline(reverse: false)
     timeline = []
 
     timeline << { type: :creation, date: created_at }
@@ -207,8 +211,13 @@ class Project < ApplicationRecord
       timeline << { type: :journal, date: entry.created_at, entry: entry }
     end
 
+    kudos.order(created_at: :asc).each do |kudo|
+      timeline << { type: :kudo, date: kudo.created_at, kudo: kudo }
+    end
+
     ship_design_events = attribute_updated_event(object: self, attribute: :review_status, after: "design_pending", all: true)
     user_ids = ship_design_events.map { |e| e[:whodunnit] }.compact.uniq
+    user_ids += kudos.pluck(:user_id).map(&:to_s)
 
     all_reviews = design_reviews.where(result: %w[returned rejected approved]).order(created_at: :asc)
     return_design_events = []
@@ -233,6 +242,7 @@ class Project < ApplicationRecord
       previous_result = review.result
     end
 
+    user_ids.uniq!
     users = User.where(id: user_ids).index_by { |u| u.id.to_s }
 
     ship_design_events.each do |event|
@@ -257,7 +267,8 @@ class Project < ApplicationRecord
       timeline << { type: :approve_design, date: group[:date], reviews: reviews_with_users }
     end
 
-    timeline.sort_by { |e| e[:date] }
+    sorted_timeline = timeline.sort_by { |e| e[:date] }
+    reverse ? sorted_timeline.reverse : sorted_timeline
   end
 
   def bom_file_url
@@ -339,10 +350,6 @@ class Project < ApplicationRecord
       To edit this file, please edit your journal entries on Blueprint.
       ==================================================================
     -->
-
-    This is my journal of the design and building process of **#{title}**.#{'  '}
-    You can view this journal in more detail on **Hack Club Blueprint** [here](https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}).
-
 
     EOS
 
@@ -455,18 +462,22 @@ class Project < ApplicationRecord
   end
 
   def follower_count
-    return preloaded_follower_count unless preloaded_follower_count.nil?
     followers.count
   end
 
   def view_count
-    return preloaded_view_count unless preloaded_view_count.nil?
-    views_count
+    Ahoy::Event.where(name: "project_view")
+      .where("properties @> ?", { project_id: id }.to_json)
+      .count("DISTINCT ((properties->>'user_id')::bigint)")
   end
 
   def self.view_counts_for(project_ids)
     return {} if project_ids.blank?
-    Project.where(id: project_ids).pluck(:id, :views_count).to_h
+    Ahoy::Event.where(name: "project_view")
+      .where("properties->>'project_id' IN (?)", project_ids.map(&:to_s))
+      .group("properties->>'project_id'")
+      .count("DISTINCT ((properties->>'user_id')::bigint)")
+      .transform_keys(&:to_i)
   end
 
   def self.follower_counts_for(project_ids)
@@ -509,7 +520,7 @@ class Project < ApplicationRecord
         msg += "Your Blueprint project *#{title}* has been rejected. You won't be able to submit again.\n\n<https://#{ENV.fetch("APPLICATION_HOST")}/projects/#{id}|View your project>\n\n"
       end
     elsif design_approved?
-      msg += "Your Blueprint project *#{title}* has passed the design review! You should receive an email from HCB about your grant soon.\n\n"
+      msg += "Your Blueprint project *#{title}* has passed the design review! You should receive an email from HCB about your grant in a few business days.\n\n"
 
       msg += "*Grant approved:* $#{'%.2f' % (approved_funding_cents / 100.0)}\n\n" if approved_funding_cents.present?
       msg += "*Tier approved:* #{approved_tier}\n\n" if approved_tier.present?
@@ -571,7 +582,7 @@ class Project < ApplicationRecord
       "Optional - Override Hours Spent Justification" => reasoning,
       "Slack ID" => user&.slack_id,
       "Project Name" => title,
-      "Grant Amount" => grant ? (grant / 100.0) : nil,
+      "Requested Grant Amount" => grant ? (grant / 100.0) : nil,
       "Grant Tier" => tier,
       "Hours Self-Reported" => journal_entries.sum(:duration_seconds) / 3600.0,
       "Checkout Screens" => (cart_screenshots.attached? ? cart_screenshots.map { |s|
@@ -586,6 +597,23 @@ class Project < ApplicationRecord
     AirtableSync.upload_or_create!(
       "tblRH1aELwmy7rgEU", self, fields
     )
+  end
+
+  def sync_to_gorse
+    GorseSyncProjectJob.perform_later(id)
+  end
+
+  def delete_from_gorse
+    GorseService.delete_item(self)
+  rescue => e
+    Rails.logger.error("Failed to delete project #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
+  end
+
+  def sync_journal_entries_to_gorse
+    journal_entries.find_each do |entry|
+      GorseSyncJournalEntryJob.perform_later(entry.id)
+    end
   end
 
   private

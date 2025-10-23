@@ -1,0 +1,9 @@
+<% kudo = event[:kudo] %>
+<%= render "timeline_event_card", class: "flex flex-col space-y-2" do %>
+  <div class="flex space-x-4">
+    <p class="grow"><%= render "shared/user_inline", user: kudo.user %> gave kudos to <%= project.title %> <%= c_time_ago_in_words(event[:date]) %> ago</p>
+  </div>
+  <div class="text-xl">
+      <p><%= kudo.content %></p>
+  </div>
+<% end %>

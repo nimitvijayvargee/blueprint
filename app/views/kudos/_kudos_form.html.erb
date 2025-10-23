@@ -1,0 +1,14 @@
+<%= form_with model: [@project, Kudo.new], class: "space-y-4" do |f| %>
+  <div class="space-y-2">
+    <%= f.label :content, "Give kudos to #{@project.title}", class: "block text-2xl wrap-break-word" %>
+    <p>We'll message them to let them know you've sent kudos! Your kudos will be public.</p>
+    <%= f.text_area :content,
+          class: "input w-full",
+          placeholder: "Write something awesome about #{@project.title}...",
+          rows: 3,
+          required: true %>
+  </div>
+  <div class="flex justify-end">
+    <%= f.submit "Send kudos", class: "btn btn-primary" %>
+  </div>
+<% end %>

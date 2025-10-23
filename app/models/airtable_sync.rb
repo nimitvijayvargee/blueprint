@@ -121,7 +121,7 @@ class AirtableSync < ApplicationRecord
         "Authorization" => "Bearer #{ENV['AIRTABLE_PAT']}",
         "Content-Type" => "application/json"
       }
-      req.body = { fields: fields }.to_json
+      req.body = { fields: fields, typecast: true }.to_json
     end
 
     Rails.logger.info("Airtable individual sync response: #{response.status} - #{response.body}")

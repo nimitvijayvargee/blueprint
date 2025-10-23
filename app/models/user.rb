@@ -42,6 +42,7 @@ class User < ApplicationRecord
   has_many :followed_projects, through: :follows, source: :project
   has_many :design_reviews, foreign_key: :reviewer_id, dependent: :destroy
   has_one :task_list, dependent: :destroy
+  has_many :kudos, dependent: :destroy
 
   has_many :ahoy_visits
   has_many :ahoy_events
@@ -54,6 +55,8 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :is_banned, inclusion: { in: [ true, false ] }
   after_commit :advance_projects_after_idv!, on: :update, if: -> { previous_changes.key?("ysws_verified") && ysws_verified? }
+  after_commit :sync_to_gorse, on: :create
+  after_commit :delete_from_gorse, on: :destroy
 
   has_paper_trail
   has_recommended :projects
@@ -877,5 +880,18 @@ class User < ApplicationRecord
 
   def special_perms?
     role == "admin" || role == "reviewer"
+  end
+
+  private
+
+  def sync_to_gorse
+    GorseSyncUserJob.perform_later(id)
+  end
+
+  def delete_from_gorse
+    GorseService.delete_user(self)
+  rescue => e
+    Rails.logger.error("Failed to delete user #{id} from Gorse: #{e.message}")
+    Sentry.capture_exception(e)
   end
 end
