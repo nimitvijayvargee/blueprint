@@ -8,7 +8,7 @@ import { Controller } from "@hotwired/stimulus";
 //   data-journal-validator-image-required-value="true"
 export default class extends Controller {
   static values = {
-    minChars: { type: Number, default: 100 },
+    minChars: { type: Number, default: 0 },
     imageRequired: { type: Boolean, default: true },
   };
   static targets = ["charCount", "imageCount", "summaryCount", "textarea", "summary", "hours", "submit"];
